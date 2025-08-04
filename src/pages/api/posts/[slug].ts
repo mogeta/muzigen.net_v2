@@ -1,7 +1,8 @@
 import type { APIRoute } from 'astro';
-import { getFirestore, collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
+import { getFirestore } from 'firebase-admin/firestore';
 import { app } from '../../../firebase/server';
-import type { BlogPost } from './index';
+import type { BlogArticle } from '../../../types/blog';
+import { renderMarkdown, sanitizeHtml } from '../../../utils/markdown';
 
 export const GET: APIRoute = async ({ params }) => {
   try {
@@ -9,7 +10,7 @@ export const GET: APIRoute = async ({ params }) => {
     
     if (!slug) {
       return new Response(JSON.stringify({
-        error: 'Slug parameter is required'
+        error: 'Article ID is required'
       }), {
         status: 400,
         headers: {
@@ -20,29 +21,12 @@ export const GET: APIRoute = async ({ params }) => {
 
     const db = getFirestore(app);
     
-    // Try to find by slug first
-    const slugQuery = query(
-      collection(db, 'posts'),
-      where('slug', '==', slug)
-    );
-    
-    const slugSnapshot = await getDocs(slugQuery);
-    
-    let postDoc;
-    if (!slugSnapshot.empty) {
-      postDoc = slugSnapshot.docs[0];
-    } else {
-      // Fallback: try to find by document ID
-      const idDoc = doc(db, 'posts', slug);
-      const idSnapshot = await getDoc(idDoc);
-      if (idSnapshot.exists()) {
-        postDoc = idSnapshot;
-      }
-    }
+    // Get article by document ID from blog_contents collection
+    const articleDoc = await db.collection('blog_contents').doc(slug).get();
 
-    if (!postDoc) {
+    if (!articleDoc.exists) {
       return new Response(JSON.stringify({
-        error: 'Post not found'
+        error: 'Article not found'
       }), {
         status: 404,
         headers: {
@@ -51,24 +35,49 @@ export const GET: APIRoute = async ({ params }) => {
       });
     }
 
-    const data = postDoc.data();
-    const post: BlogPost = {
-      id: postDoc.id,
+    const data = articleDoc.data();
+    
+    // Check if article is published
+    if (!data?.publish) {
+      return new Response(JSON.stringify({
+        error: 'Article not published'
+      }), {
+        status: 404,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+    }
+
+    // Process elements and convert markdown to HTML
+    const processedElements = (data.elements || []).map((element: any) => ({
+      source: element.source || '',
+      type: element.type || '',
+      safeHTML: element.type === 'markdown' && element.source 
+        ? sanitizeHtml(renderMarkdown(element.source))
+        : sanitizeHtml(element.safeHTML || element.source || ''),
+    }));
+
+    const article: BlogArticle = {
+      id: articleDoc.id,
       title: data.title || '',
-      content: data.content || '',
-      slug: data.slug || postDoc.id,
-      publishedAt: data.publishedAt?.toDate?.()?.toISOString() || data.publishedAt || '',
-      createdAt: data.createdAt?.toDate?.()?.toISOString() || data.createdAt || '',
-      updatedAt: data.updatedAt?.toDate?.()?.toISOString() || data.updatedAt || '',
-      published: data.published || false,
-      tags: data.tags || [],
-      excerpt: data.excerpt || ''
+      description: data.description || '',
+      ogp_image: data.ogp_image || '',
+      content: data.content ? sanitizeHtml(renderMarkdown(data.content)) : '',
+      tag: data.tag || '',
+      content_url: data.content_url || '',
+      markdown_url: data.markdown_url || '',
+      update_date: data.update_date?.toDate?.()?.toISOString() || data.update_date || '',
+      created_date: data.created_date?.toDate?.()?.toISOString() || data.created_date || '',
+      publish: data.publish || false,
+      elements: processedElements,
     };
 
-    return new Response(JSON.stringify({ post }), {
+    return new Response(JSON.stringify({ article }), {
       status: 200,
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Cache-Control': 'public, max-age=600'
       }
     });
 

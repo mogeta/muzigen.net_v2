@@ -1,0 +1,154 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import type { BlogArticle } from '../../types/blog';
+
+const { id } = Astro.params;
+
+if (!id) {
+  return Astro.redirect('/blog');
+}
+
+let article: BlogArticle | null = null;
+let error: string | null = null;
+
+try {
+  const response = await fetch(`${Astro.url.origin}/api/posts/${id}`);
+  
+  if (!response.ok) {
+    if (response.status === 404) {
+      return Astro.redirect('/blog');
+    }
+    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  }
+  
+  const contentType = response.headers.get('content-type');
+  if (!contentType || !contentType.includes('application/json')) {
+    const text = await response.text();
+    throw new Error(`Expected JSON response, got: ${contentType}. Response: ${text.substring(0, 200)}`);
+  }
+  
+  const data = await response.json();
+  article = data.article;
+} catch (err) {
+  console.error('Failed to fetch article:', err);
+  error = err instanceof Error ? err.message : 'Unknown error occurred';
+}
+
+if (!article) {
+  return Astro.redirect('/blog');
+}
+---
+
+<Layout title={article.title}>
+  <main class="max-w-4xl mx-auto px-4 py-8">
+    {error ? (
+      <div class="text-center text-red-600 bg-red-50 p-6 rounded-lg">
+        <h2 class="text-lg font-semibold mb-2">エラーが発生しました</h2>
+        <p class="text-sm">記事の取得に失敗しました: {error}</p>
+      </div>
+    ) : (
+      <article class="prose lg:prose-xl mx-auto">
+        <!-- Header -->
+        <header class="mb-8 not-prose">
+          <h1 class="text-4xl font-bold mb-4 text-gray-900">
+            {article.title}
+          </h1>
+          
+          <div class="flex items-center gap-4 text-sm text-gray-600 mb-6">
+            {article.tag && (
+              <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">
+                {article.tag}
+              </span>
+            )}
+            {article.created_date && (
+              <time datetime={article.created_date}>
+                {new Date(article.created_date).toLocaleDateString('ja-JP', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </time>
+            )}
+            {article.update_date && article.update_date !== article.created_date && (
+              <span>
+                (更新: {new Date(article.update_date).toLocaleDateString('ja-JP', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric'
+                })})
+              </span>
+            )}
+          </div>
+
+          {article.description && (
+            <p class="text-lg text-gray-600 leading-relaxed mb-6">
+              {article.description}
+            </p>
+          )}
+
+          {article.ogp_image && (
+            <img 
+              src={article.ogp_image} 
+              alt={article.title}
+              class="w-full h-64 object-cover rounded-lg mb-8"
+            />
+          )}
+        </header>
+
+        <!-- Content -->
+        <div class="markdown-content">
+          {article.content ? (
+            <div set:html={article.content} />
+          ) : article.elements && article.elements.length > 0 ? (
+            <div>
+              {article.elements.map((element) => (
+                <div class="element-content">
+                  <div set:html={element.safeHTML} />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p class="text-gray-500">コンテンツがありません。</p>
+          )}
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-12 pt-8 border-t border-gray-200 not-prose">
+          <div class="flex justify-between items-center">
+            <a 
+              href="/blog" 
+              class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium"
+            >
+              ← 記事一覧に戻る
+            </a>
+            
+            {article.markdown_url && (
+              <a 
+                href={article.markdown_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center text-gray-600 hover:text-gray-800"
+              >
+                Markdown を表示
+              </a>
+            )}
+          </div>
+        </footer>
+      </article>
+    )}
+  </main>
+</Layout>
+
+<style>
+  .prose {
+    max-width: none;
+  }
+  
+  .markdown-content {
+    /* Markdown content styling is handled by the custom renderer */
+  }
+  
+  .element-content {
+    /* Individual element styling */
+  }
+</style>
