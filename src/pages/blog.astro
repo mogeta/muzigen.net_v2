@@ -1,31 +1,33 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ArticleCard from '../components/ArticleCard.astro';
-import Pagination from '../components/Pagination.astro';
 import type { BlogListItem } from '../types/blog';
-
-const currentPage = parseInt(Astro.url.searchParams.get('page') || '1');
+import { getFirestore } from 'firebase-admin/firestore';
+import { app } from '../firebase/server';
 
 let articles: BlogListItem[] = [];
-let pagination = { currentPage: 1, totalPages: 1 };
 let error: string | null = null;
 
 try {
-  const response = await fetch(`${Astro.url.origin}/api/posts/?page=${currentPage}`);
+  const db = getFirestore(app);
   
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-  }
+  const snapshot = await db.collection('blog_contents')
+    .where('publish', '==', true)
+    .orderBy('created_date', 'desc')
+    .get();
   
-  const contentType = response.headers.get('content-type');
-  if (!contentType || !contentType.includes('application/json')) {
-    const text = await response.text();
-    throw new Error(`Expected JSON response, got: ${contentType}. Response: ${text.substring(0, 200)}`);
-  }
-  
-  const data = await response.json();
-  articles = data.articles || [];
-  pagination = data.pagination || { currentPage: 1, totalPages: 1 };
+  articles = snapshot.docs.map((doc) => {
+    const data = doc.data();
+    return {
+      id: doc.id,
+      title: data.title || '',
+      description: data.description || '',
+      ogp_image: data.ogp_image || '',
+      tag: data.tag || '',
+      created_date: data.created_date?.toDate?.()?.toISOString() || data.created_date || '',
+      update_date: data.update_date?.toDate?.()?.toISOString() || data.update_date || '',
+    };
+  });
 } catch (err) {
   console.error('Failed to fetch articles:', err);
   error = err instanceof Error ? err.message : 'Unknown error occurred';
@@ -52,14 +54,6 @@ try {
           <ArticleCard article={article} />
         ))}
       </div>
-    )}
-    
-    {!error && (
-      <Pagination 
-        currentPage={pagination.currentPage} 
-        totalPages={pagination.totalPages} 
-        baseUrl="/blog" 
-      />
     )}
   </main>
 </Layout>

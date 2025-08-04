@@ -1,53 +1,62 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import type { BlogArticle } from '../../types/blog';
+import { getFirestore } from 'firebase-admin/firestore';
+import { app } from '../../firebase/server';
+import { renderMarkdown, sanitizeHtml } from '../../utils/markdown';
 
-const { id } = Astro.params;
-
-if (!id) {
-  return Astro.redirect('/blog');
-}
-
-let article: BlogArticle | null = null;
-let error: string | null = null;
-
-try {
-  const response = await fetch(`${Astro.url.origin}/api/posts/${id}`);
+export async function getStaticPaths() {
+  const db = getFirestore(app);
   
-  if (!response.ok) {
-    if (response.status === 404) {
-      return Astro.redirect('/blog');
-    }
-    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  try {
+    const snapshot = await db.collection('blog_contents')
+      .where('publish', '==', true)
+      .get();
+    
+    return snapshot.docs.map((doc) => {
+      const data = doc.data();
+      
+      // Process elements and convert markdown to HTML
+      const processedElements = (data.elements || []).map((element: any) => ({
+        source: element.source || '',
+        type: element.type || '',
+        safeHTML: element.type === 'markdown' && element.source 
+          ? sanitizeHtml(renderMarkdown(element.source))
+          : sanitizeHtml(element.safeHTML || element.source || ''),
+      }));
+
+      const article: BlogArticle = {
+        id: doc.id,
+        title: data.title || '',
+        description: data.description || '',
+        ogp_image: data.ogp_image || '',
+        content: data.content ? sanitizeHtml(renderMarkdown(data.content)) : '',
+        tag: data.tag || '',
+        content_url: data.content_url || '',
+        markdown_url: data.markdown_url || '',
+        update_date: data.update_date?.toDate?.()?.toISOString() || data.update_date || '',
+        created_date: data.created_date?.toDate?.()?.toISOString() || data.created_date || '',
+        publish: data.publish || false,
+        elements: processedElements,
+      };
+
+      return {
+        params: { id: doc.id },
+        props: { article }
+      };
+    });
+  } catch (error) {
+    console.error('Error fetching blog posts:', error);
+    return [];
   }
-  
-  const contentType = response.headers.get('content-type');
-  if (!contentType || !contentType.includes('application/json')) {
-    const text = await response.text();
-    throw new Error(`Expected JSON response, got: ${contentType}. Response: ${text.substring(0, 200)}`);
-  }
-  
-  const data = await response.json();
-  article = data.article;
-} catch (err) {
-  console.error('Failed to fetch article:', err);
-  error = err instanceof Error ? err.message : 'Unknown error occurred';
 }
 
-if (!article) {
-  return Astro.redirect('/blog');
-}
+const { article } = Astro.props;
 ---
 
 <Layout title={article.title}>
   <main class="max-w-4xl mx-auto px-4 py-8">
-    {error ? (
-      <div class="text-center text-red-600 bg-red-50 p-6 rounded-lg">
-        <h2 class="text-lg font-semibold mb-2">エラーが発生しました</h2>
-        <p class="text-sm">記事の取得に失敗しました: {error}</p>
-      </div>
-    ) : (
-      <article class="prose lg:prose-xl mx-auto">
+    <article class="prose lg:prose-xl mx-auto">
         <!-- Header -->
         <header class="mb-8 not-prose">
           <h1 class="text-4xl font-bold mb-4 text-gray-900">
@@ -135,7 +144,6 @@ if (!article) {
           </div>
         </footer>
       </article>
-    )}
   </main>
 </Layout>
 
