@@ -1,0 +1,56 @@
+---
+import type { BlogListItem } from '../types/blog';
+
+interface Props {
+  article: BlogListItem;
+}
+
+const { article } = Astro.props;
+---
+
+<article class="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+  <div class="flex items-start gap-4">
+    {article.ogp_image && (
+      <img 
+        src={article.ogp_image} 
+        alt={article.title}
+        class="w-24 h-24 object-cover rounded-md flex-shrink-0"
+      />
+    )}
+    <div class="flex-1 min-w-0">
+      <h2 class="text-xl font-semibold mb-2 text-gray-900 hover:text-blue-600">
+        <a href={`/blog/${article.id}`} class="block">
+          {article.title}
+        </a>
+      </h2>
+      {article.description && (
+        <p class="text-gray-600 mb-3 line-clamp-2">
+          {article.description}
+        </p>
+      )}
+      <div class="flex items-center justify-between text-sm text-gray-500">
+        <div class="flex items-center gap-4">
+          {article.tag && (
+            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">
+              {article.tag}
+            </span>
+          )}
+          {article.created_date && (
+            <time datetime={article.created_date}>
+              {new Date(article.created_date).toLocaleDateString('ja-JP')}
+            </time>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

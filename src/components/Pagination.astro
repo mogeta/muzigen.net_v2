@@ -1,0 +1,75 @@
+---
+interface Props {
+  currentPage: number;
+  totalPages: number;
+  baseUrl: string;
+}
+
+const { currentPage, totalPages, baseUrl } = Astro.props;
+
+const getPageUrl = (page: number) => {
+  return page === 1 ? baseUrl : `${baseUrl}?page=${page}`;
+};
+
+const getVisiblePages = () => {
+  const pages = [];
+  const maxVisible = 5;
+  
+  if (totalPages <= maxVisible) {
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(i);
+    }
+  } else {
+    const start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+    const end = Math.min(totalPages, start + maxVisible - 1);
+    
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+  }
+  
+  return pages;
+};
+
+const visiblePages = getVisiblePages();
+---
+
+{totalPages > 1 && (
+  <nav class="flex justify-center items-center space-x-2 mt-8">
+    <!-- Previous button -->
+    {currentPage > 1 && (
+      <a 
+        href={getPageUrl(currentPage - 1)}
+        class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 hover:text-gray-700"
+      >
+        前へ
+      </a>
+    )}
+    
+    <!-- Page numbers -->
+    {visiblePages.map((page) => (
+      page === currentPage ? (
+        <span class="px-3 py-2 text-sm font-medium text-white bg-blue-600 border border-blue-600 rounded-md">
+          {page}
+        </span>
+      ) : (
+        <a 
+          href={getPageUrl(page)}
+          class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 hover:text-gray-700"
+        >
+          {page}
+        </a>
+      )
+    ))}
+    
+    <!-- Next button -->
+    {currentPage < totalPages && (
+      <a 
+        href={getPageUrl(currentPage + 1)}
+        class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 hover:text-gray-700"
+      >
+        次へ
+      </a>
+    )}
+  </nav>
+)}
