@@ -1,0 +1,99 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+const posts = await getCollection('posts');
+
+// 下書きを除外し、公開日で降順ソート
+const publishedPosts = posts
+  .filter(post => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+---
+
+<Layout title="記事一覧">
+  <main class="max-w-4xl mx-auto px-4 py-8">
+    <header class="mb-12">
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">記事一覧</h1>
+      <p class="text-xl text-gray-600">Astroマークダウンで書かれた記事の一覧です。</p>
+    </header>
+
+    {publishedPosts.length === 0 ? (
+      <div class="text-center py-12">
+        <p class="text-gray-500 text-lg">まだ記事がありません。</p>
+      </div>
+    ) : (
+      <div class="space-y-8">
+        {publishedPosts.map((post) => (
+          <article class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-6 border border-gray-200">
+            <header class="mb-4">
+              <h2 class="text-2xl font-bold text-gray-900 mb-2">
+                <a 
+                  href={`/posts/${post.slug}`}
+                  class="hover:text-blue-600 transition-colors"
+                >
+                  {post.data.title}
+                </a>
+              </h2>
+              
+              <div class="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-3">
+                <time datetime={post.data.pubDate.toISOString()}>
+                  {post.data.pubDate.toLocaleDateString('ja-JP', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </time>
+                {post.data.author && (
+                  <span class="flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                    </svg>
+                    {post.data.author}
+                  </span>
+                )}
+              </div>
+              
+              {post.data.description && (
+                <p class="text-gray-700 leading-relaxed mb-4">{post.data.description}</p>
+              )}
+              
+              {post.data.tags && (
+                <div class="flex flex-wrap gap-2">
+                  {post.data.tags.map((tag) => (
+                    <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </header>
+            
+            <footer>
+              <a 
+                href={`/posts/${post.slug}`}
+                class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors"
+              >
+                続きを読む
+                <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </a>
+            </footer>
+          </article>
+        ))}
+      </div>
+    )}
+
+    <nav class="mt-12 pt-8 border-t border-gray-200 text-center">
+      <a 
+        href="/" 
+        class="inline-flex items-center text-gray-600 hover:text-gray-800 transition-colors"
+      >
+        <svg class="mr-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+        </svg>
+        ホームに戻る
+      </a>
+    </nav>
+  </main>
+</Layout>
