@@ -3,7 +3,27 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout>
-	<div class="flex items-center justify-center min-h-screen">
-		<img src="/top.jpg" alt="Top Image" class="max-w-full max-h-full object-contain" />
+	<div class="grid grid-cols-12 gap-8 min-h-screen items-center px-4 py-16 bg-gradient-to-br from-gray-100 via-white to-gray-300">
+		<div class="col-span-12 lg:col-span-6 lg:col-start-2">
+			<div class="max-w-xl">
+				<h1 class="text-4xl font-bold tracking-tight sm:text-6xl mb-6">
+					muzigen.net
+				</h1>
+				<p class="text-lg leading-8 text-gray-600 mb-8">
+					Discover insightful articles, stories, and ideas. Explore our collection of thoughtfully crafted content.
+				</p>
+				<div class="flex gap-4">
+					<a
+						href="/blog"
+						class="rounded-md bg-indigo-600 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+					>
+						Visit Blog
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="col-span-12 lg:col-span-4">
+			<img src="/top.jpg" alt="Top Image" class="w-full h-auto object-contain rounded-lg shadow-xl" />
+		</div>
 	</div>
 </Layout>
