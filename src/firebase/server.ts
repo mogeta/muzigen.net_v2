@@ -17,23 +17,19 @@ const serviceAccount = {
 
 const initApp = () => {
 	// Check if we have all required environment variables
-	const hasEnvConfig = serviceAccount.project_id && 
-						 serviceAccount.private_key && 
+	const hasEnvConfig = serviceAccount.project_id &&
+						 serviceAccount.private_key &&
 						 serviceAccount.client_email;
-	
+
 	if (hasEnvConfig) {
 		console.info('Loading service account from env.')
 		return initializeApp({
 			credential: cert(serviceAccount as ServiceAccount)
 		})
 	}
-	
-	if (import.meta.env.PROD) {
-		console.info('PROD env detected. Using default service account.')
-		// Use default config in firebase functions. Should be already injected in the server by Firebase.
-		return initializeApp()
-	}
-	
+
+	// Only use default credentials if explicitly in Firebase Functions environment
+	// Note: When building static sites, PROD is true but we're not in Firebase Functions
 	throw new Error('Firebase configuration not found. Please set environment variables.')
 }
 
