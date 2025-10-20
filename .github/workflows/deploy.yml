@@ -1,0 +1,36 @@
+name: Deploy to Firebase Hosting
+
+# mainブランチにプッシュされたら実行
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. リポジトリのコードをチェックアウト
+      - uses: actions/checkout@v4
+
+      # 2. Astroプロジェクトのビルド (環境に合わせて変更)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Astroが要求するNode.jsバージョン
+      - name: Install Dependencies
+        run: npm install # または pnpm install など
+      - name: Build
+        run: npm run build # Astroのビルドコマンド
+
+      # 3. Firebaseへのデプロイ
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+          channelId: live # 'live'は本番環境
+          projectId: muzigen-net # ここにFirebaseプロジェクトIDを記載
+        env:
+          # Astro (Webフレームワーク) のサポートを有効化
+          FIREBASE_CLI_EXPERIMENTS: webframeworks
