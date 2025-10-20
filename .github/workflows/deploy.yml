@@ -32,7 +32,7 @@ jobs:
           FIREBASE_TOKEN_URI: ${{ secrets.FIREBASE_TOKEN_URI }}
           FIREBASE_AUTH_CERT_URL: ${{ secrets.FIREBASE_AUTH_CERT_URL }}
           FIREBASE_CLIENT_CERT_URL: ${{ secrets.FIREBASE_CLIENT_CERT_URL }}
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ env.GOOGLE_APPLICATION_CREDENTIALS_JSON }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
 
       # 3. Firebaseへのデプロイ
       - name: Deploy to Firebase Hosting
