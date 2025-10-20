@@ -5,7 +5,7 @@ const activeApps = getApps();
 
 // Helper function to clean environment variables (remove unwanted newlines and whitespace)
 const cleanEnvVar = (value: string | undefined): string | undefined => {
-	return value?.trim().replace(/\r?\n/g, '');
+	return value?.trim().replace(/\\n/g, '\n');
 };
 
 const serviceAccount = {
