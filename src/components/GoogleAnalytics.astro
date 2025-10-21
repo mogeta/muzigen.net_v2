@@ -5,7 +5,7 @@ const GA_MEASUREMENT_ID = 'G-3W5TEDXSSX';
 
 {isProd && (
 <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}/>
-<script>
+<script define:vars={{GA_MEASUREMENT_ID}}>
 	window.dataLayer = window.dataLayer || [];
 
 	function gtag() {
