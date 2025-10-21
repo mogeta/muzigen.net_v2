@@ -1,9 +1,10 @@
 ---
 import '../styles/global.css'
+import Footer from '../components/Footer.astro'
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
@@ -12,10 +13,11 @@ import '../styles/global.css'
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>muzigen.net</title>
 	</head>
 	<body>
 		<slot />
+		<Footer />
 	</body>
 </html>
 
