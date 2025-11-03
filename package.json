@@ -11,13 +11,22 @@
   "dependencies": {
     "@astrojs/check": "^0.9.4",
     "@astrojs/partytown": "^2.1.4",
+    "@astrojs/react": "^4.4.1",
     "@astrojs/sitemap": "^3.6.0",
+    "@rainbow-me/rainbowkit": "^2.2.9",
     "@tailwindcss/vite": "^4.1.11",
+    "@tanstack/react-query": "^5.90.6",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
     "astro": "^5.14.6",
     "firebase": "^12.0.0",
     "firebase-admin": "^13.4.0",
     "marked": "^16.1.2",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "tailwindcss": "^4.1.11",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "viem": "^2.38.6",
+    "wagmi": "^2.19.2"
   }
 }

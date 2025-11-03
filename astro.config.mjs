@@ -7,6 +7,8 @@ import partytown from '@astrojs/partytown';
 
 import sitemap from '@astrojs/sitemap';
 
+import react from '@astrojs/react';
+
 // https://astro.build/config
 export default defineConfig({
     output: 'static',
@@ -21,5 +23,5 @@ export default defineConfig({
             forward: ["dataLayer.push"],
         },
 
-    }), sitemap()]
+    }), sitemap(), react()]
 });
