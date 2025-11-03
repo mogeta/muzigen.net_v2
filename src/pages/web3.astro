@@ -1,10 +1,8 @@
 ---
-import WalletConnector from '../components/WalletConnector.jsx';
+import Layout from '../layouts/Layout.astro';
+import Web3App from '../components/Web3App.jsx';
 ---
 
-<html>
-  <body>
-    <h1>My Web3 Page</h1>
-    <WalletConnector client:only="react" />
-  </body>
-</html>
+<Layout title="Web3 NFT Gallery">
+  <Web3App client:only="react" />
+</Layout>

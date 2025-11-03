@@ -1,6 +1,6 @@
 import React from "react";
 import { WagmiProvider } from "wagmi";
-import { http, createConfig } from "wagmi";
+import { http } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import {
     RainbowKitProvider,
@@ -10,6 +10,7 @@ import {
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "@rainbow-me/rainbowkit/styles.css";
 import { oasys } from "../config/chains";
+import NFTGallery from "./NFTGallery";
 
 // 🚀 wagmi + RainbowKit 設定
 const config = getDefaultConfig({
@@ -25,12 +26,18 @@ const config = getDefaultConfig({
 // 🚀 TanStack Query（React Query）のクライアントを作成
 const queryClient = new QueryClient();
 
-export default function WalletConnector() {
+export default function Web3App() {
     return (
         <QueryClientProvider client={queryClient}>
             <WagmiProvider config={config}>
                 <RainbowKitProvider>
-                    <ConnectButton />
+                    <div style={{ padding: "20px" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+                            <h1>Web3 NFT Gallery</h1>
+                            <ConnectButton />
+                        </div>
+                        <NFTGallery />
+                    </div>
                 </RainbowKitProvider>
             </WagmiProvider>
         </QueryClientProvider>
