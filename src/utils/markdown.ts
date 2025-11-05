@@ -5,6 +5,7 @@ import remarkRehype from 'remark-rehype';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import rehypeStringify from 'rehype-stringify';
 import rehypeShiki from '@shikijs/rehype';
+import rehypeMermaid from 'rehype-mermaid';
 import { rehypeTailwind } from './rehype-tailwind';
 
 /**
@@ -17,7 +18,7 @@ export async function renderMarkdown(content: string): Promise<string> {
       return '';
     }
 
-    // Configure sanitization schema to allow necessary attributes including Shiki's inline styles
+    // Configure sanitization schema to allow necessary attributes including Shiki's inline styles and SVG for Mermaid diagrams
     const sanitizeSchema = {
       ...defaultSchema,
       attributes: {
@@ -28,10 +29,39 @@ export async function renderMarkdown(content: string): Promise<string> {
         code: ['className', 'class'],
         pre: ['className', 'class', 'style', 'tabIndex'],
         span: ['style', 'className', 'class'],
+        // SVG attributes for Mermaid diagrams
+        svg: ['width', 'height', 'viewBox', 'xmlns', 'xmlns:xlink', 'role', 'aria-roledescription', 'className', 'class', 'style'],
+        path: ['d', 'fill', 'stroke', 'stroke-width', 'className', 'class', 'style'],
+        g: ['transform', 'className', 'class', 'style'],
+        rect: ['x', 'y', 'width', 'height', 'fill', 'stroke', 'stroke-width', 'rx', 'ry', 'className', 'class', 'style'],
+        circle: ['cx', 'cy', 'r', 'fill', 'stroke', 'stroke-width', 'className', 'class', 'style'],
+        ellipse: ['cx', 'cy', 'rx', 'ry', 'fill', 'stroke', 'stroke-width', 'className', 'class', 'style'],
+        line: ['x1', 'y1', 'x2', 'y2', 'stroke', 'stroke-width', 'className', 'class', 'style'],
+        polyline: ['points', 'fill', 'stroke', 'stroke-width', 'className', 'class', 'style'],
+        polygon: ['points', 'fill', 'stroke', 'stroke-width', 'className', 'class', 'style'],
+        text: ['x', 'y', 'text-anchor', 'dominant-baseline', 'font-size', 'font-family', 'fill', 'className', 'class', 'style'],
+        tspan: ['x', 'y', 'dx', 'dy', 'className', 'class', 'style'],
+        marker: ['id', 'markerWidth', 'markerHeight', 'refX', 'refY', 'orient', 'markerUnits', 'className', 'class'],
+        defs: [],
+        style: ['type'],
       },
       tagNames: [
         ...(defaultSchema.tagNames || []),
         'span',
+        'svg',
+        'path',
+        'g',
+        'rect',
+        'circle',
+        'ellipse',
+        'line',
+        'polyline',
+        'polygon',
+        'text',
+        'tspan',
+        'marker',
+        'defs',
+        'style',
       ],
     };
 
@@ -43,7 +73,8 @@ export async function renderMarkdown(content: string): Promise<string> {
 		  theme: "one-dark-pro",
 		  keepBackground: true,
       }) // Add Shiki syntax highlighting
-      .use(rehypeSanitize, sanitizeSchema) // Sanitize HTML (after Shiki to preserve styles)
+      .use(rehypeMermaid) // Render Mermaid diagrams as SVG
+      .use(rehypeSanitize, sanitizeSchema) // Sanitize HTML (after Shiki and Mermaid to preserve styles)
       .use(rehypeTailwind) // Add Tailwind CSS classes
       .use(rehypeStringify) // Convert HTML AST to string
       .process(content);
