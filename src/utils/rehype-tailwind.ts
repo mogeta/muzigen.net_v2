@@ -42,18 +42,18 @@ export function rehypeTailwind() {
           props.loading = 'lazy';
           break;
         case 'pre':
-          className.push('bg-gray-100', 'p-4', 'rounded-lg', 'overflow-x-auto', 'my-4');
+          // Only add structural classes, as Shiki handles syntax highlighting styles
+          className.push('rounded-lg', 'overflow-x-auto', 'my-4');
           break;
         case 'code':
-          // Check if this code is inside a pre element (code block)
-          // If not, it's an inline code span
-          const isInline = !node.properties?.className ||
-                          !(node.properties.className as string[]).some((c: string) => c.startsWith('language-'));
+          // Check if this is a code block (has language class) or inline code
+          const hasLanguageClass = node.properties?.className &&
+                                   Array.isArray(node.properties.className) &&
+                                   (node.properties.className as string[]).some((c: string) => c.startsWith('language-'));
 
-          if (isInline) {
+          // Only style inline code - Shiki handles code blocks
+          if (!hasLanguageClass) {
             className.push('bg-gray-100', 'px-2', 'py-1', 'rounded', 'text-sm');
-          } else {
-            className.push('text-sm');
           }
           break;
         case 'ul':

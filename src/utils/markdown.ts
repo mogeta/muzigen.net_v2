@@ -4,10 +4,11 @@ import remarkGfm from 'remark-gfm';
 import remarkRehype from 'remark-rehype';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import rehypeStringify from 'rehype-stringify';
+import rehypeShiki from '@shikijs/rehype';
 import { rehypeTailwind } from './rehype-tailwind';
 
 /**
- * Renders markdown content to HTML with Tailwind CSS styling
+ * Renders markdown content to HTML with Tailwind CSS styling and Shiki syntax highlighting
  * Uses unified/remark/rehype ecosystem (based on micromark)
  */
 export async function renderMarkdown(content: string): Promise<string> {
@@ -16,7 +17,7 @@ export async function renderMarkdown(content: string): Promise<string> {
       return '';
     }
 
-    // Configure sanitization schema to allow necessary attributes
+    // Configure sanitization schema to allow necessary attributes including Shiki's inline styles
     const sanitizeSchema = {
       ...defaultSchema,
       attributes: {
@@ -25,14 +26,26 @@ export async function renderMarkdown(content: string): Promise<string> {
         img: ['src', 'alt', 'title', 'className', 'class', 'loading'],
         a: ['href', 'title', 'className', 'class'],
         code: ['className', 'class'],
+        pre: ['className', 'class', 'style', 'tabIndex'],
+        span: ['style', 'className', 'class'],
       },
+      tagNames: [
+        ...(defaultSchema.tagNames || []),
+        'span',
+      ],
     };
 
     const result = await unified()
       .use(remarkParse) // Parse markdown to AST
       .use(remarkGfm) // Support GitHub Flavored Markdown
       .use(remarkRehype) // Convert markdown AST to HTML AST
-      .use(rehypeSanitize, sanitizeSchema) // Sanitize HTML
+      .use(rehypeShiki, {
+        themes: {
+          light: 'github-light',
+          dark: 'github-dark',
+        },
+      }) // Add Shiki syntax highlighting
+      .use(rehypeSanitize, sanitizeSchema) // Sanitize HTML (after Shiki to preserve styles)
       .use(rehypeTailwind) // Add Tailwind CSS classes
       .use(rehypeStringify) // Convert HTML AST to string
       .process(content);
