@@ -1,77 +1,78 @@
-import { marked } from 'marked';
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import remarkGfm from 'remark-gfm';
+import remarkRehype from 'remark-rehype';
+import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
+import rehypeStringify from 'rehype-stringify';
+import rehypeShiki from '@shikijs/rehype';
+import { rehypeTailwind } from './rehype-tailwind';
 
-// Configure marked with enhanced options
-marked.setOptions({
-  breaks: true,        // Convert \n to <br>
-  gfm: true,          // GitHub Flavored Markdown
-});
-
-// Configure custom renderer
-marked.use({
-  renderer: {
-    heading(token: any) {
-      const text = this.parser.parseInline(token.tokens);
-      const sizes = {
-        1: 'text-3xl font-bold',
-        2: 'text-2xl font-semibold', 
-        3: 'text-xl font-semibold',
-        4: 'text-lg font-medium',
-        5: 'text-base font-medium',
-        6: 'text-sm font-medium'
-      };
-      
-      return `<h${token.depth} class="${sizes[token.depth as keyof typeof sizes] || 'text-base font-medium'} mt-8 mb-4">${text}</h${token.depth}>`;
-    },
-
-    paragraph(token: any) {
-      const text = this.parser.parseInline(token.tokens);
-      return `<p class="mb-4 leading-7">${text}</p>`;
-    },
-
-    image(token: any) {
-      const titleAttr = token.title ? ` title="${token.title}"` : '';
-      const altText = token.text || '';
-      return `<img src="${token.href}" alt="${altText}"${titleAttr} class="max-w-full h-auto rounded-lg my-6 mx-auto block" loading="lazy" />`;
-    },
-
-    code(token: any) {
-      const language = token.lang ? ` language-${token.lang}` : '';
-      return `<pre class="bg-gray-100 p-4 rounded-lg overflow-x-auto my-4"><code class="text-sm${language}">${token.text}</code></pre>`;
-    },
-
-    codespan(token: any) {
-      return `<code class="bg-gray-100 px-2 py-1 rounded text-sm">${token.text}</code>`;
-    },
-
-    list(token: any) {
-      const tag = token.ordered ? 'ol' : 'ul';
-      const classes = token.ordered ? 'list-decimal' : 'list-disc';
-      const body = token.items.map((item: any) => this.listitem(item)).join('');
-      return `<${tag} class="${classes} ml-6 mb-4 space-y-2">${body}</${tag}>`;
-    },
-
-    blockquote(token: any) {
-      const text = this.parser.parse(token.tokens);
-      return `<blockquote class="border-l-4 border-gray-300 pl-4 italic my-4 text-gray-700">${text}</blockquote>`;
-    }
-  }
-});
-
-export function renderMarkdown(content: string): string {
+/**
+ * Renders markdown content to HTML with Tailwind CSS styling and Shiki syntax highlighting
+ * Uses unified/remark/rehype ecosystem (based on micromark)
+ */
+export async function renderMarkdown(content: string): Promise<string> {
   try {
     if (!content || typeof content !== 'string') {
       return '';
     }
-    
-    return marked(content) as string;
+
+    // Configure sanitization schema to allow necessary attributes including Shiki's inline styles
+    const sanitizeSchema = {
+      ...defaultSchema,
+      attributes: {
+        ...defaultSchema.attributes,
+        '*': ['className', 'class'],
+        img: ['src', 'alt', 'title', 'className', 'class', 'loading'],
+        a: ['href', 'title', 'className', 'class'],
+        code: ['className', 'class'],
+        pre: ['className', 'class', 'style', 'tabIndex'],
+        span: ['style', 'className', 'class'],
+      },
+      tagNames: [
+        ...(defaultSchema.tagNames || []),
+        'span',
+      ],
+    };
+
+    const result = await unified()
+      .use(remarkParse) // Parse markdown to AST
+      .use(remarkGfm) // Support GitHub Flavored Markdown
+      .use(remarkRehype) // Convert markdown AST to HTML AST
+      .use(rehypeShiki, {
+		  theme: "one-dark-pro",
+		  keepBackground: true,
+      }) // Add Shiki syntax highlighting
+      .use(rehypeSanitize, sanitizeSchema) // Sanitize HTML (after Shiki to preserve styles)
+      .use(rehypeTailwind) // Add Tailwind CSS classes
+      .use(rehypeStringify) // Convert HTML AST to string
+      .process(content);
+
+    return String(result);
   } catch (error) {
     console.error('Error rendering markdown:', error);
     return `<p class="text-red-600">Markdown レンダリングエラー: ${error}</p>`;
   }
 }
 
+/**
+ * Synchronous version of renderMarkdown for backward compatibility
+ * Note: This uses the async version internally and may not work in all contexts
+ */
+export function renderMarkdownSync(content: string): string {
+  let result = '';
+  renderMarkdown(content).then((html) => {
+    result = html;
+  });
+  return result;
+}
+
+/**
+ * Basic HTML sanitization
+ * Note: rehype-sanitize is now used in the markdown pipeline,
+ * so this function is mainly for additional sanitization if needed
+ */
 export function sanitizeHtml(html: string): string {
-  // Basic HTML sanitization (you might want to use a more robust library like DOMPurify)
   return html
     .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
     .replace(/javascript:/gi, '')
