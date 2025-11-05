@@ -13,38 +13,42 @@ export async function getStaticPaths() {
       .where('publish', '==', true)
       .get();
     
-    return snapshot.docs.map((doc) => {
-      const data = doc.data();
-      
-      // Process elements and convert markdown to HTML
-      const processedElements = (data.elements || []).map((element: any) => ({
-        source: element.source || '',
-        type: element.type || '',
-        safeHTML: element.type === 'markdown' && element.source 
-          ? sanitizeHtml(renderMarkdown(element.source))
-          : sanitizeHtml(element.safeHTML || element.source || ''),
-      }));
+    return Promise.all(
+      snapshot.docs.map(async (doc) => {
+        const data = doc.data();
 
-      const article: BlogArticle = {
-        id: doc.id,
-        title: data.title || '',
-        description: data.description || '',
-        ogp_image: data.ogp_image || '',
-        content: data.content ? sanitizeHtml(renderMarkdown(data.content)) : '',
-        tag: data.tag || '',
-        content_url: data.content_url || '',
-        markdown_url: data.markdown_url || '',
-        update_date: data.update_date?.toDate?.()?.toISOString() || data.update_date || '',
-        created_date: data.created_date?.toDate?.()?.toISOString() || data.created_date || '',
-        publish: data.publish || false,
-        elements: processedElements,
-      };
+        // Process elements and convert markdown to HTML
+        const processedElements = await Promise.all(
+          (data.elements || []).map(async (element: any) => ({
+            source: element.source || '',
+            type: element.type || '',
+            safeHTML: element.type === 'markdown' && element.source
+              ? sanitizeHtml(await renderMarkdown(element.source))
+              : sanitizeHtml(element.safeHTML || element.source || ''),
+          }))
+        );
 
-      return {
-        params: { id: doc.id },
-        props: { article }
-      };
-    });
+        const article: BlogArticle = {
+          id: doc.id,
+          title: data.title || '',
+          description: data.description || '',
+          ogp_image: data.ogp_image || '',
+          content: data.content ? sanitizeHtml(await renderMarkdown(data.content)) : '',
+          tag: data.tag || '',
+          content_url: data.content_url || '',
+          markdown_url: data.markdown_url || '',
+          update_date: data.update_date?.toDate?.()?.toISOString() || data.update_date || '',
+          created_date: data.created_date?.toDate?.()?.toISOString() || data.created_date || '',
+          publish: data.publish || false,
+          elements: processedElements,
+        };
+
+        return {
+          params: { id: doc.id },
+          props: { article }
+        };
+      })
+    );
   } catch (error) {
     console.error('Error fetching blog posts:', error);
     return [];
