@@ -7,6 +7,53 @@ import rehypeStringify from 'rehype-stringify';
 import rehypeShiki from '@shikijs/rehype';
 import rehypeMermaid from 'rehype-mermaid';
 import { rehypeTailwind } from './rehype-tailwind';
+import { visit } from 'unist-util-visit';
+import type { Element } from 'hast';
+
+/**
+ * Custom rehype plugin to mark mermaid code blocks to prevent Shiki from processing them
+ */
+function rehypePreserveMermaid() {
+  return (tree: any) => {
+    visit(tree, 'element', (node: Element) => {
+      if (node.tagName === 'pre') {
+        const codeNode = node.children[0] as Element | undefined;
+        if (codeNode && codeNode.tagName === 'code') {
+          const className = codeNode.properties?.className as string[] | undefined;
+          if (className && className.includes('language-mermaid')) {
+            // Mark this as mermaid to skip Shiki processing
+            node.properties = node.properties || {};
+            (node.properties as any).dataLanguage = 'mermaid';
+            // Remove the language class temporarily to prevent Shiki from processing
+            codeNode.properties = codeNode.properties || {};
+            codeNode.properties.className = ['language-mermaid-preserved'];
+          }
+        }
+      }
+    });
+  };
+}
+
+/**
+ * Custom rehype plugin to restore mermaid language class after Shiki processing
+ */
+function rehypeRestoreMermaid() {
+  return (tree: any) => {
+    visit(tree, 'element', (node: Element) => {
+      if (node.tagName === 'pre') {
+        const codeNode = node.children[0] as Element | undefined;
+        if (codeNode && codeNode.tagName === 'code') {
+          const className = codeNode.properties?.className as string[] | undefined;
+          if (className && className.includes('language-mermaid-preserved')) {
+            // Restore the original language class for rehype-mermaid
+            codeNode.properties = codeNode.properties || {};
+            codeNode.properties.className = ['language-mermaid'];
+          }
+        }
+      }
+    });
+  };
+}
 
 /**
  * Renders markdown content to HTML with Tailwind CSS styling and Shiki syntax highlighting
@@ -69,11 +116,13 @@ export async function renderMarkdown(content: string): Promise<string> {
       .use(remarkParse) // Parse markdown to AST
       .use(remarkGfm) // Support GitHub Flavored Markdown
       .use(remarkRehype) // Convert markdown AST to HTML AST
+      .use(rehypePreserveMermaid) // Mark mermaid blocks to skip Shiki processing
       .use(rehypeShiki, {
 		  theme: "one-dark-pro",
 		  keepBackground: true,
-      }) // Add Shiki syntax highlighting
-      .use(rehypeMermaid) // Render Mermaid diagrams as SVG
+      }) // Add Shiki syntax highlighting (skips mermaid blocks)
+      .use(rehypeRestoreMermaid) // Restore mermaid class for rehype-mermaid
+      .use(rehypeMermaid, { strategy: 'img-svg' }) // Render Mermaid diagrams as SVG/IMG
       .use(rehypeSanitize, sanitizeSchema) // Sanitize HTML (after Shiki and Mermaid to preserve styles)
       .use(rehypeTailwind) // Add Tailwind CSS classes
       .use(rehypeStringify) // Convert HTML AST to string
