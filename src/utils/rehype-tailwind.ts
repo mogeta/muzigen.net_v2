@@ -1,12 +1,12 @@
 import { visit } from 'unist-util-visit';
-import type { Element, Root } from 'hast';
+import type { Element, Root, Parent } from 'hast';
 
 /**
  * Custom rehype plugin to add Tailwind CSS classes to HTML elements
  */
 export function rehypeTailwind() {
   return (tree: Root) => {
-    visit(tree, 'element', (node: Element) => {
+    visit(tree, 'element', (node: Element, _index, parent) => {
       const props = node.properties || {};
       let className = (props.className as string[]) || [];
 
@@ -42,17 +42,31 @@ export function rehypeTailwind() {
           props.loading = 'lazy';
           break;
         case 'pre':
-          // Only add structural classes, as Shiki handles syntax highlighting styles
-          className.push('rounded-lg', 'overflow-x-auto', 'my-4');
+          // Check if this is a Shiki code block
+          const isShiki = node.properties?.className &&
+                         Array.isArray(node.properties.className) &&
+                         (node.properties.className as string[]).some((c: string) => c.includes('shiki'));
+
+          if (isShiki) {
+            // For Shiki blocks: add gray background (light/dark), padding and structural classes
+            className.push('bg-gray-100', 'dark:bg-gray-800', 'p-4', 'rounded-lg', 'overflow-x-auto', 'my-4');
+          } else {
+            // For non-Shiki blocks: add background and full styling
+            className.push('bg-gray-100', 'dark:bg-gray-800', 'p-4', 'rounded-lg', 'overflow-x-auto', 'my-4');
+          }
           break;
         case 'code':
-          // Check if this is a code block (has language class) or inline code
-          const hasLanguageClass = node.properties?.className &&
-                                   Array.isArray(node.properties.className) &&
-                                   (node.properties.className as string[]).some((c: string) => c.startsWith('language-'));
+          // Check if parent is a Shiki-processed pre element
+          const parentElement = parent as Element | undefined;
+          const isShikiCodeBlock = parentElement &&
+                                   parentElement.type === 'element' &&
+                                   parentElement.tagName === 'pre' &&
+                                   parentElement.properties?.className &&
+                                   Array.isArray(parentElement.properties.className) &&
+                                   (parentElement.properties.className as string[]).some((c: string) => c.includes('shiki'));
 
           // Only style inline code - Shiki handles code blocks
-          if (!hasLanguageClass) {
+          if (!isShikiCodeBlock) {
             className.push('bg-gray-100', 'px-2', 'py-1', 'rounded', 'text-sm');
           }
           break;

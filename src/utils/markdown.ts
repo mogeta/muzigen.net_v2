@@ -44,6 +44,7 @@ export async function renderMarkdown(content: string): Promise<string> {
           light: 'github-light',
           dark: 'github-dark',
         },
+        defaultColor: false, // Don't add inline background colors, let Tailwind handle it
       }) // Add Shiki syntax highlighting
       .use(rehypeSanitize, sanitizeSchema) // Sanitize HTML (after Shiki to preserve styles)
       .use(rehypeTailwind) // Add Tailwind CSS classes

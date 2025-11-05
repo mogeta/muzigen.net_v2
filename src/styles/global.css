@@ -19,3 +19,16 @@
   --color-blue-600: #2563eb;
   --color-blue-800: #1e40af;
 }
+
+/* Override Shiki's inline background colors with our own */
+.shiki,
+.shiki span {
+  background-color: transparent !important;
+}
+
+/* Dark mode text color adjustments for code blocks */
+@media (prefers-color-scheme: dark) {
+  .shiki {
+    color: #e1e4e8 !important;
+  }
+}
