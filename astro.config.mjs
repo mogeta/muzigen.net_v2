@@ -9,6 +9,8 @@ import sitemap from '@astrojs/sitemap';
 
 import react from '@astrojs/react';
 
+import rehypeMermaid from 'rehype-mermaid';
+
 // https://astro.build/config
 export default defineConfig({
     output: 'static',
@@ -16,6 +18,17 @@ export default defineConfig({
     vite: {
         plugins: [tailwindcss()]
     },
+
+    markdown: {
+        syntaxHighlight: {
+            // Exclude mermaid from syntax highlighting to allow rehype-mermaid to process it
+            excludeLangs: ['mermaid'],
+        },
+        rehypePlugins: [
+            [rehypeMermaid, { strategy: 'inline-svg' }],
+        ],
+    },
+
     site: 'https://muzigen.net',
     integrations: [partytown({
         config: {
