@@ -40,10 +40,8 @@ export async function renderMarkdown(content: string): Promise<string> {
       .use(remarkGfm) // Support GitHub Flavored Markdown
       .use(remarkRehype) // Convert markdown AST to HTML AST
       .use(rehypeShiki, {
-        themes: {
-          light: 'github-light',
-          dark: 'github-dark',
-        },
+		  theme: "one-dark-pro",
+		  keepBackground: true,
       }) // Add Shiki syntax highlighting
       .use(rehypeSanitize, sanitizeSchema) // Sanitize HTML (after Shiki to preserve styles)
       .use(rehypeTailwind) // Add Tailwind CSS classes
