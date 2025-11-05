@@ -19,10 +19,23 @@ export const oasys = defineChain({
     },
 });
 
+// 🎮 HomeVerse (Oasys L2) チェーン定義
+export const homeverse = defineChain({
+    id: 19011,
+    name: "HOME Verse",
+    network: "homeverse",
+    nativeCurrency: {
+        name: "OAS",
+        symbol: "OAS",
+        decimals: 18,
+    },
+    rpcUrls: {
+        default: { http: ["https://rpc.mainnet.oasys.homeverse.games/"] },
+        public: { http: ["https://rpc.mainnet.oasys.homeverse.games/"] },
+    },
+    blockExplorers: {
+        default: { name: "HOME Verse Explorer", url: "https://explorer.oasys.homeverse.games/" },
+    },
+});
+
 // 他のカスタムチェーン定義をここに追加できます
-// 例：
-// export const myCustomChain = defineChain({
-//     id: 1234,
-//     name: "My Custom Chain",
-//     ...
-// });

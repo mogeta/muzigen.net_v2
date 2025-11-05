@@ -9,15 +9,16 @@ import {
 } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "@rainbow-me/rainbowkit/styles.css";
-import { oasys } from "../config/chains";
+import { oasys, homeverse } from "../config/chains";
 import NFTGallery from "./NFTGallery";
 
 // 🚀 wagmi + RainbowKit 設定
 const config = getDefaultConfig({
     appName: "My Astro Dapp",
     projectId: "e924e408ba98f7849a0b78d43502aa4c",
-    chains: [oasys, mainnet],
+    chains: [homeverse, oasys, mainnet],
     transports: {
+        [homeverse.id]: http("https://rpc.mainnet.oasys.homeverse.games/"),
         [oasys.id]: http("https://rpc.mainnet.oasys.games/"),
         [mainnet.id]: http(),
     },

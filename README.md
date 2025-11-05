@@ -44,3 +44,7 @@ All commands are run from the root of the project, from a terminal:
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+https://explorer.oasys.homeverse.games/token/0x3e1fc434eE0197a3309ad0df1Af96C2D6E7706F6
+
+
+https://explorer.oasys.homeverse.games/api/v2/addresses/0x4D8bF583BD2DD813B5e7ddEF05f268eC33f46458/nft/collections?type=

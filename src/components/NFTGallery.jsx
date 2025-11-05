@@ -1,8 +1,45 @@
 import React, { useEffect, useState } from "react";
-import { useAccount } from "wagmi";
+import { useAccount, usePublicClient } from "wagmi";
+import { getContractsForChain } from "../config/nftContracts";
+
+// ERC721 ABI (必要な関数のみ)
+const ERC721_ABI = [
+    {
+        inputs: [{ name: "owner", type: "address" }],
+        name: "balanceOf",
+        outputs: [{ name: "", type: "uint256" }],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            { name: "owner", type: "address" },
+            { name: "index", type: "uint256" },
+        ],
+        name: "tokenOfOwnerByIndex",
+        outputs: [{ name: "", type: "uint256" }],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [{ name: "tokenId", type: "uint256" }],
+        name: "tokenURI",
+        outputs: [{ name: "", type: "string" }],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [],
+        name: "name",
+        outputs: [{ name: "", type: "string" }],
+        stateMutability: "view",
+        type: "function",
+    },
+];
 
 export default function NFTGallery() {
     const { address, isConnected, chain } = useAccount();
+    const publicClient = usePublicClient();
     const [nfts, setNfts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -20,8 +57,13 @@ export default function NFTGallery() {
         setError(null);
 
         try {
-            // Alchemy APIを使用してNFTを取得
-            // APIキーは環境変数から取得（後で設定が必要）
+            // Oasys/HomeVerseの場合はコントラクトから直接取得
+            if (chain?.id === 248 || chain?.id === 19011) {
+                await fetchNFTsFromContracts();
+                return;
+            }
+
+            // Alchemy APIを使用してNFTを取得（Ethereum, Polygon等）
             const apiKey = import.meta.env.PUBLIC_ALCHEMY_API_KEY;
 
             if (!apiKey) {
@@ -53,11 +95,6 @@ export default function NFTGallery() {
                 case 137: // Polygon
                     baseUrl = `https://polygon-mainnet.g.alchemy.com/nft/v3/${apiKey}`;
                     break;
-                case 248: // Oasys
-                    // Oasysの場合は独自のNFT取得ロジックが必要
-                    setError("Oasys NFT取得は現在準備中です");
-                    setLoading(false);
-                    return;
                 default:
                     setError("このチェーンはサポートされていません");
                     setLoading(false);
@@ -76,6 +113,122 @@ export default function NFTGallery() {
             setNfts(data.ownedNfts || []);
         } catch (err) {
             console.error("Error fetching NFTs:", err);
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Oasys/HomeVerse用: コントラクトから直接NFTを取得
+    const fetchNFTsFromContracts = async () => {
+        if (!publicClient || !address) return;
+
+        try {
+            const contracts = getContractsForChain(chain.id);
+
+            if (contracts.length === 0) {
+                setNfts([]);
+                setLoading(false);
+                return;
+            }
+
+            const allNfts = [];
+
+            for (const contractAddress of contracts) {
+                try {
+                    // 1. balanceOf で所有NFT数を取得
+                    const balance = await publicClient.readContract({
+                        address: contractAddress,
+                        abi: ERC721_ABI,
+                        functionName: "balanceOf",
+                        args: [address],
+                    });
+
+                    const balanceNum = Number(balance);
+
+                    if (balanceNum === 0) continue;
+
+                    // 2. コントラクト名を取得
+                    let contractName = "Unknown Collection";
+                    try {
+                        contractName = await publicClient.readContract({
+                            address: contractAddress,
+                            abi: ERC721_ABI,
+                            functionName: "name",
+                        });
+                    } catch (e) {
+                        console.warn("Failed to get contract name:", e);
+                    }
+
+                    // 3. 各トークンのIDとメタデータを取得
+                    for (let i = 0; i < balanceNum; i++) {
+                        try {
+                            const tokenId = await publicClient.readContract({
+                                address: contractAddress,
+                                abi: ERC721_ABI,
+                                functionName: "tokenOfOwnerByIndex",
+                                args: [address, BigInt(i)],
+                            });
+
+                            // tokenURIを取得
+                            let tokenURI = "";
+                            try {
+                                tokenURI = await publicClient.readContract({
+                                    address: contractAddress,
+                                    abi: ERC721_ABI,
+                                    functionName: "tokenURI",
+                                    args: [tokenId],
+                                });
+                            } catch (e) {
+                                console.warn(`Failed to get tokenURI for token ${tokenId}:`, e);
+                            }
+
+                            // メタデータを取得
+                            let metadata = null;
+                            if (tokenURI) {
+                                try {
+                                    // IPFSの場合はHTTPゲートウェイに変換
+                                    let metadataUrl = tokenURI;
+                                    if (tokenURI.startsWith("ipfs://")) {
+                                        metadataUrl = tokenURI.replace(
+                                            "ipfs://",
+                                            "https://ipfs.io/ipfs/"
+                                        );
+                                    }
+
+                                    const metadataResponse = await fetch(metadataUrl);
+                                    if (metadataResponse.ok) {
+                                        metadata = await metadataResponse.json();
+                                    }
+                                } catch (e) {
+                                    console.warn(`Failed to fetch metadata for token ${tokenId}:`, e);
+                                }
+                            }
+
+                            // NFTデータを構築
+                            allNfts.push({
+                                contract: { address: contractAddress },
+                                tokenId: tokenId.toString(),
+                                name: metadata?.name || `${contractName} #${tokenId}`,
+                                image: {
+                                    cachedUrl: metadata?.image?.startsWith("ipfs://")
+                                        ? metadata.image.replace("ipfs://", "https://ipfs.io/ipfs/")
+                                        : metadata?.image,
+                                },
+                                metadata,
+                            });
+                        } catch (e) {
+                            console.warn(`Failed to fetch token at index ${i}:`, e);
+                        }
+                    }
+                } catch (e) {
+                    console.error(`Failed to fetch NFTs from contract ${contractAddress}:`, e);
+                }
+            }
+
+            setNfts(allNfts);
+        } catch (err) {
+            console.error("Error fetching NFTs from contracts:", err);
             setError(err.message);
         } finally {
             setLoading(false);
