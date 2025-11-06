@@ -12,7 +12,12 @@ import react from '@astrojs/react';
 // https://astro.build/config
 export default defineConfig({
     output: 'static',
-
+    markdown: {
+        syntaxHighlight: {
+            type: 'shiki',
+            excludeLangs: ['mermaid'],
+        },
+    },
     vite: {
         plugins: [tailwindcss()]
     },
