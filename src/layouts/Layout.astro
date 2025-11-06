@@ -2,6 +2,22 @@
 import '../styles/global.css'
 import Footer from '../components/Footer.astro'
 import GoogleAnalytics from '../components/GoogleAnalytics.astro'
+
+interface Props {
+	title?: string;
+	description?: string;
+	ogImage?: string;
+	ogType?: 'website' | 'article';
+}
+
+const {
+	title = 'muzigen.net',
+	description = 'muzigen.netのウェブサイト',
+	ogImage,
+	ogType = 'website'
+} = Astro.props;
+
+const pageTitle = title === 'muzigen.net' ? title : `${title} | muzigen.net`;
 ---
 
 <!doctype html>
@@ -15,7 +31,21 @@ import GoogleAnalytics from '../components/GoogleAnalytics.astro'
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" />
 		<meta name="generator" content={Astro.generator} />
-		<title>muzigen.net</title>
+		<title>{pageTitle}</title>
+		<meta name="description" content={description} />
+
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content={ogType} />
+		<meta property="og:title" content={pageTitle} />
+		<meta property="og:description" content={description} />
+		{ogImage && <meta property="og:image" content={ogImage} />}
+
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={pageTitle} />
+		<meta name="twitter:description" content={description} />
+		{ogImage && <meta name="twitter:image" content={ogImage} />}
+
 		<GoogleAnalytics />
 	</head>
 	<body>

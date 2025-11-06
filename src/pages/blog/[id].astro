@@ -66,7 +66,12 @@ export async function getStaticPaths() {
 const {article} = Astro.props;
 ---
 
-<Layout title={article.title}>
+<Layout
+	title={article.title}
+	description={article.description}
+	ogImage={article.ogp_image}
+	ogType="article"
+>
     <main class="max-w-4xl mx-auto px-4 py-8">
         <article class="prose lg:prose-xl mx-auto">
             <!-- Header -->
