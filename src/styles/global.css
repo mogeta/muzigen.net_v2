@@ -1,8 +1,39 @@
 @import "tailwindcss";
 
 @theme {
+  /* Typography - Inspired by Atlassian Design System */
   --font-family-sans: "Inter", "Noto Sans JP", system-ui, -apple-system, sans-serif;
+  --font-family-mono: "Courier New", Consolas, monospace;
 
+  /* Font sizes */
+  --font-heading-xxlarge: 2.5rem;   /* 40px */
+  --font-heading-xlarge: 2rem;      /* 32px */
+  --font-heading-large: 1.5rem;     /* 24px */
+  --font-heading-medium: 1.25rem;   /* 20px */
+  --font-heading-small: 1.125rem;   /* 18px */
+
+  --font-body-large: 1.125rem;      /* 18px */
+  --font-body-medium: 1rem;         /* 16px */
+  --font-body-small: 0.875rem;      /* 14px */
+  --font-body-xsmall: 0.75rem;      /* 12px */
+
+  /* Line heights */
+  --line-height-heading: 1.3;
+  --line-height-body: 1.7;
+
+  /* Spacing system - Inspired by Atlassian Design System */
+  --spacing-025: 0.125rem;  /* 2px */
+  --spacing-050: 0.25rem;   /* 4px */
+  --spacing-100: 0.5rem;    /* 8px */
+  --spacing-200: 1rem;      /* 16px */
+  --spacing-300: 1.5rem;    /* 24px */
+  --spacing-400: 2rem;      /* 32px */
+  --spacing-500: 2.5rem;    /* 40px */
+  --spacing-600: 3rem;      /* 48px */
+  --spacing-800: 4rem;      /* 64px */
+  --spacing-1000: 5rem;     /* 80px */
+
+  /* Color system */
   --color-gray-50: #f9fafb;
   --color-gray-100: #f3f4f6;
   --color-gray-200: #e5e7eb;
@@ -14,8 +45,67 @@
   --color-gray-800: #1f2937;
   --color-gray-900: #111827;
 
+  --color-blue-50: #eff6ff;
   --color-blue-100: #dbeafe;
   --color-blue-300: #93c5fd;
   --color-blue-600: #2563eb;
+  --color-blue-700: #1d4ed8;
   --color-blue-800: #1e40af;
+
+  /* Semantic colors */
+  --color-surface-default: #ffffff;
+  --color-surface-raised: #f9fafb;
+  --color-surface-overlay: #ffffff;
+
+  --color-text-primary: #111827;
+  --color-text-secondary: #4b5563;
+  --color-text-tertiary: #6b7280;
+  --color-text-disabled: #9ca3af;
+
+  --color-border-default: #e5e7eb;
+  --color-border-subtle: #f3f4f6;
+  --color-border-focus: #2563eb;
+
+  --color-link-default: #2563eb;
+  --color-link-hover: #1e40af;
+  --color-link-visited: #7c3aed;
+
+  /* Border radius */
+  --radius-small: 0.25rem;  /* 4px */
+  --radius-medium: 0.5rem;  /* 8px */
+  --radius-large: 0.75rem;  /* 12px */
+  --radius-xlarge: 1rem;    /* 16px */
+
+  /* Shadows */
+  --shadow-raised: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-overlay: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-floating: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+/* Focus management - Atlassian-inspired accessibility */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-small);
+}
+
+/* Skip to main content for keyboard navigation */
+.skip-to-main {
+  position: absolute;
+  left: -9999px;
+  z-index: 999;
+  background: var(--color-surface-default);
+  padding: var(--spacing-200) var(--spacing-300);
+  border: 2px solid var(--color-border-focus);
+  border-radius: var(--radius-medium);
+}
+
+.skip-to-main:focus {
+  left: 50%;
+  transform: translateX(-50%);
+  top: var(--spacing-200);
 }
