@@ -73,7 +73,7 @@ const {article} = Astro.props;
 	ogType="article"
 >
     <main class="max-w-4xl mx-auto px-4 py-8">
-        <article class="prose lg:prose-xl mx-auto">
+        <article class="prose lg:prose-xl w-full">
             <!-- Header -->
             <header class="mb-8 not-prose">
                 <h1 class="text-4xl font-bold mb-4 text-gray-900">
@@ -168,7 +168,8 @@ const {article} = Astro.props;
     @import "tailwindcss";
 
     .prose {
-        max-width: none;
+        max-width: none !important;
+        width: 100%;
     }
 
     /* Markdown Content Styles */
@@ -201,7 +202,7 @@ const {article} = Astro.props;
     }
 
     .markdown-content a {
-        @apply text-blue-600 hover:text-blue-800 underline;
+        @apply text-blue-600 hover:text-blue-800 underline break-words;
     }
 
     .markdown-content ul {
@@ -226,6 +227,8 @@ const {article} = Astro.props;
 
     .markdown-content pre {
         @apply mb-4 p-4 rounded-lg overflow-x-auto bg-gray-50;
+        max-width: 100%;
+        -webkit-overflow-scrolling: touch;
     }
 
     .markdown-content pre code {
@@ -238,6 +241,9 @@ const {article} = Astro.props;
 
     .markdown-content table {
         @apply w-full border-collapse mb-4;
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .markdown-content th {
