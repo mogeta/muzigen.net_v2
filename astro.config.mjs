@@ -9,6 +9,8 @@ import sitemap from '@astrojs/sitemap';
 
 import react from '@astrojs/react';
 
+import sentry from '@sentry/astro';
+
 // https://astro.build/config
 export default defineConfig({
     output: 'static',
@@ -22,11 +24,17 @@ export default defineConfig({
         plugins: [tailwindcss()]
     },
     site: 'https://muzigen.net',
+
     integrations: [partytown({
         config: {
             // Google AnalyticsのためにdataLayer.pushを転送
             forward: ["dataLayer.push"],
         },
 
-    }), sitemap(), react()]
+    }),sentry({
+        project: "muzigen-net",
+        org: "muzigen",
+        authToken: process.env.SENTRY_AUTH_TOKEN,
+    }),
+        sitemap(), react()]
 });
