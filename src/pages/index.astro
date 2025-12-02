@@ -3,27 +3,456 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout>
-	<div class="grid grid-cols-12 gap-8 min-h-screen items-center px-4 py-16 bg-gradient-to-br from-gray-100 via-white to-gray-300">
-		<div class="col-span-12 lg:col-span-6 lg:col-start-2">
-			<div class="max-w-xl">
-				<h1 class="text-4xl font-bold tracking-tight sm:text-6xl mb-6">
-					muzigen.net
+	<!-- Hero Section with Parallax -->
+	<section class="hero-section relative min-h-screen flex items-center justify-center overflow-hidden">
+		<div class="parallax-bg absolute inset-0 z-0"></div>
+		<div class="parallax-shapes absolute inset-0 z-1 pointer-events-none">
+			<div class="shape shape-1"></div>
+			<div class="shape shape-2"></div>
+			<div class="shape shape-3"></div>
+		</div>
+
+		<div class="hero-content relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+			<div class="fade-in-up">
+				<h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 text-gray-900">
+					<span class="gradient-text">muzigen.net</span>
 				</h1>
-				<p class="text-lg leading-8 text-gray-600 mb-8">
-					Astroを中心としたサイト検証や、resume、ブログ等。
+				<p class="text-xl sm:text-2xl text-gray-800 mb-4 max-w-2xl mx-auto">
+					Game Developer & Freelance IT Engineer
 				</p>
-				<div class="flex gap-4">
+				<p class="text-base sm:text-lg text-gray-800 mb-12 max-w-xl mx-auto">
+					ゲーム開発とWeb技術を探求するエンジニアのブログ
+				</p>
+				<div class="flex flex-col sm:flex-row gap-4 justify-center">
 					<a
 						href="/blog"
-						class="rounded-md bg-indigo-600 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+						class="btn-primary"
 					>
-						Visit Blog
+						View Blog Posts
+					</a>
+					<a
+						href="#about"
+						class="btn-secondary"
+					>
+						Learn More
 					</a>
 				</div>
 			</div>
 		</div>
-		<div class="col-span-12 lg:col-span-4">
-			<img src="/top.jpg" alt="Top Image" class="w-full h-auto object-contain rounded-lg shadow-xl" />
+
+		<div class="scroll-indicator">
+			<div class="mouse"></div>
 		</div>
-	</div>
+	</section>
+
+	<!-- About Section -->
+	<section id="about" class="about-section py-20 lg:py-32 bg-white">
+		<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+			<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+				<div class="fade-in-left">
+					<img
+						src="/top.jpg"
+						alt="Profile"
+						class="rounded-2xl shadow-2xl w-full h-auto object-cover"
+					/>
+				</div>
+				<div class="fade-in-right">
+					<h2 class="text-3xl sm:text-4xl font-bold mb-6 text-gray-900">
+						About Me
+					</h2>
+					<p class="text-lg text-gray-600 mb-6 leading-relaxed">
+					</p>
+					<div class="space-y-4">
+						<div class="skill-tag-group">
+							<span class="skill-tag">Game Development</span>
+							<span class="skill-tag">Web Engineering</span>
+							<span class="skill-tag">Astro</span>
+							<span class="skill-tag">TypeScript</span>
+							<span class="skill-tag">Firebase</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Features Section with Parallax Cards -->
+	<section class="features-section py-20 lg:py-32 bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
+		<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+			<div class="text-center mb-16 fade-in-up">
+				<h2 class="text-3xl sm:text-4xl font-bold mb-4 text-gray-900">
+					What I Do
+				</h2>
+			</div>
+
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+				<div class="feature-card fade-in-up" style="animation-delay: 0.1s;">
+					<div class="feature-icon">🎮</div>
+					<h3 class="text-xl font-bold mb-3 text-gray-900">Game Development</h3>
+					<p class="text-gray-600">
+						ゲーム開発の経験と技術を活かしたプロジェクトの実装と共有
+					</p>
+				</div>
+
+				<div class="feature-card fade-in-up" style="animation-delay: 0.2s;">
+					<div class="feature-icon">🚀</div>
+					<h3 class="text-xl font-bold mb-3 text-gray-900">Modern Web Tech</h3>
+					<p class="text-gray-600">
+						Astro、TypeScriptなど最新のWeb技術スタックの検証と実装
+					</p>
+				</div>
+
+				<div class="feature-card fade-in-up" style="animation-delay: 0.3s;">
+					<div class="feature-icon">📝</div>
+					<h3 class="text-xl font-bold mb-3 text-gray-900">Technical Writing</h3>
+					<p class="text-gray-600">
+						実践的な技術ブログを通じた知見とノウハウの共有
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- CTA Section -->
+	<section class="cta-section py-20 lg:py-32 bg-gradient-to-r from-indigo-600 to-purple-600 relative overflow-hidden">
+		<div class="parallax-pattern absolute inset-0 opacity-10"></div>
+		<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+			<div class="fade-in-up">
+				<h2 class="text-3xl sm:text-4xl font-bold mb-6 text-white">
+					Ready to Explore?
+				</h2>
+				<p class="text-lg sm:text-xl text-indigo-100 mb-10 max-w-2xl mx-auto">
+					技術ブログで最新の記事をチェックしてみてください
+				</p>
+				<a
+					href="/blog"
+					class="btn-white"
+				>
+					Browse Blog Posts
+				</a>
+			</div>
+		</div>
+	</section>
 </Layout>
+
+<style>
+	/* Hero Section Styles */
+	.hero-section {
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	}
+
+	.parallax-bg {
+		background: linear-gradient(135deg,
+			rgba(102, 126, 234, 0.8) 0%,
+			rgba(118, 75, 162, 0.8) 100%
+		);
+		transform: translateZ(-1px) scale(2);
+	}
+
+	.parallax-shapes .shape {
+		position: absolute;
+		border-radius: 50%;
+		background: rgba(255, 255, 255, 0.1);
+		backdrop-filter: blur(10px);
+	}
+
+	.shape-1 {
+		width: 300px;
+		height: 300px;
+		top: 10%;
+		left: 10%;
+		animation: float 20s ease-in-out infinite;
+	}
+
+	.shape-2 {
+		width: 200px;
+		height: 200px;
+		top: 60%;
+		right: 15%;
+		animation: float 15s ease-in-out infinite 5s;
+	}
+
+	.shape-3 {
+		width: 150px;
+		height: 150px;
+		bottom: 20%;
+		left: 50%;
+		animation: float 18s ease-in-out infinite 10s;
+	}
+
+	@keyframes float {
+		0%, 100% {
+			transform: translateY(0) translateX(0);
+		}
+		33% {
+			transform: translateY(-30px) translateX(30px);
+		}
+		66% {
+			transform: translateY(30px) translateX(-30px);
+		}
+	}
+
+	.gradient-text {
+		background: linear-gradient(to right, #ffffff, #e0e7ff);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	/* Scroll Indicator */
+	.scroll-indicator {
+		position: absolute;
+		bottom: 30px;
+		left: 50%;
+		transform: translateX(-50%);
+		z-index: 10;
+	}
+
+	.mouse {
+		width: 26px;
+		height: 40px;
+		border: 2px solid rgba(255, 255, 255, 0.5);
+		border-radius: 13px;
+		position: relative;
+	}
+
+	.mouse::before {
+		content: '';
+		width: 4px;
+		height: 8px;
+		background: rgba(255, 255, 255, 0.7);
+		border-radius: 2px;
+		position: absolute;
+		top: 8px;
+		left: 50%;
+		transform: translateX(-50%);
+		animation: scroll 2s infinite;
+	}
+
+	@keyframes scroll {
+		0% {
+			opacity: 1;
+			transform: translateX(-50%) translateY(0);
+		}
+		100% {
+			opacity: 0;
+			transform: translateX(-50%) translateY(15px);
+		}
+	}
+
+	/* Button Styles */
+	.btn-primary {
+		display: inline-block;
+		padding: 1rem 2rem;
+		background: white;
+		color: #667eea;
+		font-weight: 600;
+		border-radius: 0.75rem;
+		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+		transition: all 0.3s ease;
+	}
+
+	.btn-primary:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+	}
+
+	.btn-secondary {
+		display: inline-block;
+		padding: 1rem 2rem;
+		background: rgba(255, 255, 255, 0.1);
+		color: white;
+		font-weight: 600;
+		border-radius: 0.75rem;
+		border: 2px solid rgba(255, 255, 255, 0.3);
+		backdrop-filter: blur(10px);
+		transition: all 0.3s ease;
+	}
+
+	.btn-secondary:hover {
+		background: rgba(255, 255, 255, 0.2);
+		border-color: rgba(255, 255, 255, 0.5);
+		transform: translateY(-2px);
+	}
+
+	.btn-white {
+		display: inline-block;
+		padding: 1rem 2.5rem;
+		background: white;
+		color: #667eea;
+		font-weight: 600;
+		border-radius: 0.75rem;
+		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+		transition: all 0.3s ease;
+	}
+
+	.btn-white:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+	}
+
+	/* Feature Cards */
+	.feature-card {
+		background: white;
+		padding: 2rem;
+		border-radius: 1rem;
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+		transition: all 0.3s ease;
+		border: 1px solid rgba(0, 0, 0, 0.05);
+	}
+
+	.feature-card:hover {
+		transform: translateY(-8px);
+		box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+	}
+
+	.feature-icon {
+		font-size: 3rem;
+		margin-bottom: 1rem;
+	}
+
+	/* Skill Tags */
+	.skill-tag-group {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+	}
+
+	.skill-tag {
+		display: inline-block;
+		padding: 0.5rem 1rem;
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		color: white;
+		border-radius: 2rem;
+		font-size: 0.875rem;
+		font-weight: 600;
+		box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+		transition: all 0.3s ease;
+	}
+
+	.skill-tag:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
+	}
+
+	/* Parallax Pattern */
+	.parallax-pattern {
+		background-image:
+			radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 2px, transparent 2px),
+			radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 2px, transparent 2px);
+		background-size: 50px 50px;
+		animation: patternMove 20s linear infinite;
+	}
+
+	@keyframes patternMove {
+		0% {
+			background-position: 0 0, 25px 25px;
+		}
+		100% {
+			background-position: 50px 50px, 75px 75px;
+		}
+	}
+
+	/* Fade In Animations */
+	.fade-in-up {
+		opacity: 0;
+		animation: fadeInUp 1s ease forwards;
+	}
+
+	.fade-in-left {
+		opacity: 0;
+		animation: fadeInLeft 1s ease forwards;
+	}
+
+	.fade-in-right {
+		opacity: 0;
+		animation: fadeInRight 1s ease forwards;
+	}
+
+	@keyframes fadeInUp {
+		from {
+			opacity: 0;
+			transform: translateY(30px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes fadeInLeft {
+		from {
+			opacity: 0;
+			transform: translateX(-30px);
+		}
+		to {
+			opacity: 1;
+			transform: translateX(0);
+		}
+	}
+
+	@keyframes fadeInRight {
+		from {
+			opacity: 0;
+			transform: translateX(30px);
+		}
+		to {
+			opacity: 1;
+			transform: translateX(0);
+		}
+	}
+
+	/* Responsive adjustments */
+	@media (max-width: 640px) {
+		.hero-section {
+			min-height: 100vh;
+		}
+
+		.shape-1, .shape-2, .shape-3 {
+			width: 150px;
+			height: 150px;
+		}
+	}
+</style>
+
+<script>
+	// Parallax effect on scroll
+	window.addEventListener('scroll', () => {
+		const scrolled = window.pageYOffset;
+		const parallaxBg = document.querySelector('.parallax-bg') as HTMLElement;
+		const shapes = document.querySelectorAll('.shape') as NodeListOf<HTMLElement>;
+
+		if (parallaxBg) {
+			parallaxBg.style.transform = `translateY(${scrolled * 0.5}px)`;
+		}
+
+		shapes.forEach((shape, index) => {
+			const speed = 0.2 + (index * 0.1);
+			shape.style.transform = `translateY(${scrolled * speed}px)`;
+		});
+	});
+
+	// Intersection Observer for fade-in animations
+	const observerOptions = {
+		threshold: 0.1,
+		rootMargin: '0px 0px -50px 0px'
+	};
+
+	const observer = new IntersectionObserver((entries) => {
+		entries.forEach(entry => {
+			if (entry.isIntersecting) {
+				// 要素が画面内に入ったらアニメーションを再開
+				(entry.target as HTMLElement).style.animation = 'none';
+				// 強制的にリフローを発生させる
+				void (entry.target as HTMLElement).offsetHeight;
+				// アニメーションを再設定
+				(entry.target as HTMLElement).style.animation = '';
+			}
+		});
+	}, observerOptions);
+
+	document.addEventListener('DOMContentLoaded', () => {
+		const animatedElements = document.querySelectorAll('.fade-in-up, .fade-in-left, .fade-in-right');
+		animatedElements.forEach(el => observer.observe(el));
+	});
+</script>
