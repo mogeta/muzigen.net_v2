@@ -24,4 +24,11 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
-.claude
+
+# 個人設定は除外
+.claude/settings.local.json
+.claude/cache/
+.claude/logs/
+
+# スキルは含める
+!.claude/skills/
