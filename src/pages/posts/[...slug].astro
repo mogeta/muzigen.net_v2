@@ -22,7 +22,6 @@ const { Content } = await post.render();
   ogType="article"
   publishedTime={post.data.pubDate.toISOString()}
   modifiedTime={post.data.pubDate.toISOString()}
-  author={post.data.author}
 >
   <BlogPostingSchema
     title={post.data.title}
