@@ -1,0 +1,122 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import {getFirestore} from 'firebase-admin/firestore';
+import {app} from '../../firebase/server';
+import BreadcrumbSchema from '../../components/BreadcrumbSchema.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+interface TagCount {
+	name: string;
+	count: number;
+}
+
+let tags: TagCount[] = [];
+
+try {
+	const db = getFirestore(app);
+	const snapshot = await db.collection('blog_contents')
+		.where('publish', '==', true)
+		.get();
+
+	// Count articles per tag
+	const tagMap = new Map<string, number>();
+	snapshot.docs.forEach(doc => {
+		const data = doc.data();
+		const tag = data.tag;
+		if (tag && typeof tag === 'string') {
+			tagMap.set(tag, (tagMap.get(tag) || 0) + 1);
+		}
+	});
+
+	// Convert to array and sort by count (descending)
+	tags = Array.from(tagMap.entries())
+		.map(([name, count]) => ({name, count}))
+		.sort((a, b) => b.count - a.count);
+} catch (error) {
+	console.error('Error fetching tags:', error);
+}
+---
+
+<Layout
+	title="タグ一覧"
+	description="ブログ記事のタグ一覧ページ。興味のあるトピックから記事を探せます。"
+>
+	<BreadcrumbSchema
+		items={[
+			{ name: 'ホーム', url: '/' },
+			{ name: 'ブログ', url: '/blog' },
+			{ name: 'タグ一覧', url: '/tags' }
+		]}
+	/>
+	<a href="#main-content" class="skip-to-main">メインコンテンツへスキップ</a>
+
+	<main id="main-content" class="max-w-6xl mx-auto px-4 py-12">
+		<!-- パンくずナビゲーション -->
+		<Breadcrumb
+			items={[
+				{ name: 'ホーム', url: '/' },
+				{ name: 'ブログ', url: '/blog' },
+				{ name: 'タグ一覧', url: '/tags' }
+			]}
+		/>
+
+		<!-- Header -->
+		<header class="mb-12 text-center">
+			<h1 class="text-5xl font-bold text-gray-900 mb-4">
+				タグ一覧
+			</h1>
+			<p class="text-xl text-gray-600 max-w-2xl mx-auto">
+				興味のあるトピックから記事を探せます
+			</p>
+		</header>
+
+		{tags.length > 0 ? (
+			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+				{tags.map((tag) => (
+					<a
+						href={`/tags/${encodeURIComponent(tag.name)}`}
+						class="group block bg-white rounded-xl shadow-md border border-gray-200 p-6 hover:shadow-xl hover:border-blue-300 transition-all duration-200 hover:-translate-y-1"
+					>
+						<div class="flex items-center justify-between">
+							<div class="flex-1 min-w-0">
+								<h2 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors truncate">
+									#{tag.name}
+								</h2>
+								<p class="text-sm text-gray-600">
+									{tag.count}件
+								</p>
+							</div>
+							<svg
+								class="w-6 h-6 text-gray-400 group-hover:text-blue-600 transition-colors flex-shrink-0 ml-2"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+							</svg>
+						</div>
+					</a>
+				))}
+			</div>
+		) : (
+			<div class="text-center py-20">
+				<div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+					<svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+					</svg>
+				</div>
+				<h2 class="text-2xl font-bold text-gray-900 mb-2">タグがありません</h2>
+				<p class="text-gray-600 mb-8">まだタグ付けされた記事がありません</p>
+				<a
+					href="/blog"
+					class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+				>
+					記事一覧へ
+					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+					</svg>
+				</a>
+			</div>
+		)}
+	</main>
+</Layout>
