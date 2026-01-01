@@ -17,9 +17,13 @@ let relatedArticles: BlogListItem[] = [];
 try {
   if (tag) {
     const db = getFirestore(app);
+    // Fetch articles sorted by created_date with limit
+    // Note: This requires a composite index on (tag, created_date) in Firestore
     const snapshot = await db.collection('blog_contents')
       .where('publish', '==', true)
       .where('tag', '==', tag)
+      .orderBy('created_date', 'desc')
+      .limit(limit + 1) // +1 to account for current article potentially being in results
       .get();
 
     relatedArticles = snapshot.docs
@@ -37,13 +41,7 @@ try {
           created_date: data.created_date?.toDate?.()?.toISOString() || data.created_date || '',
         };
       })
-      .sort((a, b) => {
-        // Sort by created_date descending
-        const dateA = new Date(a.created_date).getTime();
-        const dateB = new Date(b.created_date).getTime();
-        return dateB - dateA;
-      })
-      .slice(0, limit); // Limit results
+      .slice(0, limit); // Ensure we don't exceed limit after filtering
   }
 } catch (error) {
   console.error('Error fetching related articles:', error);

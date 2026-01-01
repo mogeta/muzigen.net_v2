@@ -15,43 +15,36 @@ export async function getStaticPaths() {
 			.where('publish', '==', true)
 			.get();
 
-		// Get unique tags
-		const tagsSet = new Set<string>();
+		// Group articles by tag in a single pass
+		const articlesByTag = new Map<string, BlogListItem[]>();
 		snapshot.docs.forEach(doc => {
 			const data = doc.data();
 			const tag = data.tag;
 			if (tag && typeof tag === 'string') {
-				tagsSet.add(tag);
+				const articlesForTag = articlesByTag.get(tag) || [];
+				const article: BlogListItem = {
+					id: doc.id,
+					slug: data.slug || undefined,
+					title: data.title || '',
+					description: data.description || '',
+					ogp_image: data.ogp_image || '',
+					tag: data.tag || '',
+					update_date: data.update_date?.toDate?.()?.toISOString() || data.update_date || '',
+					created_date: data.created_date?.toDate?.()?.toISOString() || data.created_date || '',
+				};
+				articlesForTag.push(article);
+				articlesByTag.set(tag, articlesForTag);
 			}
 		});
 
 		// Generate paths for each tag
-		return Array.from(tagsSet).map(tag => {
-			// Filter articles by this tag
-			const articles: BlogListItem[] = snapshot.docs
-				.filter(doc => {
-					const data = doc.data();
-					return data.tag === tag;
-				})
-				.map(doc => {
-					const data = doc.data();
-					return {
-						id: doc.id,
-						slug: data.slug || undefined,
-						title: data.title || '',
-						description: data.description || '',
-						ogp_image: data.ogp_image || '',
-						tag: data.tag || '',
-						update_date: data.update_date?.toDate?.()?.toISOString() || data.update_date || '',
-						created_date: data.created_date?.toDate?.()?.toISOString() || data.created_date || '',
-					};
-				})
-				.sort((a, b) => {
-					// Sort by created_date descending
-					const dateA = new Date(a.created_date).getTime();
-					const dateB = new Date(b.created_date).getTime();
-					return dateB - dateA;
-				});
+		return Array.from(articlesByTag.entries()).map(([tag, articles]) => {
+			// Sort articles within each tag group
+			articles.sort((a, b) => {
+				const dateA = new Date(a.created_date).getTime();
+				const dateB = new Date(b.created_date).getTime();
+				return dateB - dateA;
+			});
 
 			return {
 				params: {tag},
@@ -100,7 +93,7 @@ const {tag, articles} = Astro.props;
 					#{tag}
 				</div>
 				<span class="text-gray-600">
-					{articles.length} {articles.length === 1 ? '記事' : '記事'}
+					{articles.length}件
 				</span>
 			</div>
 
