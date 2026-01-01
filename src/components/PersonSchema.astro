@@ -20,8 +20,8 @@ const siteUrl = Astro.url.origin;
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'Person',
-  name: name,
-  description: description,
+  name,
+  description,
   image: image ? (image.startsWith('http') ? image : `${siteUrl}${image}`) : undefined,
   url: url.startsWith('http') ? url : `${siteUrl}${url}`,
   sameAs: sameAs.filter(link => link),
