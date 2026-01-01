@@ -80,7 +80,7 @@ const {article} = Astro.props;
 		image={article.ogp_image}
 		datePublished={article.created_date}
 		dateModified={article.update_date || article.created_date}
-		url={`https://muzigen.net/blog/${article.id}/`}
+		url={Astro.url.href}
 	/>
 	<BreadcrumbSchema
 		items={[

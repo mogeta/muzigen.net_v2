@@ -22,7 +22,7 @@ const { Content } = await post.render();
     description={post.data.description}
     datePublished={post.data.pubDate.toISOString()}
     dateModified={post.data.pubDate.toISOString()}
-    url={`https://muzigen.net/posts/${post.slug}/`}
+    url={Astro.url.href}
     author={post.data.author}
   />
   <BreadcrumbSchema

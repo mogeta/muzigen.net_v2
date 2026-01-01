@@ -16,10 +16,10 @@ const {
   datePublished,
   dateModified,
   url,
-  author = 'muzigen.net',
+  author,
 } = Astro.props;
 
-const siteUrl = 'https://muzigen.net';
+const siteUrl = Astro.url.origin;
 
 const schema = {
   '@context': 'https://schema.org',
@@ -29,9 +29,12 @@ const schema = {
   image: image ? (image.startsWith('http') ? image : `${siteUrl}${image}`) : undefined,
   datePublished: datePublished,
   dateModified: dateModified,
-  author: {
+  author: author ? {
     '@type': 'Person',
     name: author,
+  } : {
+    '@type': 'Organization',
+    name: 'muzigen.net',
   },
   publisher: {
     '@type': 'Organization',
@@ -46,9 +49,6 @@ const schema = {
     '@id': url,
   },
 };
-
-// Remove undefined fields
-const cleanSchema = JSON.parse(JSON.stringify(schema));
 ---
 
-<script type="application/ld+json" set:html={JSON.stringify(cleanSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
