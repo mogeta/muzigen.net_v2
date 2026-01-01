@@ -8,13 +8,19 @@ interface Props {
 	description?: string;
 	ogImage?: string;
 	ogType?: 'website' | 'article';
+	publishedTime?: string;
+	modifiedTime?: string;
+	author?: string;
 }
 
 const {
 	title = 'muzigen.net',
 	description = 'muzigen.netのウェブサイト',
 	ogImage,
-	ogType = 'website'
+	ogType = 'website',
+	publishedTime,
+	modifiedTime,
+	author
 } = Astro.props;
 
 const pageTitle = title === 'muzigen.net' ? title : `${title} | muzigen.net`;
@@ -41,6 +47,9 @@ const pageTitle = title === 'muzigen.net' ? title : `${title} | muzigen.net`;
 		<meta property="og:title" content={pageTitle} />
 		<meta property="og:description" content={description} />
 		{ogImage && <meta property="og:image" content={ogImage} />}
+		{publishedTime && <meta property="article:published_time" content={publishedTime} />}
+		{modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+		{author && <meta property="article:author" content={author} />}
 
 		<!-- Twitter -->
 		<meta name="twitter:card" content="summary_large_image" />
