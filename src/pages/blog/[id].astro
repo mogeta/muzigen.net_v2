@@ -8,6 +8,7 @@ import {createMarkdownProcessor} from '@astrojs/markdown-remark';
 import rehypeMermaid from 'rehype-mermaid';
 import BlogPostingSchema from '../../components/BlogPostingSchema.astro';
 import BreadcrumbSchema from '../../components/BreadcrumbSchema.astro';
+import ShareButtons from '../../components/ShareButtons.astro';
 
 export async function getStaticPaths() {
 	const db = getFirestore(app);
@@ -194,6 +195,9 @@ const {article} = Astro.props;
 						</div>
 					)}
 				</div>
+
+				<!-- シェアボタン -->
+				<ShareButtons url={Astro.url.href} title={article.title} />
 			</div>
 
 			<!-- フッター -->
