@@ -11,7 +11,8 @@ export interface BlogArticle {
   description: string;
   ogp_image: string;
   content: string;
-  tag: string;
+  tag?: string; // Deprecated: use tags instead
+  tags?: string[]; // Array of tags
   content_url: string;
   markdown_url: string;
   update_date: string;
@@ -26,7 +27,8 @@ export interface BlogListItem {
   title: string;
   description: string;
   ogp_image: string;
-  tag: string;
+  tag?: string; // Deprecated: use tags instead
+  tags?: string[]; // Array of tags
   update_date: string;
   created_date: string;
 }
