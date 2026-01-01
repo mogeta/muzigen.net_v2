@@ -1,0 +1,54 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  datePublished: string;
+  dateModified: string;
+  url: string;
+  author?: string;
+}
+
+const {
+  title,
+  description,
+  image,
+  datePublished,
+  dateModified,
+  url,
+  author = 'muzigen.net',
+} = Astro.props;
+
+const siteUrl = 'https://muzigen.net';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description: description,
+  image: image ? (image.startsWith('http') ? image : `${siteUrl}${image}`) : undefined,
+  datePublished: datePublished,
+  dateModified: dateModified,
+  author: {
+    '@type': 'Person',
+    name: author,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'muzigen.net',
+    logo: {
+      '@type': 'ImageObject',
+      url: `${siteUrl}/favicon.svg`,
+    },
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': url,
+  },
+};
+
+// Remove undefined fields
+const cleanSchema = JSON.parse(JSON.stringify(schema));
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(cleanSchema)} />

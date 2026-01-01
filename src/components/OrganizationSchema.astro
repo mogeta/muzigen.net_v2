@@ -1,0 +1,19 @@
+---
+const siteUrl = 'https://muzigen.net';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'muzigen.net',
+  url: siteUrl,
+  logo: {
+    '@type': 'ImageObject',
+    url: `${siteUrl}/favicon.svg`,
+  },
+  sameAs: [
+    // SNSアカウントのURLがあれば追加
+  ],
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

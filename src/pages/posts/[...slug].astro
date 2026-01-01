@@ -1,6 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import BlogPostingSchema from '../../components/BlogPostingSchema.astro';
+import BreadcrumbSchema from '../../components/BreadcrumbSchema.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
@@ -15,6 +17,21 @@ const { Content } = await post.render();
 ---
 
 <Layout title={post.data.title} description={post.data.description} ogType="article">
+  <BlogPostingSchema
+    title={post.data.title}
+    description={post.data.description}
+    datePublished={post.data.pubDate.toISOString()}
+    dateModified={post.data.pubDate.toISOString()}
+    url={`https://muzigen.net/posts/${post.slug}/`}
+    author={post.data.author}
+  />
+  <BreadcrumbSchema
+    items={[
+      { name: 'ホーム', url: '/' },
+      { name: 'Posts', url: '/posts' },
+      { name: post.data.title, url: `/posts/${post.slug}/` }
+    ]}
+  />
   <a href="#main-content" class="skip-to-main">メインコンテンツへスキップ</a>
 
   <main id="main-content" class="max-w-4xl mx-auto px-4 py-12">
