@@ -1,0 +1,42 @@
+---
+import type { BlogListItem } from '../types/blog';
+
+interface Props {
+	name: string;
+	description: string;
+	url: string;
+	blogPosts?: BlogListItem[];
+}
+
+const {
+	name,
+	description,
+	url,
+	blogPosts = [],
+} = Astro.props;
+
+const siteUrl = Astro.url.origin;
+
+const schema = {
+	'@context': 'https://schema.org',
+	'@type': 'Blog',
+	name: name,
+	description: description,
+	url: url,
+	blogPost: blogPosts.slice(0, 10).map(post => ({
+		'@type': 'BlogPosting',
+		headline: post.title,
+		description: post.description,
+		image: post.ogp_image ? (post.ogp_image.startsWith('http') ? post.ogp_image : `${siteUrl}${post.ogp_image}`) : undefined,
+		datePublished: post.created_date,
+		dateModified: post.update_date || post.created_date,
+		url: `${siteUrl}/blog/${post.slug || post.id}/`,
+		author: {
+			'@type': 'Organization',
+			name: 'muzigen.net',
+		},
+	})),
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
