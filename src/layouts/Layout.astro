@@ -8,14 +8,19 @@ interface Props {
 	description?: string;
 	ogImage?: string;
 	ogType?: 'website' | 'article';
+	canonicalURL?: string;
 }
 
 const {
 	title = 'muzigen.net',
 	description = 'muzigen.netのウェブサイト',
 	ogImage,
-	ogType = 'website'
+	ogType = 'website',
+	canonicalURL
 } = Astro.props;
+
+// Use provided canonical URL or default to current page URL
+const canonical = canonicalURL || Astro.url.href;
 
 const pageTitle = title === 'muzigen.net' ? title : `${title} | muzigen.net`;
 ---
@@ -25,6 +30,7 @@ const pageTitle = title === 'muzigen.net' ? title : `${title} | muzigen.net`;
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
+		<link rel="canonical" href={canonical} />
         <link rel="sitemap" href="/sitemap-index.xml" />
 		<link rel="alternate" type="application/rss+xml" title="muzigen.net - Blog RSS Feed" href="/rss.xml" />
 		<link rel="alternate" type="application/rss+xml" title="muzigen.net - Posts RSS Feed" href="/posts/rss.xml" />
