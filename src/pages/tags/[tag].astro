@@ -6,6 +6,7 @@ import {getFirestore} from 'firebase-admin/firestore';
 import {app} from '../../firebase/server';
 import BreadcrumbSchema from '../../components/BreadcrumbSchema.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
+import {extractTags, isValidTag} from '../../utils/tags';
 
 export async function getStaticPaths() {
 	const db = getFirestore(app);
@@ -19,23 +20,24 @@ export async function getStaticPaths() {
 		const articlesByTag = new Map<string, BlogListItem[]>();
 		snapshot.docs.forEach(doc => {
 			const data = doc.data();
-			// Support both tags array and legacy tag string
-			const tags = data.tags || (data.tag ? [data.tag] : []);
-			if (Array.isArray(tags)) {
+			const tags = extractTags(data);
+			if (tags.length > 0) {
+				// Create article object once per document (efficiency improvement)
+				const article: BlogListItem = {
+					id: doc.id,
+					slug: data.slug || undefined,
+					title: data.title || '',
+					description: data.description || '',
+					ogp_image: data.ogp_image || '',
+					tags: data.tags,
+					tag: data.tag,
+					update_date: data.update_date?.toDate?.()?.toISOString() || data.update_date || '',
+					created_date: data.created_date?.toDate?.()?.toISOString() || data.created_date || '',
+				};
+				// Add article to each of its tags
 				tags.forEach(tag => {
-					if (tag && typeof tag === 'string') {
+					if (isValidTag(tag)) {
 						const articlesForTag = articlesByTag.get(tag) || [];
-						const article: BlogListItem = {
-							id: doc.id,
-							slug: data.slug || undefined,
-							title: data.title || '',
-							description: data.description || '',
-							ogp_image: data.ogp_image || '',
-							tags: data.tags,
-							tag: data.tag,
-							update_date: data.update_date?.toDate?.()?.toISOString() || data.update_date || '',
-							created_date: data.created_date?.toDate?.()?.toISOString() || data.created_date || '',
-						};
 						articlesForTag.push(article);
 						articlesByTag.set(tag, articlesForTag);
 					}

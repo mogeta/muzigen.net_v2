@@ -4,6 +4,7 @@ import {getFirestore} from 'firebase-admin/firestore';
 import {app} from '../../firebase/server';
 import BreadcrumbSchema from '../../components/BreadcrumbSchema.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
+import {extractTags, isValidTag} from '../../utils/tags';
 
 interface TagCount {
 	name: string;
@@ -22,15 +23,12 @@ try {
 	const tagMap = new Map<string, number>();
 	snapshot.docs.forEach(doc => {
 		const data = doc.data();
-		// Support both tags array and legacy tag string
-		const tags = data.tags || (data.tag ? [data.tag] : []);
-		if (Array.isArray(tags)) {
-			tags.forEach(tag => {
-				if (tag && typeof tag === 'string') {
-					tagMap.set(tag, (tagMap.get(tag) || 0) + 1);
-				}
-			});
-		}
+		const tags = extractTags(data);
+		tags.forEach(tag => {
+			if (isValidTag(tag)) {
+				tagMap.set(tag, (tagMap.get(tag) || 0) + 1);
+			}
+		});
 	});
 
 	// Convert to array and sort by count (descending)
