@@ -16,7 +16,13 @@ const post = Astro.props;
 const { Content } = await post.render();
 ---
 
-<Layout title={post.data.title} description={post.data.description} ogType="article">
+<Layout
+  title={post.data.title}
+  description={post.data.description}
+  ogType="article"
+  publishedTime={post.data.pubDate.toISOString()}
+  modifiedTime={post.data.pubDate.toISOString()}
+>
   <BlogPostingSchema
     title={post.data.title}
     description={post.data.description}
