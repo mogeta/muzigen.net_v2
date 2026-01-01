@@ -6,6 +6,8 @@ import {app} from '../../firebase/server';
 import {sanitizeHtml} from '../../utils/markdown';
 import {createMarkdownProcessor} from '@astrojs/markdown-remark';
 import rehypeMermaid from 'rehype-mermaid';
+import BlogPostingSchema from '../../components/BlogPostingSchema.astro';
+import BreadcrumbSchema from '../../components/BreadcrumbSchema.astro';
 
 export async function getStaticPaths() {
 	const db = getFirestore(app);
@@ -72,6 +74,21 @@ const {article} = Astro.props;
 	ogImage={article.ogp_image}
 	ogType="article"
 >
+	<BlogPostingSchema
+		title={article.title}
+		description={article.description}
+		image={article.ogp_image}
+		datePublished={article.created_date}
+		dateModified={article.update_date || article.created_date}
+		url={Astro.url.href}
+	/>
+	<BreadcrumbSchema
+		items={[
+			{ name: 'ホーム', url: '/' },
+			{ name: 'ブログ', url: '/blog' },
+			{ name: article.title, url: `/blog/${article.id}/` }
+		]}
+	/>
 	<a href="#main-content" class="skip-to-main">メインコンテンツへスキップ</a>
 
 	<main id="main-content" class="max-w-4xl mx-auto px-4 py-12">
