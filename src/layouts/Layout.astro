@@ -8,6 +8,8 @@ interface Props {
 	description?: string;
 	ogImage?: string;
 	ogType?: 'website' | 'article';
+	publishedTime?: string;
+	modifiedTime?: string;
 	canonicalURL?: string;
 }
 
@@ -16,11 +18,13 @@ const {
 	description = 'muzigen.netのウェブサイト',
 	ogImage,
 	ogType = 'website',
+	publishedTime,
+	modifiedTime,
 	canonicalURL
 } = Astro.props;
 
-// Use provided canonical URL or default to current page URL
-const canonical = canonicalURL || Astro.url.href;
+// Use provided canonical URL or default to current page URL without query parameters
+const canonical = canonicalURL || `${Astro.url.origin}${Astro.url.pathname}`;
 
 const pageTitle = title === 'muzigen.net' ? title : `${title} | muzigen.net`;
 ---
@@ -47,6 +51,12 @@ const pageTitle = title === 'muzigen.net' ? title : `${title} | muzigen.net`;
 		<meta property="og:title" content={pageTitle} />
 		<meta property="og:description" content={description} />
 		{ogImage && <meta property="og:image" content={ogImage} />}
+		{ogType === 'article' && (
+			<>
+				{publishedTime && <meta property="article:published_time" content={publishedTime} />}
+				{modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+			</>
+		)}
 
 		<!-- Twitter -->
 		<meta name="twitter:card" content="summary_large_image" />

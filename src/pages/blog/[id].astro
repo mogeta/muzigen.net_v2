@@ -73,6 +73,8 @@ const {article} = Astro.props;
 	description={article.description}
 	ogImage={article.ogp_image}
 	ogType="article"
+	publishedTime={article.created_date}
+	modifiedTime={article.update_date}
 >
 	<BlogPostingSchema
 		title={article.title}
