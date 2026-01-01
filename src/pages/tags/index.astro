@@ -22,9 +22,14 @@ try {
 	const tagMap = new Map<string, number>();
 	snapshot.docs.forEach(doc => {
 		const data = doc.data();
-		const tag = data.tag;
-		if (tag && typeof tag === 'string') {
-			tagMap.set(tag, (tagMap.get(tag) || 0) + 1);
+		// Support both tags array and legacy tag string
+		const tags = data.tags || (data.tag ? [data.tag] : []);
+		if (Array.isArray(tags)) {
+			tags.forEach(tag => {
+				if (tag && typeof tag === 'string') {
+					tagMap.set(tag, (tagMap.get(tag) || 0) + 1);
+				}
+			});
 		}
 	});
 

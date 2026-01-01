@@ -19,21 +19,27 @@ export async function getStaticPaths() {
 		const articlesByTag = new Map<string, BlogListItem[]>();
 		snapshot.docs.forEach(doc => {
 			const data = doc.data();
-			const tag = data.tag;
-			if (tag && typeof tag === 'string') {
-				const articlesForTag = articlesByTag.get(tag) || [];
-				const article: BlogListItem = {
-					id: doc.id,
-					slug: data.slug || undefined,
-					title: data.title || '',
-					description: data.description || '',
-					ogp_image: data.ogp_image || '',
-					tag: data.tag || '',
-					update_date: data.update_date?.toDate?.()?.toISOString() || data.update_date || '',
-					created_date: data.created_date?.toDate?.()?.toISOString() || data.created_date || '',
-				};
-				articlesForTag.push(article);
-				articlesByTag.set(tag, articlesForTag);
+			// Support both tags array and legacy tag string
+			const tags = data.tags || (data.tag ? [data.tag] : []);
+			if (Array.isArray(tags)) {
+				tags.forEach(tag => {
+					if (tag && typeof tag === 'string') {
+						const articlesForTag = articlesByTag.get(tag) || [];
+						const article: BlogListItem = {
+							id: doc.id,
+							slug: data.slug || undefined,
+							title: data.title || '',
+							description: data.description || '',
+							ogp_image: data.ogp_image || '',
+							tags: data.tags,
+							tag: data.tag,
+							update_date: data.update_date?.toDate?.()?.toISOString() || data.update_date || '',
+							created_date: data.created_date?.toDate?.()?.toISOString() || data.created_date || '',
+						};
+						articlesForTag.push(article);
+						articlesByTag.set(tag, articlesForTag);
+					}
+				});
 			}
 		});
 
