@@ -24,7 +24,7 @@ const { article } = Astro.props;
     <header class="mb-4">
       <h2 class="text-2xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
         <a
-          href={`/blog/${article.id}`}
+          href={`/blog/${article.slug || article.id}`}
           class="before:absolute before:inset-0 focus:outline-none"
           aria-label={`記事を読む: ${article.title}`}
         >

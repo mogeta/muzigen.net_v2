@@ -40,6 +40,7 @@ export async function getStaticPaths() {
 
 				const article: BlogArticle = {
 					id: doc.id,
+					slug: data.slug || undefined,
 					title: data.title || '',
 					description: data.description || '',
 					ogp_image: data.ogp_image || '',
@@ -54,7 +55,7 @@ export async function getStaticPaths() {
 				};
 
 				return {
-					params: {id: doc.id},
+					params: {id: data.slug || doc.id},
 					props: {article}
 				};
 			})
@@ -88,7 +89,7 @@ const {article} = Astro.props;
 		items={[
 			{ name: 'ホーム', url: '/' },
 			{ name: 'ブログ', url: '/blog' },
-			{ name: article.title, url: `/blog/${article.id}/` }
+			{ name: article.title, url: `/blog/${article.slug || article.id}/` }
 		]}
 	/>
 	<a href="#main-content" class="skip-to-main">メインコンテンツへスキップ</a>

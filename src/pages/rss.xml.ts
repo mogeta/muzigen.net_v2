@@ -21,7 +21,7 @@ export const GET: APIRoute = async (context) => {
       return {
         title: data.title || 'Untitled',
         description: data.description || '',
-        link: `/blog/${doc.id}/`,
+        link: `/blog/${data.slug || doc.id}/`,
         pubDate: createdDate,
         // カスタムデータとして更新日とタグを含める
         customData: [

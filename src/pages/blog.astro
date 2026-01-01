@@ -22,6 +22,7 @@ try {
     const data = doc.data();
     return {
       id: doc.id,
+      slug: data.slug || undefined,
       title: data.title || '',
       description: data.description || '',
       ogp_image: data.ogp_image || '',

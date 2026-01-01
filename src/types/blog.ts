@@ -6,6 +6,7 @@ export interface BlogElement {
 
 export interface BlogArticle {
   id: string;
+  slug?: string;
   title: string;
   description: string;
   ogp_image: string;
@@ -21,6 +22,7 @@ export interface BlogArticle {
 
 export interface BlogListItem {
   id: string;
+  slug?: string;
   title: string;
   description: string;
   ogp_image: string;
