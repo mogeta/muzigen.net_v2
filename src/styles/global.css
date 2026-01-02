@@ -5,21 +5,22 @@
   --font-family-sans: "Inter", "Noto Sans JP", system-ui, -apple-system, sans-serif;
   --font-family-mono: "Courier New", Consolas, monospace;
 
-  /* Font sizes */
-  --font-heading-xxlarge: 2.5rem;   /* 40px */
-  --font-heading-xlarge: 2rem;      /* 32px */
-  --font-heading-large: 1.5rem;     /* 24px */
-  --font-heading-medium: 1.25rem;   /* 20px */
-  --font-heading-small: 1.125rem;   /* 18px */
+  /* Font sizes - Mobile-first responsive design */
+  /* Mobile base: 17px for better readability on small screens */
+  --font-heading-xxlarge: 2rem;     /* 32px on mobile */
+  --font-heading-xlarge: 1.75rem;   /* 28px on mobile */
+  --font-heading-large: 1.375rem;   /* 22px on mobile */
+  --font-heading-medium: 1.25rem;   /* 20px on mobile */
+  --font-heading-small: 1.125rem;   /* 18px on mobile */
 
-  --font-body-large: 1.125rem;      /* 18px */
-  --font-body-medium: 1rem;         /* 16px */
-  --font-body-small: 0.875rem;      /* 14px */
-  --font-body-xsmall: 0.75rem;      /* 12px */
+  --font-body-large: 1.125rem;      /* 18px on mobile */
+  --font-body-medium: 1.0625rem;    /* 17px on mobile */
+  --font-body-small: 0.9375rem;     /* 15px on mobile */
+  --font-body-xsmall: 0.8125rem;    /* 13px on mobile */
 
   /* Line heights */
   --line-height-heading: 1.3;
-  --line-height-body: 1.7;
+  --line-height-body: 1.75;
 
   /* Spacing system - Inspired by Atlassian Design System */
   --spacing-025: 0.125rem;  /* 2px */
@@ -80,6 +81,25 @@
   --shadow-raised: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --shadow-overlay: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   --shadow-floating: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+/* Responsive typography breakpoints */
+/* Tablet and above (768px+): Adjust fonts to standard sizes */
+@media (min-width: 768px) {
+  :root {
+    --font-heading-xxlarge: 2.5rem;   /* 40px on tablet+ */
+    --font-heading-xlarge: 2rem;      /* 32px on tablet+ */
+    --font-heading-large: 1.5rem;     /* 24px on tablet+ */
+    --font-heading-medium: 1.25rem;   /* 20px on tablet+ */
+    --font-heading-small: 1.125rem;   /* 18px on tablet+ */
+
+    --font-body-large: 1.125rem;      /* 18px on tablet+ */
+    --font-body-medium: 1rem;         /* 16px on tablet+ */
+    --font-body-small: 0.875rem;      /* 14px on tablet+ */
+    --font-body-xsmall: 0.75rem;      /* 12px on tablet+ */
+
+    --line-height-body: 1.7;
+  }
 }
 
 /* Focus management - Atlassian-inspired accessibility */
