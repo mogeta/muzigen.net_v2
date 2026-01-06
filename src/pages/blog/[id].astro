@@ -111,13 +111,13 @@ const {article} = Astro.props;
 		<article class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
 			<!-- OGP画像（ある場合は最初に表示） -->
 			{article.ogp_image && (
-				<div class="aspect-video overflow-hidden bg-gray-100">
+				<div class="h-[200px] overflow-hidden bg-gray-100">
 					<img
 						src={article.ogp_image}
 						alt={article.title}
 						loading="lazy"
 						decoding="async"
-						class="w-full h-full object-cover"
+						class="w-full h-full object-contain"
 					/>
 				</div>
 			)}
