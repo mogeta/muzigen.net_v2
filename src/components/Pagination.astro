@@ -1,75 +1,127 @@
 ---
+import type { Page } from 'astro';
+
 interface Props {
-  currentPage: number;
-  totalPages: number;
-  baseUrl: string;
+  page: Page<any>;
+  baseUrl?: string;
 }
 
-const { currentPage, totalPages, baseUrl } = Astro.props;
+const { page, baseUrl = '/blog' } = Astro.props;
 
-const getPageUrl = (page: number) => {
-  return page === 1 ? baseUrl : `${baseUrl}?page=${page}`;
-};
+// ページ番号の配列を生成（最大7個表示）
+function getPageNumbers(currentPage: number, lastPage: number): (number | string)[] {
+  const pages: (number | string)[] = [];
 
-const getVisiblePages = () => {
-  const pages = [];
-  const maxVisible = 5;
-  
-  if (totalPages <= maxVisible) {
-    for (let i = 1; i <= totalPages; i++) {
+  if (lastPage <= 7) {
+    // 7ページ以下なら全て表示
+    for (let i = 1; i <= lastPage; i++) {
       pages.push(i);
     }
   } else {
-    const start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
-    const end = Math.min(totalPages, start + maxVisible - 1);
-    
+    // 常に最初のページを表示
+    pages.push(1);
+
+    if (currentPage > 3) {
+      pages.push('...');
+    }
+
+    // 現在のページ周辺を表示
+    const start = Math.max(2, currentPage - 1);
+    const end = Math.min(lastPage - 1, currentPage + 1);
+
     for (let i = start; i <= end; i++) {
       pages.push(i);
     }
-  }
-  
-  return pages;
-};
 
-const visiblePages = getVisiblePages();
+    if (currentPage < lastPage - 2) {
+      pages.push('...');
+    }
+
+    // 常に最後のページを表示
+    pages.push(lastPage);
+  }
+
+  return pages;
+}
+
+const pageNumbers = getPageNumbers(page.currentPage, page.lastPage);
+
+function getPageUrl(pageNum: number): string {
+  if (pageNum === 1) {
+    return baseUrl;
+  }
+  return `${baseUrl}/${pageNum}`;
+}
 ---
 
-{totalPages > 1 && (
-  <nav class="flex justify-center items-center space-x-2 mt-8">
-    <!-- Previous button -->
-    {currentPage > 1 && (
-      <a 
-        href={getPageUrl(currentPage - 1)}
-        class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 hover:text-gray-700"
+{page.lastPage > 1 && (
+  <nav aria-label="ページネーション" class="flex justify-center items-center gap-2 mt-12">
+    {/* 前へボタン */}
+    {page.url.prev ? (
+      <a
+        href={page.url.prev}
+        class="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors flex items-center gap-2"
+        aria-label="前のページ"
       >
-        前へ
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        <span class="hidden sm:inline">前へ</span>
       </a>
+    ) : (
+      <span class="px-4 py-2 rounded-lg border border-gray-200 text-gray-400 cursor-not-allowed flex items-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        <span class="hidden sm:inline">前へ</span>
+      </span>
     )}
-    
-    <!-- Page numbers -->
-    {visiblePages.map((page) => (
-      page === currentPage ? (
-        <span class="px-3 py-2 text-sm font-medium text-white bg-blue-600 border border-blue-600 rounded-md">
-          {page}
-        </span>
-      ) : (
-        <a 
-          href={getPageUrl(page)}
-          class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 hover:text-gray-700"
-        >
-          {page}
-        </a>
-      )
-    ))}
-    
-    <!-- Next button -->
-    {currentPage < totalPages && (
-      <a 
-        href={getPageUrl(currentPage + 1)}
-        class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 hover:text-gray-700"
+
+    {/* ページ番号 */}
+    <div class="flex gap-2">
+      {pageNumbers.map((pageNum) =>
+        typeof pageNum === 'number' ? (
+          pageNum === page.currentPage ? (
+            <span
+              class="px-4 py-2 rounded-lg bg-blue-600 text-white font-medium"
+              aria-current="page"
+            >
+              {pageNum}
+            </span>
+          ) : (
+            <a
+              href={getPageUrl(pageNum)}
+              class="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors"
+              aria-label={`ページ${pageNum}へ`}
+            >
+              {pageNum}
+            </a>
+          )
+        ) : (
+          <span class="px-2 py-2 text-gray-400">...</span>
+        )
+      )}
+    </div>
+
+    {/* 次へボタン */}
+    {page.url.next ? (
+      <a
+        href={page.url.next}
+        class="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors flex items-center gap-2"
+        aria-label="次のページ"
       >
-        次へ
+        <span class="hidden sm:inline">次へ</span>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
       </a>
+    ) : (
+      <span class="px-4 py-2 rounded-lg border border-gray-200 text-gray-400 cursor-not-allowed flex items-center gap-2">
+        <span class="hidden sm:inline">次へ</span>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </span>
     )}
   </nav>
 )}
