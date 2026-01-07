@@ -10,7 +10,7 @@ import { getFirestore } from 'firebase-admin/firestore';
 import { app } from '../../firebase/server';
 
 export const getStaticPaths = (async ({ paginate }) => {
-  let articles: BlogListItem[] = [];
+  let articles: BlogListItem[];
 
   try {
     const db = getFirestore(app);
