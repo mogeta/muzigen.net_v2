@@ -30,22 +30,21 @@ export interface LaprasActivity {
 }
 
 export interface LaprasGitHubRepository {
-  name: string;
-  full_name: string;
-  description: string | null;
-  html_url: string;
-  language: string | null;
+  id: number;
+  title: string;
+  url: string;
+  description: string;
+  is_oss: boolean;
+  is_fork: boolean;
+  is_owner: boolean;
+  language: string;
   stargazers_count: number;
-  forks_count: number;
-  fork: boolean;
-  contribution: {
-    commits_count: number;
-    additions_count: number;
-    deletions_count: number;
-  };
+  forks: number;
+  contributors_count: number;
+  contributions: number;
   languages: {
     name: string;
-    rate: number;
+    bytes: number;
   }[];
 }
 

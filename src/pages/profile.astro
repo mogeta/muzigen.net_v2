@@ -24,11 +24,24 @@ const profile = {
 
 const sameAs = Object.values(profile.social).filter(link => link);
 
+// デバッグ: Laprasデータの確認
+console.log('Lapras Share ID:', laprasShareId);
+console.log('Lapras Data loaded:', !!laprasData);
+if (laprasData) {
+  console.log('GitHub Repositories count:', laprasData.github_repositories?.length || 0);
+  console.log('Articles - Qiita:', laprasData.qiita_articles?.length || 0);
+  console.log('Articles - Zenn:', laprasData.zenn_articles?.length || 0);
+  console.log('Articles - Blog:', laprasData.blog_articles?.length || 0);
+  console.log('Speaker Deck Slides:', laprasData.speaker_deck_slides?.length || 0);
+}
+
 // GitHubリポジトリ（上位10件、フォークを除外）
 const topRepositories = laprasData?.github_repositories
-  ?.filter(repo => !repo.fork)
-  .sort((a, b) => b.stargazers_count - a.stargazers_count)
+  ?.filter(repo => !repo.is_fork)
+  .sort((a, b) => (b.stargazers_count || 0) - (a.stargazers_count || 0))
   .slice(0, 10) || [];
+
+console.log('Top Repositories count:', topRepositories.length);
 
 // 記事（各ソースから最新5件）
 const allArticles = [
@@ -40,10 +53,14 @@ const allArticles = [
   .sort((a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime())
   .slice(0, 10);
 
+console.log('All Articles count:', allArticles.length);
+
 // スピーカー活動（上位5件）
 const topSlides = laprasData?.speaker_deck_slides
-  ?.sort((a, b) => b.views_count - a.views_count)
+  ?.sort((a, b) => (b.views_count || 0) - (a.views_count || 0))
   .slice(0, 5) || [];
+
+console.log('Top Slides count:', topSlides.length);
 ---
 
 <Layout
@@ -159,21 +176,21 @@ const topSlides = laprasData?.speaker_deck_slides
             <div class={`p-6 rounded-xl ${getScoreBgColor(laprasData.e_score)} border border-gray-200`}>
               <div class="text-sm font-medium text-gray-600 mb-2">Engineering Score</div>
               <div class={`text-4xl font-bold ${getScoreColor(laprasData.e_score)}`}>
-                {formatScore(laprasData.e_score)}
+                {formatScore(laprasData.e_score)}<span class="text-2xl text-gray-400 ml-1">/5</span>
               </div>
               <div class="text-xs text-gray-500 mt-2">技術力スコア</div>
             </div>
             <div class={`p-6 rounded-xl ${getScoreBgColor(laprasData.b_score)} border border-gray-200`}>
               <div class="text-sm font-medium text-gray-600 mb-2">Business Score</div>
               <div class={`text-4xl font-bold ${getScoreColor(laprasData.b_score)}`}>
-                {formatScore(laprasData.b_score)}
+                {formatScore(laprasData.b_score)}<span class="text-2xl text-gray-400 ml-1">/5</span>
               </div>
               <div class="text-xs text-gray-500 mt-2">ビジネス力スコア</div>
             </div>
             <div class={`p-6 rounded-xl ${getScoreBgColor(laprasData.i_score)} border border-gray-200`}>
               <div class="text-sm font-medium text-gray-600 mb-2">Influence Score</div>
               <div class={`text-4xl font-bold ${getScoreColor(laprasData.i_score)}`}>
-                {formatScore(laprasData.i_score)}
+                {formatScore(laprasData.i_score)}<span class="text-2xl text-gray-400 ml-1">/5</span>
               </div>
               <div class="text-xs text-gray-500 mt-2">影響力スコア</div>
             </div>
@@ -188,14 +205,14 @@ const topSlides = laprasData?.speaker_deck_slides
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             {topRepositories.map(repo => (
               <a
-                href={repo.html_url}
+                href={repo.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 class="p-5 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50/50 transition-all group"
               >
                 <div class="flex items-start justify-between mb-2">
                   <h3 class="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-                    {repo.name}
+                    {repo.title}
                   </h3>
                   {repo.language && (
                     <span class="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded-full">
@@ -217,7 +234,7 @@ const topSlides = laprasData?.speaker_deck_slides
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M8 6.1V3h8v3.1l6 3V21H2V9.1l6-3zM4 11v8h16v-8l-8-4.5L4 11z"/>
                     </svg>
-                    {repo.forks_count || 0}
+                    {repo.forks || 0}
                   </span>
                 </div>
               </a>
