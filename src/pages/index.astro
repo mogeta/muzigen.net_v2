@@ -66,9 +66,16 @@ import OrganizationSchema from "../components/OrganizationSchema.astro";
 
 		<!-- Decorative Elements -->
 		<div
-			class="absolute bottom-10 left-10 text-xs text-gray-400 font-mono hidden sm:block"
+			class="absolute bottom-10 left-10 text-xs text-gray-400 font-mono hidden sm:block z-50"
 		>
-			COORD: 35.6895° N, 139.6917° E<br />
+			<a
+				id="dynamic-coords"
+				href="https://www.google.com/maps?q=35.6895,139.6917"
+				target="_blank"
+				class="hover:text-neon-cyan transition-colors cursor-pointer block mb-1"
+			>
+				COORD: 35.6895° N, 139.6917° E
+			</a>
 			STATUS: ONLINE
 		</div>
 	</section>
@@ -215,3 +222,30 @@ import OrganizationSchema from "../components/OrganizationSchema.astro";
 		</div>
 	</section>
 </Layout>
+
+<script>
+	function updateCoordinates() {
+		const coordsEl = document.getElementById(
+			"dynamic-coords",
+		) as HTMLAnchorElement;
+		if (!coordsEl) return;
+
+		// Random coordinates generator
+		// Lat: -90 to 90
+		// Lng: -180 to 180
+		const lat = Math.random() * 180 - 90;
+		const lng = Math.random() * 360 - 180;
+
+		const latDir = lat >= 0 ? "N" : "S";
+		const lngDir = lng >= 0 ? "E" : "W";
+
+		const formattedLat = Math.abs(lat).toFixed(4);
+		const formattedLng = Math.abs(lng).toFixed(4);
+
+		coordsEl.textContent = `COORD: ${formattedLat}° ${latDir}, ${formattedLng}° ${lngDir}`;
+		coordsEl.href = `https://www.google.com/maps?q=${lat},${lng}`;
+	}
+
+	// Update on load
+	document.addEventListener("DOMContentLoaded", updateCoordinates);
+</script>
