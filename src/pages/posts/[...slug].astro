@@ -1,11 +1,11 @@
 ---
-import { getCollection } from 'astro:content';
-import Layout from '../../layouts/Layout.astro';
-import BlogPostingSchema from '../../components/BlogPostingSchema.astro';
-import BreadcrumbSchema from '../../components/BreadcrumbSchema.astro';
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import BlogPostingSchema from "../../components/BlogPostingSchema.astro";
+import BreadcrumbSchema from "../../components/BreadcrumbSchema.astro";
 
 export async function getStaticPaths() {
-  const posts = await getCollection('posts');
+  const posts = await getCollection("posts");
   return posts.map((post) => ({
     params: { slug: post.slug },
     props: post,
@@ -33,12 +33,11 @@ const { Content } = await post.render();
   />
   <BreadcrumbSchema
     items={[
-      { name: 'ホーム', url: '/' },
-      { name: 'Posts', url: '/posts' },
-      { name: post.data.title, url: `/posts/${post.slug}/` }
+      { name: "ホーム", url: "/" },
+      { name: "Posts", url: "/posts" },
+      { name: post.data.title, url: `/posts/${post.slug}/` },
     ]}
   />
-  <a href="#main-content" class="skip-to-main">メインコンテンツへスキップ</a>
 
   <main id="main-content" class="max-w-4xl mx-auto px-4 py-12">
     <!-- 戻るナビゲーション -->
@@ -47,54 +46,98 @@ const { Content } = await post.render();
         href="/posts"
         class="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium transition-colors px-3 py-2 rounded-lg hover:bg-gray-100"
       >
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        <svg
+          class="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"></path>
         </svg>
         記事一覧に戻る
       </a>
     </nav>
 
-    <article class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+    <article
+      class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden"
+    >
       <!-- ヘッダー部分 -->
       <header class="px-8 pt-12 pb-8 border-b border-gray-100">
-        <h1 class="text-5xl font-bold text-gray-900 mb-6 leading-tight">{post.data.title}</h1>
+        <h1 class="text-5xl font-bold text-gray-900 mb-6 leading-tight">
+          {post.data.title}
+        </h1>
 
-        <div class="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-6">
-          <time datetime={post.data.pubDate.toISOString()} class="flex items-center gap-2">
-            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        <div
+          class="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-6"
+        >
+          <time
+            datetime={post.data.pubDate.toISOString()}
+            class="flex items-center gap-2"
+          >
+            <svg
+              class="w-5 h-5 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              ></path>
             </svg>
-            {post.data.pubDate.toLocaleDateString('ja-JP', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            })}
+            {
+              post.data.pubDate.toLocaleDateString("ja-JP", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+            }
           </time>
-          {post.data.author && (
-            <span class="flex items-center gap-2">
-              <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
-              </svg>
-              {post.data.author}
-            </span>
-          )}
+          {
+            post.data.author && (
+              <span class="flex items-center gap-2">
+                <svg
+                  class="w-5 h-5 text-gray-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                {post.data.author}
+              </span>
+            )
+          }
         </div>
 
-        {post.data.description && (
-          <p class="text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-blue-500 pl-4 py-2 bg-blue-50/50">
-            {post.data.description}
-          </p>
-        )}
+        {
+          post.data.description && (
+            <p class="text-xl text-gray-700 leading-relaxed mb-6 border-l-4 border-blue-500 pl-4 py-2 bg-blue-50/50">
+              {post.data.description}
+            </p>
+          )
+        }
 
-        {post.data.tags && (
-          <div class="flex flex-wrap gap-2">
-            {post.data.tags.map((tag) => (
-              <span class="px-4 py-2 bg-blue-50 text-blue-700 font-medium rounded-full text-sm hover:bg-blue-100 transition-colors">
-                #{tag}
-              </span>
-            ))}
-          </div>
-        )}
+        {
+          post.data.tags && (
+            <div class="flex flex-wrap gap-2">
+              {post.data.tags.map((tag) => (
+                <span class="px-4 py-2 bg-blue-50 text-blue-700 font-medium rounded-full text-sm hover:bg-blue-100 transition-colors">
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          )
+        }
       </header>
 
       <!-- 本文 -->
@@ -107,16 +150,23 @@ const { Content } = await post.render();
       <!-- フッター -->
       <footer class="px-8 py-6 bg-gray-50 border-t border-gray-200">
         <div class="flex items-center justify-between flex-wrap gap-4">
-          <div class="text-sm text-gray-600">
-            この記事は役に立ちましたか？
-          </div>
+          <div class="text-sm text-gray-600">この記事は役に立ちましたか？</div>
           <a
             href="/posts"
             class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium transition-colors"
           >
             他の記事を読む
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"></path>
             </svg>
           </a>
         </div>
@@ -128,6 +178,50 @@ const { Content } = await post.render();
 <style>
   /* Markdown content styles - Inspired by Atlassian Design System */
   .markdown-content {
+    /* Mapping legacy variables to new theme or hardcoded values */
+    --font-heading-xlarge: 2.5rem;
+    --font-heading-large: 2rem;
+    --font-heading-medium: 1.75rem;
+    --font-heading-small: 1.5rem;
+
+    --font-body-large: 1.125rem;
+    --font-body-medium: 1rem;
+    --font-body-small: 0.875rem;
+
+    --line-height-heading: 1.3;
+    --line-height-body: 1.6;
+
+    --color-text-primary: var(--text-main /* #111827 */);
+    --color-text-secondary: #4b5563;
+
+    --color-link-default: var(--neon-cyan);
+    --color-link-hover: var(--neon-magenta);
+
+    --color-border-default: #e5e7eb;
+    --color-border-subtle: #f3f4f6;
+    --color-border-focus: var(--neon-cyan);
+
+    --color-surface-raised: #f9fafb;
+
+    --color-gray-50: #f9fafb;
+    --color-gray-100: #f3f4f6;
+    --color-gray-900: #111827;
+
+    --color-blue-600: var(--neon-cyan);
+
+    --spacing-050: 0.125rem;
+    --spacing-100: 0.25rem;
+    --spacing-200: 0.5rem;
+    --spacing-300: 0.75rem;
+    --spacing-400: 1rem;
+    --spacing-500: 1.25rem;
+    --spacing-600: 1.5rem;
+
+    --radius-small: 0.25rem;
+    --radius-medium: 0.5rem;
+
+    --shadow-raised: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
     font-size: var(--font-body-medium);
     color: var(--color-text-primary);
     line-height: var(--line-height-body);

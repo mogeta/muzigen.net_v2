@@ -1,76 +1,124 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import OrganizationSchema from '../components/OrganizationSchema.astro';
+import Layout from "../layouts/Layout.astro";
+import GlitchText from "../components/GlitchText.astro";
+import OrganizationSchema from "../components/OrganizationSchema.astro";
 ---
 
 <Layout>
 	<OrganizationSchema />
-	<!-- Hero Section with Parallax -->
-	<section class="hero-section relative min-h-screen flex items-center justify-center overflow-hidden">
-		<div class="parallax-bg absolute inset-0 z-0"></div>
-		<div class="parallax-shapes absolute inset-0 z-1 pointer-events-none">
-			<div class="shape shape-1"></div>
-			<div class="shape shape-2"></div>
-			<div class="shape shape-3"></div>
-		</div>
 
-		<div class="hero-content relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-			<div class="fade-in-up">
-				<h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 text-gray-900">
-					<span class="gradient-text">muzigen.net</span>
+	<!-- Hero Section -->
+	<section
+		class="relative min-h-screen flex items-center justify-center overflow-hidden"
+	>
+		<!-- Content -->
+		<div
+			class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
+		>
+			<div class="fade-in-up space-y-8">
+				<h1 class="font-black mb-6 tracking-tighter">
+					<GlitchText
+						text="muzigen.net"
+						as="span"
+						class="text-6xl sm:text-8xl lg:text-9xl text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 via-gray-800 to-fuchsia-600 always-active"
+					/>
 				</h1>
-				<p class="text-xl sm:text-2xl text-gray-800 mb-4 max-w-2xl mx-auto">
-					Game Developer & Freelance IT Engineer
-				</p>
-				<p class="text-base sm:text-lg text-gray-800 mb-12 max-w-xl mx-auto">
-					ゲーム開発とWeb技術を探求するエンジニアのブログ
-				</p>
-				<div class="flex flex-col sm:flex-row gap-4 justify-center">
-					<a
-						href="/blog"
-						class="btn-primary"
+
+				<p
+					class="text-xl sm:text-3xl text-gray-800 max-w-3xl mx-auto font-light tracking-wide"
+				>
+					<span class="text-neon-cyan drop-shadow-sm font-medium"
+						>Game Developer</span
+					> & <span
+						class="text-neon-magenta drop-shadow-sm font-medium"
+						>Freelance IT Engineer</span
 					>
-						View Blog Posts
+				</p>
+
+				<p
+					class="text-base sm:text-lg text-gray-600 mb-12 max-w-xl mx-auto border-l-2 border-neon-cyan pl-4 text-left"
+				>
+					Exploring the chaotic boundary between game dev and modern
+					web tech.
+					<br class="hidden sm:block" />
+					Building digital experiences with raw energy.
+				</p>
+
+				<div
+					class="flex flex-col sm:flex-row gap-6 justify-center items-center mt-12"
+				>
+					<a href="/blog" class="cyber-button group">
+						<span
+							class="relative z-10 group-hover:text-white transition-colors duration-100"
+							>View Transmissions</span
+						>
+						<div
+							class="glitch-bg absolute inset-0 bg-neon-cyan transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left"
+						>
+						</div>
 					</a>
-					<a
-						href="#about"
-						class="btn-secondary"
-					>
-						Learn More
+					<a href="#about" class="cyber-button-outline">
+						<span class="relative z-10">Initialize System</span>
 					</a>
 				</div>
 			</div>
 		</div>
 
-		<div class="scroll-indicator">
-			<div class="mouse"></div>
+		<!-- Decorative Elements -->
+		<div
+			class="absolute bottom-10 left-10 text-xs text-gray-400 font-mono hidden sm:block"
+		>
+			COORD: 35.6895° N, 139.6917° E<br />
+			STATUS: ONLINE
 		</div>
 	</section>
 
 	<!-- About Section -->
-	<section id="about" class="about-section py-20 lg:py-32 bg-white">
+	<section id="about" class="py-32 relative">
 		<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-			<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-				<div class="fade-in-left">
+			<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+				<div class="fade-in-left relative group">
+					<div
+						class="absolute -inset-1 bg-gradient-to-r from-neon-cyan to-neon-magenta opacity-30 group-hover:opacity-100 blur transition duration-1000 group-hover:duration-200"
+					>
+					</div>
 					<img
 						src="/top.jpg"
 						alt="Profile"
-						class="rounded-2xl shadow-2xl w-full h-auto object-cover"
+						class="relative rounded-lg shadow-2xl w-full h-auto object-cover grayscale contrast-125 hover:grayscale-0 transition-all duration-500 glass-panel"
 					/>
 				</div>
-				<div class="fade-in-right">
-					<h2 class="text-3xl sm:text-4xl font-bold mb-6 text-gray-900">
-						About Me
+				<div class="fade-in-right space-y-8">
+					<h2 class="text-4xl font-bold mb-6 text-gray-900">
+						<span class="text-neon-cyan">#</span> About_Me
 					</h2>
-					<p class="text-lg text-gray-600 mb-6 leading-relaxed">
+					<p class="text-lg text-gray-700 leading-relaxed font-light">
+						I am a digital architect operating at the intersection
+						of gameplay logic and frontend aesthetics. My mission is
+						to craft immersive interfaces that feel alive.
 					</p>
-					<div class="space-y-4">
-						<div class="skill-tag-group">
-							<span class="skill-tag">Game Development</span>
-							<span class="skill-tag">Web Engineering</span>
-							<span class="skill-tag">Astro</span>
-							<span class="skill-tag">TypeScript</span>
-							<span class="skill-tag">Firebase</span>
+
+					<div
+						class="glass-panel p-6 rounded-none border-l-4 border-neon-magenta"
+					>
+						<h3 class="text-xl font-bold mb-4 text-neon-magenta">
+							Active Protocols
+						</h3>
+						<div class="flex flex-wrap gap-3">
+							{
+								[
+									"Game Development",
+									"Web Engineering",
+									"Astro",
+									"TypeScript",
+									"Firebase",
+									"GLSL",
+								].map((skill) => (
+									<span class="px-3 py-1 bg-black/5 border border-black/10 text-gray-800 text-sm tracking-wider hover:bg-neon-cyan/20 hover:border-neon-cyan transition-colors cursor-crosshair">
+										{skill}
+									</span>
+								))
+							}
 						</div>
 					</div>
 				</div>
@@ -78,59 +126,90 @@ import OrganizationSchema from '../components/OrganizationSchema.astro';
 		</div>
 	</section>
 
-	<!-- Features Section with Parallax Cards -->
-	<section class="features-section py-20 lg:py-32 bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
-		<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-			<div class="text-center mb-16 fade-in-up">
-				<h2 class="text-3xl sm:text-4xl font-bold mb-4 text-gray-900">
-					What I Do
+	<!-- Features Section -->
+	<section class="py-32 relative">
+		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+			<div class="text-center mb-24 fade-in-up">
+				<h2 class="text-4xl sm:text-5xl font-black mb-4 text-gray-900">
+					<GlitchText text="SYSTEM MODULES" />
 				</h2>
 			</div>
 
-			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-				<div class="feature-card fade-in-up" style="animation-delay: 0.1s;">
-					<div class="feature-icon">🎮</div>
-					<h3 class="text-xl font-bold mb-3 text-gray-900">Game Development</h3>
-					<p class="text-gray-600">
-						ゲーム開発の経験と技術を活かしたプロジェクトの実装と共有
-					</p>
-				</div>
-
-				<div class="feature-card fade-in-up" style="animation-delay: 0.2s;">
-					<div class="feature-icon">🚀</div>
-					<h3 class="text-xl font-bold mb-3 text-gray-900">Modern Web Tech</h3>
-					<p class="text-gray-600">
-						Astro、TypeScriptなど最新のWeb技術スタックの検証と実装
-					</p>
-				</div>
-
-				<div class="feature-card fade-in-up" style="animation-delay: 0.3s;">
-					<div class="feature-icon">📝</div>
-					<h3 class="text-xl font-bold mb-3 text-gray-900">Technical Writing</h3>
-					<p class="text-gray-600">
-						実践的な技術ブログを通じた知見とノウハウの共有
-					</p>
-				</div>
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+				{
+					[
+						{
+							icon: "👤",
+							title: "Profile",
+							desc: "Game Developer & Web Engineer. Access personal data and skillset.",
+							link: "/profile",
+						},
+						{
+							icon: "📝",
+							title: "Blog",
+							desc: "Technical transmissions, tutorials, and development logs.",
+							link: "/blog",
+						},
+						{
+							icon: "📰",
+							title: "Chirashi",
+							desc: "Special content and digital leaflets from the void.",
+							link: "/chirashi/main.html",
+						},
+					].map((feature, i) => (
+						<a
+							href={feature.link}
+							class="cyber-card group block text-left"
+							style={`animation-delay: ${i * 0.1}s;`}
+						>
+							<div class="text-6xl mb-6 group-hover:scale-110 transition-transform duration-300 grayscale group-hover:grayscale-0">
+								{feature.icon}
+							</div>
+							<h3 class="text-2xl font-bold mb-4 text-gray-900 group-hover:text-neon-cyan transition-colors">
+								{feature.title}
+							</h3>
+							<p class="text-gray-600 group-hover:text-gray-900 transition-colors">
+								{feature.desc}
+							</p>
+							<div class="absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 border-neon-cyan opacity-0 group-hover:opacity-100 transition-opacity" />
+						</a>
+					))
+				}
 			</div>
 		</div>
 	</section>
 
 	<!-- CTA Section -->
-	<section class="cta-section py-20 lg:py-32 bg-gradient-to-r from-indigo-600 to-purple-600 relative overflow-hidden">
-		<div class="parallax-pattern absolute inset-0 opacity-10"></div>
-		<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-			<div class="fade-in-up">
-				<h2 class="text-3xl sm:text-4xl font-bold mb-6 text-white">
-					Ready to Explore?
-				</h2>
-				<p class="text-lg sm:text-xl text-indigo-100 mb-10 max-w-2xl mx-auto">
-					技術ブログで最新の記事をチェックしてみてください
-				</p>
-				<a
-					href="/blog"
-					class="btn-white"
+	<section class="py-32 relative overflow-hidden">
+		<!-- Dynamic Grid Background -->
+		<div
+			class="absolute inset-0 z-0 bg-grid-pattern opacity-10 transform perspective-1000 rotate-x-60 pointer-events-none"
+		>
+		</div>
+
+		<div class="max-w-4xl mx-auto px-4 text-center relative z-10">
+			<div
+				class="glass-panel p-12 border border-black/10 relative overflow-hidden group"
+			>
+				<div
+					class="absolute inset-0 bg-gradient-to-r from-neon-cyan/5 to-neon-magenta/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
 				>
-					Browse Blog Posts
+				</div>
+
+				<h2 class="text-4xl sm:text-6xl font-bold mb-8 text-gray-900">
+					Ready to <span class="text-neon-cyan">Dive In?</span>
+				</h2>
+				<p class="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
+					Access the knowledge base. Read the latest execution logs.
+				</p>
+				<a href="/blog" class="cyber-button inline-block min-w-[200px]">
+					<span class="relative z-10 group-hover:text-white"
+						>ACCESS BLOG</span
+					>
+					<div
+						class="glitch-bg absolute inset-0 bg-gray-900 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left"
+					>
+					</div>
 				</a>
 			</div>
 		</div>
@@ -138,323 +217,138 @@ import OrganizationSchema from '../components/OrganizationSchema.astro';
 </Layout>
 
 <style>
-	/* Hero Section Styles */
-	.hero-section {
-		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-	}
-
-	.parallax-bg {
-		background: linear-gradient(135deg,
-			rgba(102, 126, 234, 0.8) 0%,
-			rgba(118, 75, 162, 0.8) 100%
-		);
-		transform: translateZ(-1px) scale(2);
-	}
-
-	.parallax-shapes .shape {
-		position: absolute;
-		border-radius: 50%;
-		background: rgba(255, 255, 255, 0.1);
-		backdrop-filter: blur(10px);
-	}
-
-	.shape-1 {
-		width: 300px;
-		height: 300px;
-		top: 10%;
-		left: 10%;
-		animation: float 20s ease-in-out infinite;
-	}
-
-	.shape-2 {
-		width: 200px;
-		height: 200px;
-		top: 60%;
-		right: 15%;
-		animation: float 15s ease-in-out infinite 5s;
-	}
-
-	.shape-3 {
-		width: 150px;
-		height: 150px;
-		bottom: 20%;
-		left: 50%;
-		animation: float 18s ease-in-out infinite 10s;
-	}
-
-	@keyframes float {
-		0%, 100% {
-			transform: translateY(0) translateX(0);
-		}
-		33% {
-			transform: translateY(-30px) translateX(30px);
-		}
-		66% {
-			transform: translateY(30px) translateX(-30px);
-		}
-	}
-
-	.gradient-text {
-		background: linear-gradient(to right, #ffffff, #e0e7ff);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-	}
-
-	/* Scroll Indicator */
-	.scroll-indicator {
-		position: absolute;
-		bottom: 30px;
-		left: 50%;
-		transform: translateX(-50%);
-		z-index: 10;
-	}
-
-	.mouse {
-		width: 26px;
-		height: 40px;
-		border: 2px solid rgba(255, 255, 255, 0.5);
-		border-radius: 13px;
+	/* Cyber Button */
+	.cyber-button {
 		position: relative;
-	}
-
-	.mouse::before {
-		content: '';
-		width: 4px;
-		height: 8px;
-		background: rgba(255, 255, 255, 0.7);
-		border-radius: 2px;
-		position: absolute;
-		top: 8px;
-		left: 50%;
-		transform: translateX(-50%);
-		animation: scroll 2s infinite;
-	}
-
-	@keyframes scroll {
-		0% {
-			opacity: 1;
-			transform: translateX(-50%) translateY(0);
-		}
-		100% {
-			opacity: 0;
-			transform: translateX(-50%) translateY(15px);
-		}
-	}
-
-	/* Button Styles */
-	.btn-primary {
-		display: inline-block;
-		padding: 1rem 2rem;
-		background: white;
-		color: #667eea;
-		font-weight: 600;
-		border-radius: 0.75rem;
-		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-		transition: all 0.3s ease;
-	}
-
-	.btn-primary:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-	}
-
-	.btn-secondary {
-		display: inline-block;
-		padding: 1rem 2rem;
-		background: rgba(255, 255, 255, 0.1);
-		color: white;
-		font-weight: 600;
-		border-radius: 0.75rem;
-		border: 2px solid rgba(255, 255, 255, 0.3);
-		backdrop-filter: blur(10px);
-		transition: all 0.3s ease;
-	}
-
-	.btn-secondary:hover {
-		background: rgba(255, 255, 255, 0.2);
-		border-color: rgba(255, 255, 255, 0.5);
-		transform: translateY(-2px);
-	}
-
-	.btn-white {
-		display: inline-block;
 		padding: 1rem 2.5rem;
-		background: white;
-		color: #667eea;
-		font-weight: 600;
-		border-radius: 0.75rem;
-		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-		transition: all 0.3s ease;
+		background: transparent;
+		border: 1px solid var(--neon-cyan);
+		color: var(--neon-cyan);
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		overflow: hidden;
+		transition: all 0.2s;
+		cursor: pointer;
 	}
 
-	.btn-white:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+	.cyber-button:hover {
+		box-shadow:
+			0 0 20px var(--neon-cyan),
+			inset 0 0 10px var(--neon-cyan);
+		border-color: transparent;
+		animation: button-glitch 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both
+			infinite;
 	}
 
-	/* Feature Cards */
-	.feature-card {
-		background: white;
-		padding: 2rem;
-		border-radius: 1rem;
-		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
-		transition: all 0.3s ease;
+	.cyber-button-outline {
+		padding: 1rem 2.5rem;
+		border: 1px solid rgba(255, 255, 255, 0.2);
+		color: white; /* Changed from text-gray-X to white for better contrast on glass */
+		/* Actually for light mode, outline button should be dark text/border */
+		border-color: rgba(0, 0, 0, 0.2);
+		color: rgba(0, 0, 0, 0.7);
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		background: rgba(255, 255, 255, 0.4);
+		backdrop-filter: blur(4px);
+		transition: all 0.3s;
+	}
+
+	.cyber-button-outline:hover {
+		border-color: var(--neon-cyan);
+		color: var(--neon-cyan);
+		background: rgba(255, 255, 255, 0.8);
+		letter-spacing: 4px;
+	}
+
+	/* Cyber Card */
+	.cyber-card {
+		position: relative;
+		padding: 2.5rem;
+		background: rgba(255, 255, 255, 0.8); /* Light mode background */
 		border: 1px solid rgba(0, 0, 0, 0.05);
+		backdrop-filter: blur(10px);
+		transition: all 0.4s ease;
 	}
 
-	.feature-card:hover {
-		transform: translateY(-8px);
-		box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+	.cyber-card:hover {
+		transform: translateY(-5px) scale(1.02);
+		border-color: var(--neon-cyan);
+		box-shadow: 0 10px 40px -10px rgba(0, 191, 216, 0.15);
 	}
 
-	.feature-icon {
-		font-size: 3rem;
-		margin-bottom: 1rem;
-	}
-
-	/* Skill Tags */
-	.skill-tag-group {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.75rem;
-	}
-
-	.skill-tag {
-		display: inline-block;
-		padding: 0.5rem 1rem;
-		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-		color: white;
-		border-radius: 2rem;
-		font-size: 0.875rem;
-		font-weight: 600;
-		box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
-		transition: all 0.3s ease;
-	}
-
-	.skill-tag:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
-	}
-
-	/* Parallax Pattern */
-	.parallax-pattern {
-		background-image:
-			radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 2px, transparent 2px),
-			radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 2px, transparent 2px);
-		background-size: 50px 50px;
-		animation: patternMove 20s linear infinite;
-	}
-
-	@keyframes patternMove {
+	/* Animations */
+	@keyframes button-glitch {
 		0% {
-			background-position: 0 0, 25px 25px;
+			transform: translate(0);
+		}
+		20% {
+			transform: translate(-2px, 2px);
+		}
+		40% {
+			transform: translate(-2px, -2px);
+		}
+		60% {
+			transform: translate(2px, 2px);
+		}
+		80% {
+			transform: translate(2px, -2px);
 		}
 		100% {
-			background-position: 50px 50px, 75px 75px;
+			transform: translate(0);
 		}
 	}
 
-	/* Fade In Animations */
 	.fade-in-up {
+		animation: fade-in-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 		opacity: 0;
-		animation: fadeInUp 1s ease forwards;
+		transform: translateY(40px);
 	}
 
-	.fade-in-left {
-		opacity: 0;
-		animation: fadeInLeft 1s ease forwards;
-	}
-
-	.fade-in-right {
-		opacity: 0;
-		animation: fadeInRight 1s ease forwards;
-	}
-
-	@keyframes fadeInUp {
-		from {
-			opacity: 0;
-			transform: translateY(30px);
-		}
+	@keyframes fade-in-up {
 		to {
 			opacity: 1;
 			transform: translateY(0);
 		}
 	}
 
-	@keyframes fadeInLeft {
-		from {
-			opacity: 0;
-			transform: translateX(-30px);
-		}
-		to {
-			opacity: 1;
-			transform: translateX(0);
-		}
+	.bg-grid-pattern {
+		background-size: 50px 50px;
+		background-image:
+			linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+			linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
 	}
 
-	@keyframes fadeInRight {
-		from {
-			opacity: 0;
-			transform: translateX(30px);
-		}
-		to {
-			opacity: 1;
-			transform: translateX(0);
-		}
+	.perspective-1000 {
+		perspective: 1000px;
 	}
 
-	/* Responsive adjustments */
-	@media (max-width: 640px) {
-		.hero-section {
-			min-height: 100vh;
-		}
-
-		.shape-1, .shape-2, .shape-3 {
-			width: 150px;
-			height: 150px;
-		}
+	.rotate-x-60 {
+		transform: rotateX(60deg);
 	}
 </style>
 
 <script>
-	// Parallax effect on scroll
-	window.addEventListener('scroll', () => {
-		const scrolled = window.pageYOffset;
-		const parallaxBg = document.querySelector('.parallax-bg') as HTMLElement;
-		const shapes = document.querySelectorAll('.shape') as NodeListOf<HTMLElement>;
+	// Effect: Shatter on Click
+	const interactables = document.querySelectorAll(
+		".cyber-button, .cyber-card",
+	);
 
-		if (parallaxBg) {
-			parallaxBg.style.transform = `translateY(${scrolled * 0.5}px)`;
-		}
+	interactables.forEach((el) => {
+		el.addEventListener("click", (e) => {
+			// Don't prevent default if it's a link, just animate first?
+			// Actually for links we might want to delay navigation, but for now let's just show the visual effect
+			// if it was a SPA transition we'd await. Since it's Astro MPA, we let it rip or delay slightly.
+			// Let's just add the class for visual feedback immediately.
+			const target = e.currentTarget as HTMLElement;
+			target.classList.add("shattered");
 
-		shapes.forEach((shape, index) => {
-			const speed = 0.2 + (index * 0.1);
-			shape.style.transform = `translateY(${scrolled * speed}px)`;
+			// Remove class after animation to reset state if user comes back or it's a non-navigating click
+			setTimeout(() => {
+				target.classList.remove("shattered");
+			}, 500);
 		});
-	});
-
-	// Intersection Observer for fade-in animations
-	const observerOptions = {
-		threshold: 0.1,
-		rootMargin: '0px 0px -50px 0px'
-	};
-
-	const observer = new IntersectionObserver((entries) => {
-		entries.forEach(entry => {
-			if (entry.isIntersecting) {
-				// 要素が画面内に入ったらアニメーションを再開
-				(entry.target as HTMLElement).style.animation = 'none';
-				// 強制的にリフローを発生させる
-				void (entry.target as HTMLElement).offsetHeight;
-				// アニメーションを再設定
-				(entry.target as HTMLElement).style.animation = '';
-			}
-		});
-	}, observerOptions);
-
-	document.addEventListener('DOMContentLoaded', () => {
-		const animatedElements = document.querySelectorAll('.fade-in-up, .fade-in-left, .fade-in-right');
-		animatedElements.forEach(el => observer.observe(el));
 	});
 </script>

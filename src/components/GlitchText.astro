@@ -1,0 +1,86 @@
+---
+interface Props {
+    text: string;
+    as?: "h1" | "h2" | "h3" | "span" | "p";
+    class?: string;
+}
+
+const { text, as: Tag = "span", class: className = "" } = Astro.props;
+---
+
+<Tag
+    class={`glitch-wrapper relative inline-block ${className}`}
+    data-text={text}
+>
+    <span class="actual-text relative z-10">{text}</span>
+    <span
+        aria-hidden="true"
+        class="glitch-layer layer-1 absolute inset-0 z-0 opacity-0 select-none overflow-hidden"
+        >{text}</span
+    >
+    <span
+        aria-hidden="true"
+        class="glitch-layer layer-2 absolute inset-0 z-0 opacity-0 select-none overflow-hidden"
+        >{text}</span
+    >
+</Tag>
+
+<style>
+    .glitch-wrapper {
+        position: relative;
+    }
+
+    .glitch-wrapper:hover .glitch-layer {
+        opacity: 1;
+    }
+
+    /* Always active for main titles, or on hover for interactive elements */
+    .glitch-wrapper.always-active .glitch-layer {
+        opacity: 1;
+    }
+
+    .glitch-layer {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .layer-1 {
+        color: var(--neon-cyan);
+        clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+        transform: translate(-2px, 0);
+        animation: glitch-skew 4s infinite linear alternate-reverse;
+        text-shadow: 2px 0 var(--neon-magenta);
+    }
+
+    .layer-2 {
+        color: var(--neon-magenta);
+        clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+        transform: translate(2px, 0);
+        animation: glitch-skew 2s infinite linear alternate-reverse;
+        text-shadow: -2px 0 var(--neon-lime);
+    }
+
+    /* Intense Glitch Animation (defined in global.css but refined here) */
+    @keyframes glitch-skew {
+        0% {
+            transform: translate(0);
+        }
+        20% {
+            transform: translate(-2px, 0.5px);
+        }
+        40% {
+            transform: translate(-2px, -0.5px);
+        }
+        60% {
+            transform: translate(2px, 0.5px);
+        }
+        80% {
+            transform: translate(2px, -0.5px);
+        }
+        100% {
+            transform: translate(0);
+        }
+    }
+</style>

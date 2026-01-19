@@ -1,131 +1,207 @@
 @import "tailwindcss";
 
-@theme {
-  /* Typography - Inspired by Atlassian Design System */
-  --font-family-sans: "Inter", "Noto Sans JP", system-ui, -apple-system, sans-serif;
-  --font-family-mono: "Courier New", Consolas, monospace;
+:root {
+	/* Neon Cyber Palette (Light Mode - Laboratory) */
+	--neon-cyan: #00bfd8;
+	/* Slightly darker for white bg */
+	--neon-magenta: #d800d8;
+	/* Slightly darker */
+	--neon-lime: #00c000;
 
-  /* Font sizes - Mobile-first responsive design */
-  /* Mobile base: 17px for better readability on small screens */
-  --font-heading-xxlarge: 2rem;     /* 32px on mobile */
-  --font-heading-xlarge: 1.75rem;   /* 28px on mobile */
-  --font-heading-large: 1.375rem;   /* 22px on mobile */
-  --font-heading-medium: 1.25rem;   /* 20px on mobile */
-  --font-heading-small: 1.125rem;   /* 18px on mobile */
+	/* Laboratory Theme */
+	--deep-space: #f8f9fa;
+	/* Light Gray / Lab White */
+	--text-main: #111827;
+	/* Dark Gray */
 
-  --font-body-large: 1.125rem;      /* 18px on mobile */
-  --font-body-medium: 1.0625rem;    /* 17px on mobile */
-  --font-body-small: 0.9375rem;     /* 15px on mobile */
-  --font-body-xsmall: 0.8125rem;    /* 13px on mobile */
+	/* Glass Variables for Light Mode */
+	--glass-border: rgba(0, 0, 0, 0.08);
+	--glass-surface: rgba(255, 255, 255, 0.65);
 
-  /* Line heights */
-  --line-height-heading: 1.3;
-  --line-height-body: 1.75;
-
-  /* Spacing system - Inspired by Atlassian Design System */
-  --spacing-025: 0.125rem;  /* 2px */
-  --spacing-050: 0.25rem;   /* 4px */
-  --spacing-100: 0.5rem;    /* 8px */
-  --spacing-200: 1rem;      /* 16px */
-  --spacing-300: 1.5rem;    /* 24px */
-  --spacing-400: 2rem;      /* 32px */
-  --spacing-500: 2.5rem;    /* 40px */
-  --spacing-600: 3rem;      /* 48px */
-  --spacing-800: 4rem;      /* 64px */
-  --spacing-1000: 5rem;     /* 80px */
-
-  /* Color system */
-  --color-gray-50: #f9fafb;
-  --color-gray-100: #f3f4f6;
-  --color-gray-200: #e5e7eb;
-  --color-gray-300: #d1d5db;
-  --color-gray-400: #9ca3af;
-  --color-gray-500: #6b7280;
-  --color-gray-600: #4b5563;
-  --color-gray-700: #374151;
-  --color-gray-800: #1f2937;
-  --color-gray-900: #111827;
-
-  --color-blue-50: #eff6ff;
-  --color-blue-100: #dbeafe;
-  --color-blue-300: #93c5fd;
-  --color-blue-600: #2563eb;
-  --color-blue-700: #1d4ed8;
-  --color-blue-800: #1e40af;
-
-  /* Semantic colors */
-  --color-surface-default: #ffffff;
-  --color-surface-raised: #f9fafb;
-  --color-surface-overlay: #ffffff;
-
-  --color-text-primary: #111827;
-  --color-text-secondary: #4b5563;
-  --color-text-tertiary: #6b7280;
-  --color-text-disabled: #9ca3af;
-
-  --color-border-default: #e5e7eb;
-  --color-border-subtle: #f3f4f6;
-  --color-border-focus: #2563eb;
-
-  --color-link-default: #2563eb;
-  --color-link-hover: #1e40af;
-  --color-link-visited: #7c3aed;
-
-  /* Border radius */
-  --radius-small: 0.25rem;  /* 4px */
-  --radius-medium: 0.5rem;  /* 8px */
-  --radius-large: 0.75rem;  /* 12px */
-  --radius-xlarge: 1rem;    /* 16px */
-
-  /* Shadows */
-  --shadow-raised: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-  --shadow-overlay: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-floating: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+	--font-cyber: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-/* Responsive typography breakpoints */
-/* Tablet and above (768px+): Adjust fonts to standard sizes */
-@media (min-width: 768px) {
-  :root {
-    --font-heading-xxlarge: 2.5rem;   /* 40px on tablet+ */
-    --font-heading-xlarge: 2rem;      /* 32px on tablet+ */
-    --font-heading-large: 1.5rem;     /* 24px on tablet+ */
-    --font-heading-medium: 1.25rem;   /* 20px on tablet+ */
-    --font-heading-small: 1.125rem;   /* 18px on tablet+ */
-
-    --font-body-large: 1.125rem;      /* 18px on tablet+ */
-    --font-body-medium: 1rem;         /* 16px on tablet+ */
-    --font-body-small: 0.875rem;      /* 14px on tablet+ */
-    --font-body-xsmall: 0.75rem;      /* 12px on tablet+ */
-
-    --line-height-body: 1.7;
-  }
+@font-face {
+	font-family: 'Inter';
+	src: url('https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff2') format('woff2');
+	font-weight: 100 900;
+	font-display: swap;
 }
 
-/* Focus management - Atlassian-inspired accessibility */
-a:focus-visible,
-button:focus-visible,
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible {
-  outline: 2px solid var(--color-border-focus);
-  outline-offset: 2px;
-  border-radius: var(--radius-small);
+html {
+	background: var(--deep-space);
+	color: var(--text-main);
+	font-family: var(--font-cyber);
+	overflow-x: hidden;
 }
 
-/* Skip to main content for keyboard navigation */
-.skip-to-main {
-  position: absolute;
-  left: -9999px;
-  z-index: 999;
-  background: var(--color-surface-default);
-  padding: var(--spacing-200) var(--spacing-300);
-  border: 2px solid var(--color-border-focus);
-  border-radius: var(--radius-medium);
+body {
+	min-height: 100vh;
+	margin: 0;
+	position: relative;
+	/* Scanline overlay base - Subtle for light mode */
+	background-image: linear-gradient(rgba(255, 255, 255, 0) 50%,
+			rgba(0, 0, 0, 0.03) 50%), linear-gradient(90deg,
+			rgba(255, 0, 0, 0.03),
+			rgba(0, 255, 0, 0.01),
+			rgba(0, 0, 255, 0.03));
+	background-size: 100% 2px, 3px 100%;
 }
 
-.skip-to-main:focus {
-  left: 50%;
-  transform: translateX(-50%);
-  top: var(--spacing-200);
+/* Base Utility Classes */
+.text-neon-cyan {
+	color: var(--neon-cyan);
+	text-shadow: 0 0 10px var(--neon-cyan);
+}
+
+.text-neon-magenta {
+	color: var(--neon-magenta);
+	text-shadow: 0 0 10px var(--neon-magenta);
+}
+
+/* RGB Shift Animation */
+@keyframes rgb-shift-anim {
+	0% {
+		text-shadow: -2px 0 var(--neon-cyan), 2px 0 var(--neon-magenta);
+	}
+
+	25% {
+		text-shadow: -2px -2px var(--neon-cyan), 2px 2px var(--neon-magenta);
+	}
+
+	50% {
+		text-shadow: 2px -2px var(--neon-cyan), -2px 2px var(--neon-magenta);
+	}
+
+	75% {
+		text-shadow: 2px 2px var(--neon-cyan), -2px -2px var(--neon-magenta);
+	}
+
+	100% {
+		text-shadow: -2px 0 var(--neon-cyan), 2px 0 var(--neon-magenta);
+	}
+}
+
+/* Glitch Shake */
+@keyframes glitch-skew {
+	0% {
+		transform: skew(0deg);
+	}
+
+	20% {
+		transform: skew(-20deg);
+	}
+
+	40% {
+		transform: skew(10deg);
+	}
+
+	60% {
+		transform: skew(-5deg);
+	}
+
+	80% {
+		transform: skew(5deg);
+	}
+
+	100% {
+		transform: skew(0deg);
+	}
+}
+
+/* Noise Animation */
+@keyframes noise-move {
+	0% {
+		background-position: 0 0;
+	}
+
+	10% {
+		background-position: -5% -10%;
+	}
+
+	20% {
+		background-position: -15% 5%;
+	}
+
+	30% {
+		background-position: 7% -25%;
+	}
+
+	40% {
+		background-position: 20% 25%;
+	}
+
+	50% {
+		background-position: -25% 10%;
+	}
+
+	60% {
+		background-position: 15% 5%;
+	}
+
+	70% {
+		background-position: 0% 15%;
+	}
+
+	80% {
+		background-position: 25% 35%;
+	}
+
+	90% {
+		background-position: -10% 10%;
+	}
+
+	100% {
+		background-position: 0 0;
+	}
+}
+
+/* Shatter Effect (Added via JS class) */
+.shattered {
+	animation: shatter-anim 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@keyframes shatter-anim {
+	0% {
+		transform: scale(1);
+		clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+		filter: hue-rotate(0deg);
+	}
+
+	20% {
+		transform: scale(1.1) skew(10deg);
+		clip-path: polygon(10% 0, 90% 0, 100% 90%, 0% 100%);
+		filter: hue-rotate(90deg);
+	}
+
+	40% {
+		transform: scale(0.9) skew(-10deg) translate(-5px, 5px);
+		clip-path: polygon(0 10%, 100% 0, 90% 100%, 10% 90%);
+		filter: hue-rotate(180deg);
+	}
+
+	60% {
+		transform: scale(1.05) skew(5deg) translate(5px, -5px);
+		clip-path: polygon(5% 5%, 95% 0, 100% 95%, 0% 100%);
+		filter: hue-rotate(270deg);
+	}
+
+	100% {
+		transform: scale(1);
+		clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+		filter: hue-rotate(360deg);
+	}
+}
+
+/* Utilities for Glass */
+.glass-panel {
+	background: var(--glass-surface);
+	backdrop-filter: blur(12px);
+	border: 1px solid var(--glass-border);
+	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+.glass-panel:hover {
+	border-color: rgba(255, 255, 255, 0.3);
+	box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
 }
