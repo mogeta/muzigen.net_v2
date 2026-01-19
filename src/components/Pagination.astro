@@ -1,15 +1,18 @@
 ---
-import type { Page } from 'astro';
+import type { Page } from "astro";
 
 interface Props {
   page: Page<any>;
   baseUrl?: string;
 }
 
-const { page, baseUrl = '/blog' } = Astro.props;
+const { page, baseUrl = "/blog" } = Astro.props;
 
 // ページ番号の配列を生成（最大7個表示）
-function getPageNumbers(currentPage: number, lastPage: number): (number | string)[] {
+function getPageNumbers(
+  currentPage: number,
+  lastPage: number,
+): (number | string)[] {
   const pages: (number | string)[] = [];
 
   if (lastPage <= 7) {
@@ -22,7 +25,7 @@ function getPageNumbers(currentPage: number, lastPage: number): (number | string
     pages.push(1);
 
     if (currentPage > 3) {
-      pages.push('...');
+      pages.push("...");
     }
 
     // 現在のページ周辺を表示
@@ -34,7 +37,7 @@ function getPageNumbers(currentPage: number, lastPage: number): (number | string
     }
 
     if (currentPage < lastPage - 2) {
-      pages.push('...');
+      pages.push("...");
     }
 
     // 常に最後のページを表示
@@ -54,74 +57,127 @@ function getPageUrl(pageNum: number): string {
 }
 ---
 
-{page.lastPage > 1 && (
-  <nav aria-label="ページネーション" class="flex justify-center items-center gap-2 mt-12">
-    {/* 前へボタン */}
-    {page.url.prev ? (
-      <a
-        href={page.url.prev}
-        class="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors flex items-center gap-2"
-        aria-label="前のページ"
-      >
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-        </svg>
-        <span class="hidden sm:inline">前へ</span>
-      </a>
-    ) : (
-      <span class="px-4 py-2 rounded-lg border border-gray-200 text-gray-400 cursor-not-allowed flex items-center gap-2">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-        </svg>
-        <span class="hidden sm:inline">前へ</span>
-      </span>
-    )}
-
-    {/* ページ番号 */}
-    <div class="flex gap-2">
-      {pageNumbers.map((pageNum) =>
-        typeof pageNum === 'number' ? (
-          pageNum === page.currentPage ? (
-            <span
-              class="px-4 py-2 rounded-lg bg-blue-600 text-white font-medium"
-              aria-current="page"
+{
+  page.lastPage > 1 && (
+    <nav
+      aria-label="ページネーション"
+      class="flex justify-center items-center gap-2 mt-12 flex-wrap"
+    >
+      {/* 前へボタン */}
+      {page.url.prev ? (
+        <a
+          href={page.url.prev}
+          class="cyber-button cyber-button-sm group"
+          aria-label="前のページ"
+        >
+          <span class="relative z-10 flex items-center gap-2">
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              {pageNum}
-            </span>
-          ) : (
-            <a
-              href={getPageUrl(pageNum)}
-              class="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors"
-              aria-label={`ページ${pageNum}へ`}
-            >
-              {pageNum}
-            </a>
-          )
-        ) : (
-          <span class="px-2 py-2 text-gray-400">...</span>
-        )
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+            <span class="hidden sm:inline">PREV</span>
+          </span>
+          <div class="glitch-bg absolute inset-0 bg-neon-cyan transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left" />
+        </a>
+      ) : (
+        <span class="cyber-button-outline cyber-button-sm opacity-50 cursor-not-allowed flex items-center gap-2">
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+          <span class="hidden sm:inline">PREV</span>
+        </span>
       )}
-    </div>
 
-    {/* 次へボタン */}
-    {page.url.next ? (
-      <a
-        href={page.url.next}
-        class="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors flex items-center gap-2"
-        aria-label="次のページ"
-      >
-        <span class="hidden sm:inline">次へ</span>
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-        </svg>
-      </a>
-    ) : (
-      <span class="px-4 py-2 rounded-lg border border-gray-200 text-gray-400 cursor-not-allowed flex items-center gap-2">
-        <span class="hidden sm:inline">次へ</span>
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-        </svg>
-      </span>
-    )}
-  </nav>
-)}
+      {/* ページ番号 */}
+      <div class="flex gap-2">
+        {pageNumbers.map((pageNum) =>
+          typeof pageNum === "number" ? (
+            pageNum === page.currentPage ? (
+              <span
+                class="cyber-button cyber-button-sm bg-neon-cyan text-white border-transparent"
+                style="background-color: var(--neon-cyan); color: white;"
+                aria-current="page"
+              >
+                <span class="relative z-10">{pageNum}</span>
+              </span>
+            ) : (
+              <a
+                href={getPageUrl(pageNum)}
+                class="cyber-button cyber-button-sm group"
+                aria-label={`ページ${pageNum}へ`}
+              >
+                <span class="relative z-10">{pageNum}</span>
+                <div class="glitch-bg absolute inset-0 bg-neon-cyan transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left" />
+              </a>
+            )
+          ) : (
+            <span class="px-2 py-2 text-gray-400 font-mono">...</span>
+          ),
+        )}
+      </div>
+
+      {/* 次へボタン */}
+      {page.url.next ? (
+        <a
+          href={page.url.next}
+          class="cyber-button cyber-button-sm group"
+          aria-label="次のページ"
+        >
+          <span class="relative z-10 flex items-center gap-2">
+            <span class="hidden sm:inline">NEXT</span>
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </span>
+          <div class="glitch-bg absolute inset-0 bg-neon-cyan transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left" />
+        </a>
+      ) : (
+        <span class="cyber-button-outline cyber-button-sm opacity-50 cursor-not-allowed flex items-center gap-2">
+          <span class="hidden sm:inline">NEXT</span>
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </span>
+      )}
+    </nav>
+  )
+}

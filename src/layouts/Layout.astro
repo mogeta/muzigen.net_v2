@@ -168,6 +168,20 @@ const pageTitle = title === "muzigen.net" ? title : `${title} | muzigen.net`;
 		<script>
 			// System Online Log
 			// console.log('%c SYSTEM ONLINE %c muzigen.net v2.0 ', 'background: #00f3ff; color: #000; font-weight: bold; padding: 4px;', 'background: #000; color: #00f3ff; padding: 4px;');
+
+			// Effect: Shatter on Click (Global)
+			// Apply to any element with .cyber-button or .cyber-card class
+			document.addEventListener("click", (e) => {
+				const target = (e.target as Element).closest(
+					".cyber-button, .cyber-card",
+				);
+				if (target) {
+					target.classList.add("shattered");
+					setTimeout(() => {
+						target.classList.remove("shattered");
+					}, 500);
+				}
+			});
 		</script>
 	</body>
 </html>
