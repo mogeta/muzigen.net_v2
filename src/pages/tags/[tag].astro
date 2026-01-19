@@ -28,7 +28,7 @@ export async function getStaticPaths() {
 					slug: data.slug || undefined,
 					title: data.title || '',
 					description: data.description || '',
-					ogp_image: data.ogp_image || '',
+					ogp_image: data.ogp_image || '/ogp_default.png',
 					tags: data.tags,
 					tag: data.tag,
 					update_date: data.update_date?.toDate?.()?.toISOString() || data.update_date || '',

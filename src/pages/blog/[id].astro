@@ -46,7 +46,7 @@ export async function getStaticPaths() {
 					slug: data.slug || undefined,
 					title: data.title || '',
 					description: data.description || '',
-					ogp_image: data.ogp_image || '',
+					ogp_image: data.ogp_image || '/ogp_default.png',
 					content: data.content ? sanitizeHtml((await processor.render(data.content)).code) : '',
 					tag: data.tag || '',
 					tags: data.tags || undefined,

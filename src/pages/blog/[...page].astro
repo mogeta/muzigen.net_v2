@@ -27,7 +27,7 @@ export const getStaticPaths = (async ({ paginate }) => {
         slug: data.slug || undefined,
         title: data.title || '',
         description: data.description || '',
-        ogp_image: data.ogp_image || '',
+        ogp_image: data.ogp_image || '/ogp_default.png',
         tag: data.tag || '',
         created_date: data.created_date?.toDate?.()?.toISOString() || data.created_date || '',
         update_date: data.update_date?.toDate?.()?.toISOString() || data.update_date || '',
