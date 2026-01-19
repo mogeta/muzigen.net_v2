@@ -33,7 +33,7 @@ export const GET: APIRoute = async (context) => {
 
     return rss({
       title: 'muzigen.net - Blog',
-      description: 'muzigen.netの最新記事をお届けします',
+      description: 'tech life hobby and other things',
       site: context.site || 'https://muzigen.net',
       items,
       customData: '<language>ja</language>',
@@ -44,7 +44,7 @@ export const GET: APIRoute = async (context) => {
     // エラーの場合は空のフィードを返す
     return rss({
       title: 'muzigen.net - Blog',
-      description: 'muzigen.netの最新記事をお届けします',
+      description: 'tech life hobby and other things',
       site: context.site || 'https://muzigen.net',
       items: [],
       customData: '<language>ja</language>',
