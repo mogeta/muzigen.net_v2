@@ -14,6 +14,10 @@ import sentry from '@sentry/astro';
 // https://astro.build/config
 export default defineConfig({
     output: 'static',
+    build: {
+        // CSSを自動インライン化（小さいCSSはHTMLに埋め込み、レンダリングブロックを軽減）
+        inlineStylesheets: 'auto',
+    },
     markdown: {
         syntaxHighlight: {
             type: 'shiki',
