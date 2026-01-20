@@ -21,13 +21,6 @@
 	--font-cyber: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-@font-face {
-	font-family: 'Inter';
-	src: url('https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff2') format('woff2');
-	font-weight: 100 900;
-	font-display: swap;
-}
-
 html {
 	background: var(--deep-space);
 	color: var(--text-main);
