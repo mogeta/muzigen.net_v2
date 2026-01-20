@@ -15,6 +15,7 @@
     "@astrojs/react": "^4.4.2",
     "@astrojs/rss": "^4.0.14",
     "@astrojs/sitemap": "^3.6.0",
+    "@fontsource/inter": "^5.2.8",
     "@rainbow-me/rainbowkit": "^2.2.9",
     "@sentry/astro": "^10.29.0",
     "@shikijs/rehype": "^3.19.0",

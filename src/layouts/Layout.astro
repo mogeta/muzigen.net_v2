@@ -1,5 +1,12 @@
 ---
 import "../styles/global.css";
+// Self-hosted Inter font (eliminates external font requests)
+import "@fontsource/inter/300.css";
+import "@fontsource/inter/400.css";
+import "@fontsource/inter/500.css";
+import "@fontsource/inter/600.css";
+import "@fontsource/inter/700.css";
+import "@fontsource/inter/900.css";
 import Footer from "../components/Footer.astro";
 import GoogleAnalytics from "../components/GoogleAnalytics.astro";
 
@@ -62,27 +69,6 @@ const pageTitle = title === "muzigen.net" ? title : `${title} | muzigen.net`;
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 		<link rel="manifest" href="/site.webmanifest" />
 		<meta name="theme-color" content="#0a0a0a" />
-
-		<!-- Futuristic Fonts (Replaced with Inter for readability) -->
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link
-			rel="preload"
-			as="style"
-			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap"
-		/>
-		<link
-			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap"
-			rel="stylesheet"
-			media="print"
-			onload="this.media='all'"
-		/>
-		<noscript>
-			<link
-				href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap"
-				rel="stylesheet"
-			/>
-		</noscript>
 
 		<meta name="generator" content={Astro.generator} />
 		<title>{pageTitle}</title>
