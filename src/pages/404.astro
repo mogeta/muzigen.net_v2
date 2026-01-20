@@ -1,0 +1,69 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+	title="404 - Page Not Found"
+	description="お探しのページは見つかりませんでした。"
+>
+	<section
+		class="min-h-screen flex items-center justify-center px-4 relative overflow-hidden"
+	>
+		<div class="text-center max-w-2xl mx-auto relative z-10">
+			<div class="mb-8">
+				<span
+					class="glitch-text text-8xl sm:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 via-gray-800 to-fuchsia-600"
+					data-text="404"
+				>
+					404
+				</span>
+			</div>
+
+			<h1 class="text-2xl sm:text-4xl font-bold text-gray-900 mb-4">
+				<span class="text-neon-cyan">ERROR:</span> Page Not Found
+			</h1>
+
+			<p class="text-gray-600 text-lg mb-8 font-mono">
+				&gt; The requested resource could not be located.<br />
+				&gt; Connection to target node failed.<br />
+				&gt; Initiating fallback protocol...
+			</p>
+
+			<div class="glass-panel p-6 mb-8 border-l-4 border-neon-magenta">
+				<p class="text-gray-700">
+					お探しのページは移動または削除された可能性があります。<br />
+					URLをご確認いただくか、以下のリンクからお探しください。
+				</p>
+			</div>
+
+			<div class="flex flex-col sm:flex-row gap-4 justify-center">
+				<a href="/" class="cyber-button group">
+					<span
+						class="relative z-10 group-hover:text-white transition-colors duration-100"
+					>
+						Return to Home
+					</span>
+					<div
+						class="glitch-bg absolute inset-0 bg-neon-cyan transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left"
+					>
+					</div>
+				</a>
+				<a href="/blog" class="cyber-button-outline">
+					<span class="relative z-10">Browse Blog</span>
+				</a>
+			</div>
+
+			<div class="mt-12 text-xs text-gray-400 font-mono">
+				<span class="text-neon-cyan">STATUS:</span> 404 |
+				<span class="text-neon-magenta">TYPE:</span> NOT_FOUND |
+				<span>TIME:</span>
+				<span id="error-time"></span>
+			</div>
+		</div>
+	</section>
+</Layout>
+
+<script is:inline>
+	document.getElementById("error-time").textContent =
+		new Date().toISOString();
+</script>

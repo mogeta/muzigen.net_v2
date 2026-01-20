@@ -1,0 +1,39 @@
+---
+interface Props {
+	name?: string;
+	description?: string;
+}
+
+const { name = "muzigen.net", description = "muzigen.netのウェブサイト" } =
+	Astro.props;
+
+const siteUrl = Astro.site?.origin || Astro.url.origin;
+
+const schema = {
+	"@context": "https://schema.org",
+	"@type": "WebSite",
+	name: name,
+	description: description,
+	url: siteUrl,
+	inLanguage: "ja",
+	publisher: {
+		"@type": "Organization",
+		name: name,
+		url: siteUrl,
+		logo: {
+			"@type": "ImageObject",
+			url: `${siteUrl}/favicon.svg`,
+		},
+	},
+	potentialAction: {
+		"@type": "SearchAction",
+		target: {
+			"@type": "EntryPoint",
+			urlTemplate: `${siteUrl}/tags/{search_term_string}`,
+		},
+		"query-input": "required name=search_term_string",
+	},
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

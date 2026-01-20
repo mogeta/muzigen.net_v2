@@ -26,6 +26,14 @@ const {
 // Use provided canonical URL or default to current page URL without query parameters
 const canonical = canonicalURL || `${Astro.url.origin}${Astro.url.pathname}`;
 
+// OGP image - use provided image or default
+const siteUrl = Astro.site?.origin || "https://muzigen.net";
+const resolvedOgImage = ogImage
+	? ogImage.startsWith("http")
+		? ogImage
+		: `${siteUrl}${ogImage.startsWith("/") ? "" : "/"}${ogImage}`
+	: `${siteUrl}/ogp_default.png`;
+
 const pageTitle = title === "muzigen.net" ? title : `${title} | muzigen.net`;
 ---
 
@@ -53,6 +61,7 @@ const pageTitle = title === "muzigen.net" ? title : `${title} | muzigen.net`;
 		<link rel="shortcut icon" href="/favicon.ico" />
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 		<link rel="manifest" href="/site.webmanifest" />
+		<meta name="theme-color" content="#0a0a0a" />
 
 		<!-- Futuristic Fonts (Replaced with Inter for readability) -->
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -68,17 +77,14 @@ const pageTitle = title === "muzigen.net" ? title : `${title} | muzigen.net`;
 
 		<!-- Open Graph / Facebook -->
 		<meta property="og:type" content={ogType} />
+		<meta property="og:url" content={canonical} />
+		<meta property="og:locale" content="ja_JP" />
+		<meta property="og:site_name" content="muzigen.net" />
 		<meta property="og:title" content={pageTitle} />
 		<meta property="og:description" content={description} />
-		{
-			ogImage && (
-				<>
-					<meta property="og:image" content={ogImage} />
-					<meta property="og:image:width" content="1200" />
-					<meta property="og:image:height" content="630" />
-				</>
-			)
-		}
+		<meta property="og:image" content={resolvedOgImage} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
 		{
 			ogType === "article" && (
 				<>
@@ -100,9 +106,11 @@ const pageTitle = title === "muzigen.net" ? title : `${title} | muzigen.net`;
 
 		<!-- Twitter -->
 		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:site" content="@mogetta" />
+		<meta name="twitter:creator" content="@mogetta" />
 		<meta name="twitter:title" content={pageTitle} />
 		<meta name="twitter:description" content={description} />
-		{ogImage && <meta name="twitter:image" content={ogImage} />}
+		<meta name="twitter:image" content={resolvedOgImage} />
 
 		<GoogleAnalytics />
 
