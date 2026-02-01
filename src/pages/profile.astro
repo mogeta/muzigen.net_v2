@@ -17,7 +17,11 @@ const profile = {
     description={profile.bio}
     image={profile.image}
     url="/profile"
-    sameAs={[]}
+    sameAs={[
+      "https://github.com/mogeta",
+      "https://www.linkedin.com/in/hiroshi-mimori",
+      "https://x.com/mogetta"
+    ]}
   />
   <BreadcrumbSchema
     items={[
@@ -41,9 +45,12 @@ const profile = {
         <div class="flex-1 text-center">
           <h1 class="text-3xl font-bold text-gray-900 mb-3">{profile.name}</h1>
           <p
-            class="text-lg text-gray-700 leading-relaxed mb-6 max-w-2xl mx-auto"
+            class="text-lg text-gray-700 leading-relaxed mb-2 max-w-2xl mx-auto"
           >
             {profile.bio}
+          </p>
+          <p class="text-base text-gray-600 italic mb-6 max-w-2xl mx-auto">
+            ITエンジニアリングでユーザー体験を創造、改善する人をやってます。
           </p>
           <div class="flex flex-wrap gap-3 justify-center mb-8">
             <a
@@ -66,11 +73,86 @@ const profile = {
               GitHub
             </a>
             <a
+              href="https://www.linkedin.com/in/hiroshi-mimori"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors font-medium"
+              aria-label="LinkedInプロフィールを見る"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+              LinkedIn
+            </a>
+            <a
+              href="https://x.com/mogetta"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors font-medium"
+              aria-label="Xプロフィールを見る"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+              X
+            </a>
+            <a
               href="/profile/lapras"
               class="inline-flex items-center gap-2 px-4 py-2 bg-purple-50 text-purple-800 rounded-lg hover:bg-purple-100 transition-colors font-medium"
             >
               LAPRASデータを見る
             </a>
+          </div>
+          <div class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg max-w-2xl mx-auto">
+            <p class="text-gray-700 text-sm text-center">
+              お仕事に関するお問い合わせは各種SNSか、<a href="mailto:muzigen@gmail.com" class="text-blue-600 hover:text-blue-800 underline font-medium">muzigen@gmail.com</a>まで
+            </p>
+          </div>
+          <div class="mt-8 max-w-2xl mx-auto">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4 text-center">使用言語・技術</h2>
+
+            <div class="mb-4">
+              <h3 class="text-sm font-semibold text-gray-600 mb-2 text-center">Languages</h3>
+              <div class="flex flex-wrap gap-2 justify-center">
+                <span class="px-3 py-1.5 bg-blue-100 text-blue-800 rounded-lg text-sm font-medium">Go</span>
+                <span class="px-3 py-1.5 bg-blue-100 text-blue-800 rounded-lg text-sm font-medium">TypeScript</span>
+                <span class="px-3 py-1.5 bg-yellow-100 text-yellow-800 rounded-lg text-sm font-medium">Python</span>
+                <span class="px-3 py-1.5 bg-indigo-100 text-indigo-800 rounded-lg text-sm font-medium">Solidity</span>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <h3 class="text-sm font-semibold text-gray-600 mb-2 text-center">Frameworks / Tools</h3>
+              <div class="flex flex-wrap gap-2 justify-center">
+                <span class="px-3 py-1.5 bg-gray-100 text-gray-800 rounded-lg text-sm font-medium">Next.js</span>
+                <span class="px-3 py-1.5 bg-green-100 text-green-800 rounded-lg text-sm font-medium">Nuxt</span>
+                <span class="px-3 py-1.5 bg-red-100 text-red-800 rounded-lg text-sm font-medium">Angular</span>
+                <span class="px-3 py-1.5 bg-gray-100 text-gray-800 rounded-lg text-sm font-medium">Unity</span>
+                <span class="px-3 py-1.5 bg-orange-100 text-orange-800 rounded-lg text-sm font-medium">Firebase</span>
+                <span class="px-3 py-1.5 bg-orange-100 text-orange-800 rounded-lg text-sm font-medium">Firestore</span>
+                <span class="px-3 py-1.5 bg-blue-100 text-blue-800 rounded-lg text-sm font-medium">Ory Hydra</span>
+              </div>
+            </div>
+
+            <div>
+              <h3 class="text-sm font-semibold text-gray-600 mb-2 text-center">Infrastructure</h3>
+              <div class="flex flex-wrap gap-2 justify-center">
+                <span class="px-3 py-1.5 bg-amber-100 text-amber-800 rounded-lg text-sm font-medium">AWS</span>
+                <span class="px-3 py-1.5 bg-blue-100 text-blue-800 rounded-lg text-sm font-medium">GCP</span>
+                <span class="px-3 py-1.5 bg-purple-100 text-purple-800 rounded-lg text-sm font-medium">Terraform</span>
+                <span class="px-3 py-1.5 bg-red-100 text-red-800 rounded-lg text-sm font-medium">Jenkins</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -145,7 +227,7 @@ const profile = {
             <p
               class="text-gray-700 mt-3 group-hover:text-gray-900 transition-colors"
             >
-              ジェネラーティブアートのエンジニアリングを担当しました。
+              デジタルモザイクアートNFTのモザイクアート生成に関するエンジニアリングを担当しました。
             </p>
             <div
               class="absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 border-neon-cyan opacity-0 group-hover:opacity-100 transition-opacity"
