@@ -1,0 +1,43 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+---
+
+<Layout title="Survive Game" description="Ebiten WebAssembly Game - Survive">
+    <div class="game-container">
+        <div class="iframe-container">
+            <iframe
+                src="/survive/main.html"
+                width="1280"
+                height="1400"
+                allow="autoplay"
+                title="Survive Game"></iframe>
+        </div>
+    </div>
+</Layout>
+
+<style>
+    .game-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 200px);
+        padding: 2rem 1rem;
+    }
+
+    /* Scaling logic adapted from public/survive/index.html */
+    .iframe-container {
+        width: 640px; /* Half of 1280 */
+        height: 700px; /* Half of 1400 */
+        overflow: hidden;
+        position: relative;
+    }
+
+    iframe {
+        border: none;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        transform: scale(0.5);
+        transform-origin: 0 0;
+        width: 200%; /* 2x width to compensate for 0.5 scale */
+        height: 200%; /* 2x height to compensate for 0.5 scale */
+    }
+</style>
