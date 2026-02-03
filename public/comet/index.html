@@ -2,14 +2,52 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=/comet">
-    <link rel="canonical" href="/comet">
-    <title>Redirecting...</title>
-    <script>
-        window.location.replace("/ebiten/comet");
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scaled Ebiten Game Host</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .iframe-container {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        iframe {
+            border: none;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 512px;  /* Canvas 2x (256x512 -> 512x1024) */
+            height: 1024px;
+            transform-origin: 0 0;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
 </head>
 <body>
-    <p>リダイレクト中... <a href="/ebiten/comet">こちらをクリック</a>してください。</p>
+<div class="iframe-container">
+    <iframe id="gameFrame" src="main.html" width="512" height="1024" allow="autoplay"></iframe>
+</div>
+<script>
+    (function () {
+        const baseWidth = 512;
+        const baseHeight = 1024;
+        const frame = document.getElementById("gameFrame");
+        function resize() {
+            const scale = Math.min(window.innerWidth / baseWidth, window.innerHeight / baseHeight);
+            frame.style.transform = `translate(-50%, -50%) scale(${scale})`;
+        }
+        window.addEventListener("resize", resize);
+        resize();
+    })();
+</script>
 </body>
 </html>
