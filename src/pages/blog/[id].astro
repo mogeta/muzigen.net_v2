@@ -6,6 +6,7 @@ import { app } from "../../firebase/server";
 import { sanitizeHtml } from "../../utils/markdown";
 import { createMarkdownProcessor } from "@astrojs/markdown-remark";
 import rehypeMermaid from "rehype-mermaid";
+import { remarkAutoEmbed } from "../../utils/remark-auto-embed";
 import BlogPostingSchema from "../../components/BlogPostingSchema.astro";
 import BreadcrumbSchema from "../../components/BreadcrumbSchema.astro";
 import Breadcrumb from "../../components/Breadcrumb.astro";
@@ -19,6 +20,7 @@ export async function getStaticPaths() {
 			type: "shiki",
 			excludeLangs: ["mermaid"],
 		},
+		remarkPlugins: [remarkAutoEmbed],
 		rehypePlugins: [rehypeMermaid],
 	});
 	try {
@@ -36,17 +38,7 @@ export async function getStaticPaths() {
 					(data.elements || []).map(async (element: any) => ({
 						source: element.source || "",
 						type: element.type || "",
-						safeHTML:
-							element.type === "markdown" && element.source
-								? sanitizeHtml(
-										(await processor.render(element.source))
-											.code,
-									)
-								: sanitizeHtml(
-										element.safeHTML ||
-											element.source ||
-											"",
-									),
+						safeHTML:element.source
 					})),
 				);
 
@@ -57,9 +49,9 @@ export async function getStaticPaths() {
 					description: data.description || "",
 					ogp_image: data.ogp_image || "/ogp_default.png",
 					content: data.content
-						? sanitizeHtml(
-								(await processor.render(data.content)).code,
-							)
+						?
+								(await processor.render(data.content)).code
+
 						: "",
 					tag: data.tag || "",
 					tags: data.tags || undefined,
@@ -320,6 +312,16 @@ const { article } = Astro.props;
 						)
 					}
 				</div>
+
+				{
+					article.content?.includes("twitter-tweet") && (
+						<script
+							async
+							src="https://platform.twitter.com/widgets.js"
+							charset="utf-8"
+						></script>
+					)
+				}
 
 				<!-- シェアボタン -->
 				<ShareButtons url={Astro.url.href} title={article.title} />
@@ -686,5 +688,40 @@ const { article } = Astro.props;
 	/* Element content styling */
 	.element-content {
 		margin-bottom: var(--spacing-300);
+	}
+
+	/* Auto-embed styling */
+	.markdown-content .embed-youtube {
+		position: relative;
+		width: 100%;
+		padding-top: 56.25%;
+		margin: var(--spacing-400) 0;
+		border-radius: var(--radius-medium);
+		overflow: hidden;
+		box-shadow: var(--shadow-raised);
+		background-color: var(--color-gray-900);
+	}
+
+	.markdown-content .embed-youtube iframe {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		border: 0;
+	}
+
+	.markdown-content .embed-gist {
+		margin: var(--spacing-400) 0;
+	}
+
+	.markdown-content .embed-gist .gist {
+		margin: 0;
+	}
+
+	.markdown-content .twitter-tweet,
+	.markdown-content twitter-widget {
+		margin-left: auto;
+		margin-right: auto;
 	}
 </style>

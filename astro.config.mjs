@@ -1,15 +1,11 @@
 // @ts-check
 import {defineConfig} from 'astro/config';
-
 import tailwindcss from '@tailwindcss/vite';
-
 import partytown from '@astrojs/partytown';
-
 import sitemap from '@astrojs/sitemap';
-
 import react from '@astrojs/react';
-
 import sentry from '@sentry/astro';
+import embeds from 'astro-embed/integration';
 
 // https://astro.build/config
 export default defineConfig({
@@ -29,7 +25,9 @@ export default defineConfig({
     },
     site: 'https://muzigen.net',
 
-    integrations: [partytown({
+    integrations: [
+        embeds(),
+        partytown({
         config: {
             // Google AnalyticsのためにdataLayer.pushを転送
             forward: ["dataLayer.push"],
