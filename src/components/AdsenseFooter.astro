@@ -1,0 +1,89 @@
+---
+const isProd = import.meta.env.PROD;
+const adClient = import.meta.env.PUBLIC_ADSENSE_CLIENT;
+const adSlot = import.meta.env.PUBLIC_ADSENSE_SLOT;
+const isEnabled = isProd && adClient && adSlot;
+---
+
+{isEnabled && (
+	<section class="adsense-footer" aria-label="Advertisement">
+		<ins
+			class="adsbygoogle"
+			style="display:block"
+			data-ad-client={adClient}
+			data-ad-slot={adSlot}
+			data-ad-format="auto"
+			data-full-width-responsive="true"
+		></ins>
+	</section>
+)}
+
+{isEnabled && (
+	<script define:vars={{ adClient }}>
+		const container = document.querySelector(".adsense-footer");
+		if (!container) return;
+
+		const scriptSrc = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adClient}`;
+
+		const requestAd = () => {
+			if (container.dataset.adsenseInitialized === "true") return;
+			container.dataset.adsenseInitialized = "true";
+			try {
+				(window.adsbygoogle = window.adsbygoogle || []).push({});
+			} catch (error) {
+				console.warn("Adsense push failed:", error);
+			}
+		};
+
+		const ensureScript = () => {
+			if (window.__adsenseLoaded) {
+				requestAd();
+				return;
+			}
+
+			if (window.__adsenseLoading) return;
+			window.__adsenseLoading = true;
+
+			const script = document.createElement("script");
+			script.async = true;
+			script.src = scriptSrc;
+			script.crossOrigin = "anonymous";
+			script.onload = () => {
+				window.__adsenseLoaded = true;
+				requestAd();
+			};
+			script.onerror = () => {
+				window.__adsenseLoading = false;
+				console.warn("Adsense script failed to load.");
+			};
+			document.head.appendChild(script);
+		};
+
+		if ("IntersectionObserver" in window) {
+			const observer = new IntersectionObserver(
+				(entries) => {
+					entries.forEach((entry) => {
+						if (entry.isIntersecting) {
+							ensureScript();
+							observer.disconnect();
+						}
+					});
+				},
+				{ rootMargin: "200px 0px" },
+			);
+			observer.observe(container);
+		} else {
+			ensureScript();
+		}
+	</script>
+)}
+
+<style>
+	.adsense-footer {
+		min-height: 250px;
+		padding: 1.5rem 0 0.5rem;
+	}
+	.adsense-footer > .adsbygoogle {
+		width: 100%;
+	}
+</style>
