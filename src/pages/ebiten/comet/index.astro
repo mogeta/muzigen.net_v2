@@ -16,9 +16,79 @@ import Layout from "../../../layouts/Layout.astro";
 				title="Comet Game"></iframe>
 		</div>
 	</div>
+
+	<section class="info-section">
+		<div class="info-inner">
+
+			<!-- ── How to Play ── -->
+			<div class="glass-panel info-card">
+				<h2 class="card-heading">HOW TO PLAY</h2>
+				<div class="steps">
+					<div class="step">
+						<span class="step-num">01</span>
+						<div class="step-text">
+							<p class="step-title">ブロックをドラッグ</p>
+							<p class="step-body">マウス・タッチでブロックを操作し、縦方向に入れ替える。</p>
+						</div>
+					</div>
+					<div class="step-connector"></div>
+					<div class="step">
+						<span class="step-num">02</span>
+						<div class="step-text">
+							<p class="step-title">同じ色を 3 つ並べる</p>
+							<p class="step-body">縦に同色のブロックが 3 つ揃うと、上方向へ打ち上げられる。</p>
+						</div>
+					</div>
+					<div class="step-connector"></div>
+					<div class="step">
+						<span class="step-num">03</span>
+						<div class="step-text">
+							<p class="step-title">天井まで打ち上げる</p>
+							<p class="step-body">ブロックが天井に到達すると消え、スコアが加算される。</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- ── Multiplayer + Tech Stack ── -->
+			<div class="two-col">
+				<div class="glass-panel info-card">
+					<h2 class="card-heading">MULTIPLAYER</h2>
+					<ul class="spec-list">
+						<li>
+							<span class="spec-label">ルーム定員</span>
+							<span class="spec-value">最大 10 名</span>
+						</li>
+						<li>
+							<span class="spec-label">攻撃対象</span>
+							<span class="spec-value">ランダム決定</span>
+						</li>
+					</ul>
+				</div>
+
+				<div class="glass-panel info-card">
+					<h2 class="card-heading">TECH STACK</h2>
+					<div class="tags">
+						<span class="tag">Ebitengine</span>
+						<span class="tag">Donburi ECS</span>
+						<span class="tag">Go → WASM</span>
+						<span class="tag">WebTransport</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- ── Status ── -->
+			<div class="status-bar">
+				<span class="status-badge">β テスト中</span>
+				<p class="status-note">現在テスト段階のため、機能や仕様に変更の可能性があります。今後、さらなる拡張を予定しています。</p>
+			</div>
+
+		</div>
+	</section>
 </Layout>
 
 <style>
+	/* ── Game ── */
 	.game-container {
 		display: flex;
 		justify-content: center;
@@ -40,5 +110,178 @@ import Layout from "../../../layouts/Layout.astro";
 		transform-origin: 0 0;
 		width: 100%;
 		height: 100%;
+	}
+
+	/* ── Info Section ── */
+	.info-section {
+		padding: 1rem 1rem 4rem;
+	}
+
+	.info-inner {
+		max-width: 640px;
+		margin: 0 auto;
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+	}
+
+	.info-card {
+		border-radius: 8px;
+		padding: 1.75rem;
+	}
+
+	.card-heading {
+		color: var(--neon-cyan);
+		text-shadow: 0 0 10px var(--neon-cyan);
+		font-size: 0.75rem;
+		font-weight: 700;
+		letter-spacing: 0.2em;
+		text-transform: uppercase;
+		margin: 0 0 1.25rem;
+		padding-bottom: 0.625rem;
+		border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+	}
+
+	/* ── Steps ── */
+	.steps {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.step {
+		display: flex;
+		gap: 1rem;
+		align-items: flex-start;
+	}
+
+	.step-num {
+		width: 2.25rem;
+		height: 2.25rem;
+		min-width: 2.25rem;
+		border-radius: 50%;
+		background: var(--neon-cyan);
+		color: #111827;
+		font-weight: 700;
+		font-size: 0.8rem;
+		letter-spacing: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.step-text {
+		padding-top: 0.125rem;
+	}
+
+	.step-title {
+		font-weight: 600;
+		font-size: 0.9375rem;
+		color: #111827;
+		margin: 0 0 0.2rem;
+	}
+
+	.step-body {
+		font-size: 0.8125rem;
+		color: #6b7280;
+		line-height: 1.5;
+		margin: 0;
+	}
+
+	.step-connector {
+		width: 1px;
+		height: 1.25rem;
+		background: var(--neon-cyan);
+		margin-left: calc(2.25rem / 2);
+		opacity: 0.35;
+	}
+
+	/* ── Two Column ── */
+	.two-col {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1.25rem;
+	}
+
+	@media (max-width: 560px) {
+		.two-col {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	/* ── Spec List ── */
+	.spec-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.spec-list li {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 0.625rem 0;
+		border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+	}
+
+	.spec-list li:last-child {
+		border-bottom: none;
+	}
+
+	.spec-label {
+		font-size: 0.8125rem;
+		color: #6b7280;
+	}
+
+	.spec-value {
+		font-size: 0.8125rem;
+		font-weight: 600;
+		color: #111827;
+	}
+
+	/* ── Tags ── */
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.tag {
+		padding: 0.3rem 0.75rem;
+		border: 1px solid var(--neon-cyan);
+		color: var(--neon-cyan);
+		border-radius: 999px;
+		font-size: 0.75rem;
+		font-weight: 600;
+		letter-spacing: 0.03em;
+	}
+
+	/* ── Status Bar ── */
+	.status-bar {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding: 1rem 1.25rem;
+		background: rgba(216, 0, 216, 0.05);
+		border: 1px solid rgba(216, 0, 216, 0.18);
+		border-radius: 8px;
+	}
+
+	.status-badge {
+		background: var(--neon-magenta);
+		color: #fff;
+		font-size: 0.6875rem;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		padding: 0.25rem 0.625rem;
+		border-radius: 4px;
+		white-space: nowrap;
+	}
+
+	.status-note {
+		font-size: 0.8125rem;
+		color: #6b7280;
+		margin: 0;
+		line-height: 1.45;
 	}
 </style>
