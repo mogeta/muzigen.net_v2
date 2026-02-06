@@ -30,6 +30,10 @@ const {
 	canonicalURL,
 } = Astro.props;
 
+// AdSense configuration
+const isProd = import.meta.env.PROD;
+const adClient = import.meta.env.PUBLIC_ADSENSE_CLIENT;
+
 // Use provided canonical URL or default to current page URL without query parameters
 const canonical = canonicalURL || `${Astro.url.origin}${Astro.url.pathname}`;
 
@@ -112,6 +116,17 @@ const pageTitle = title === "muzigen.net" ? title : `${title} | muzigen.net`;
 		<meta name="twitter:image" content={resolvedOgImage} />
 
 		<GoogleAnalytics />
+
+		<!-- Google AdSense (Auto Ads) -->
+		{
+			isProd && adClient && (
+				<script
+					async
+					src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adClient}`}
+					crossorigin="anonymous"
+				></script>
+			)
+		}
 
 		<!-- Inline critical styles for background to prevent white flash -->
 		<style is:inline>

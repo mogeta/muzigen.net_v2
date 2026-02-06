@@ -12,7 +12,6 @@ import BreadcrumbSchema from "../../components/BreadcrumbSchema.astro";
 import Breadcrumb from "../../components/Breadcrumb.astro";
 import ShareButtons from "../../components/ShareButtons.astro";
 import RelatedArticles from "../../components/RelatedArticles.astro";
-import AdsenseFooter from "../../components/AdsenseFooter.astro";
 
 export async function getStaticPaths() {
 	const db = getFirestore(app);
@@ -395,9 +394,6 @@ const { article } = Astro.props;
 				</div>
 			</footer>
 		</article>
-
-		<!-- AdSense -->
-		<AdsenseFooter />
 
 		<!-- RSS Feed Link -->
 		<div class="mt-8 text-center">
