@@ -40,6 +40,8 @@ jobs:
           FIREBASE_CLIENT_CERT_URL: ${{ secrets.FIREBASE_CLIENT_CERT_URL }}
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
           LAPRAS_SHARE_ID: ${{ secrets.LAPRAS_SHARE_ID }}
+          PUBLIC_ADSENSE_CLIENT: ${{ secrets.PUBLIC_ADSENSE_CLIENT }}
+          PUBLIC_ADSENSE_SLOT: ${{ secrets.PUBLIC_ADSENSE_SLOT }}
 
       # 3. Firebaseへのデプロイ
       - name: Deploy to Firebase Hosting
