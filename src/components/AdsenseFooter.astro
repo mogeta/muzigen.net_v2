@@ -20,28 +20,10 @@ const isEnabled = isProd && adClient && adSlot;
 
 {isEnabled && (
 	<script define:vars={{ adClient }}>
-		const container = document.querySelector(".adsense-footer");
-		if (!container) return;
-
 		const scriptSrc = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adClient}`;
 
-		const requestAd = () => {
-			if (container.dataset.adsenseInitialized === "true") return;
-			container.dataset.adsenseInitialized = "true";
-			try {
-				(window.adsbygoogle = window.adsbygoogle || []).push({});
-			} catch (error) {
-				console.warn("Adsense push failed:", error);
-			}
-		};
-
-		const ensureScript = () => {
-			if (window.__adsenseLoaded) {
-				requestAd();
-				return;
-			}
-
-			if (window.__adsenseLoading) return;
+		// Load the AdSense script immediately
+		if (!window.__adsenseLoaded && !window.__adsenseLoading) {
 			window.__adsenseLoading = true;
 
 			const script = document.createElement("script");
@@ -50,30 +32,25 @@ const isEnabled = isProd && adClient && adSlot;
 			script.crossOrigin = "anonymous";
 			script.onload = () => {
 				window.__adsenseLoaded = true;
-				requestAd();
+				// Initialize the ad
+				try {
+					(window.adsbygoogle = window.adsbygoogle || []).push({});
+				} catch (error) {
+					console.warn("AdSense push failed:", error);
+				}
 			};
 			script.onerror = () => {
 				window.__adsenseLoading = false;
-				console.warn("Adsense script failed to load.");
+				console.warn("AdSense script failed to load.");
 			};
 			document.head.appendChild(script);
-		};
-
-		if ("IntersectionObserver" in window) {
-			const observer = new IntersectionObserver(
-				(entries) => {
-					entries.forEach((entry) => {
-						if (entry.isIntersecting) {
-							ensureScript();
-							observer.disconnect();
-						}
-					});
-				},
-				{ rootMargin: "200px 0px" },
-			);
-			observer.observe(container);
-		} else {
-			ensureScript();
+		} else if (window.__adsenseLoaded) {
+			// If script is already loaded, just push the ad
+			try {
+				(window.adsbygoogle = window.adsbygoogle || []).push({});
+			} catch (error) {
+				console.warn("AdSense push failed:", error);
+			}
 		}
 	</script>
 )}
