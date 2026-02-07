@@ -12,6 +12,18 @@
       "**/.*",
       "**/node_modules/**"
     ],
+    "redirects": [
+      {
+        "source": "/posts",
+        "destination": "/blog",
+        "type": 301
+      },
+      {
+        "source": "/posts/**",
+        "destination": "/blog",
+        "type": 301
+      }
+    ],
     "headers": [
       {
         "source": "/_astro/**",

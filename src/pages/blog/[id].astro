@@ -82,6 +82,9 @@ export async function getStaticPaths() {
 }
 
 const { article } = Astro.props;
+const isProd = import.meta.env.PROD;
+const adClient = import.meta.env.PUBLIC_ADSENSE_CLIENT;
+const showAds = isProd && !!adClient;
 ---
 
 <Layout
@@ -99,6 +102,8 @@ const { article } = Astro.props;
 		datePublished={article.created_date}
 		dateModified={article.update_date || article.created_date}
 		url={Astro.url.href}
+		tags={article.tags && article.tags.length > 0 ? article.tags : article.tag ? [article.tag] : []}
+		articleSection={article.tag || undefined}
 	/>
 	<BreadcrumbSchema
 		items={[
@@ -134,7 +139,9 @@ const { article } = Astro.props;
 						<img
 							src={article.ogp_image}
 							alt={article.title}
-							loading="lazy"
+							width="1200"
+							height="630"
+							loading="eager"
 							decoding="async"
 							class="w-full h-full object-contain"
 						/>
@@ -273,20 +280,23 @@ const { article } = Astro.props;
 					)
 				}
 			</header>
-            <div class="px-4 md:px-8 py-8 md:py-12">
-				<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0497802544647037"
-						crossorigin="anonymous"></script>
-				<!-- muzigen.net -->
-				<ins class="adsbygoogle"
-					 style="display:block"
-					 data-ad-client="ca-pub-0497802544647037"
-					 data-ad-slot="2023728066"
-					 data-ad-format="auto"
-					 data-full-width-responsive="true"></ins>
-				<script>
-					(adsbygoogle = window.adsbygoogle || []).push({});
-				</script>
-			</div>
+			{
+				showAds && (
+					<div class="px-4 md:px-8 py-8 md:py-12">
+						<ins
+							class="adsbygoogle"
+							style="display:block"
+							data-ad-client={adClient}
+							data-ad-slot="2023728066"
+							data-ad-format="auto"
+							data-full-width-responsive="true"
+						/>
+						<script is:inline>
+							(adsbygoogle = window.adsbygoogle || []).push({});
+						</script>
+					</div>
+				)
+			}
 
 			<!-- 本文 -->
 			<div class="px-4 md:px-8 py-8 md:py-12">
@@ -352,20 +362,23 @@ const { article } = Astro.props;
 				}
 			</div>
 
-            <div class="px-4 md:px-8 py-8 md:py-12">
-				<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0497802544647037"
-						crossorigin="anonymous"></script>
-				<!-- muzigen.net -->
-				<ins class="adsbygoogle"
-					 style="display:block"
-					 data-ad-client="ca-pub-0497802544647037"
-					 data-ad-slot="2023728066"
-					 data-ad-format="auto"
-					 data-full-width-responsive="true"></ins>
-				<script>
-					(adsbygoogle = window.adsbygoogle || []).push({});
-				</script>
-			</div>
+			{
+				showAds && (
+					<div class="px-4 md:px-8 py-8 md:py-12">
+						<ins
+							class="adsbygoogle"
+							style="display:block"
+							data-ad-client={adClient}
+							data-ad-slot="2023728066"
+							data-ad-format="auto"
+							data-full-width-responsive="true"
+						/>
+						<script is:inline>
+							(adsbygoogle = window.adsbygoogle || []).push({});
+						</script>
+					</div>
+				)
+			}
 
 			<!-- フッター -->
 			<footer

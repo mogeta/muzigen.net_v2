@@ -7,6 +7,8 @@ interface Props {
   dateModified: string;
   url: string;
   author?: string;
+  tags?: string[];
+  articleSection?: string;
 }
 
 const {
@@ -17,6 +19,8 @@ const {
   dateModified,
   url,
   author,
+  tags = [],
+  articleSection,
 } = Astro.props;
 
 const siteUrl = Astro.url.origin;
@@ -29,6 +33,9 @@ const schema = {
   image: image ? (image.startsWith('http') ? image : `${siteUrl}${image}`) : undefined,
   datePublished: datePublished,
   dateModified: dateModified,
+  inLanguage: 'ja-JP',
+  keywords: tags.length > 0 ? tags.join(', ') : undefined,
+  articleSection: articleSection || (tags.length > 0 ? tags[0] : 'Blog'),
   author: author ? {
     '@type': 'Person',
     name: author,
