@@ -118,16 +118,16 @@ const pageTitle = title === "muzigen.net" ? title : `${title} | muzigen.net`;
 		<GoogleAnalytics />
 
 		<!-- Google AdSense (Auto Ads) -->
-		// {
-		// 	isProd && adClient && (
-		// 		<script
-		// 			is:inline
-		// 			async
-		// 			src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adClient}`}
-		// 			crossorigin="anonymous"
-		// 		></script>
-		// 	)
-		// }
+		{
+			isProd && adClient && (
+				<script
+					is:inline
+					async
+					src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adClient}`}
+					crossorigin="anonymous"
+				></script>
+			)
+		}
 
 		<!-- Inline critical styles for background to prevent white flash -->
 		<style is:inline>
