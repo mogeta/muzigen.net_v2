@@ -282,7 +282,7 @@ const showAds = isProd && !!adClient;
 			</header>
 			{
 				showAds && (
-					<div class="px-4 md:px-8 py-8 md:py-12">
+					<div class="blog-ads-slot px-4 md:px-8 py-8 md:py-12">
 						<ins
 							class="adsbygoogle"
 							style="display:block"
@@ -364,7 +364,7 @@ const showAds = isProd && !!adClient;
 
 			{
 				showAds && (
-					<div class="px-4 md:px-8 py-8 md:py-12">
+					<div class="blog-ads-slot px-4 md:px-8 py-8 md:py-12">
 						<ins
 							class="adsbygoogle"
 							style="display:block"
@@ -765,5 +765,22 @@ const showAds = isProd && !!adClient;
 	.markdown-content twitter-widget {
 		margin-left: auto;
 		margin-right: auto;
+	}
+
+	.blog-ads-slot {
+		width: 100%;
+		max-width: 100%;
+		overflow-x: clip;
+	}
+
+	.blog-ads-slot .adsbygoogle {
+		display: block;
+		width: 100% !important;
+		max-width: 100% !important;
+		min-width: 0 !important;
+	}
+
+	.blog-ads-slot .adsbygoogle iframe {
+		max-width: 100% !important;
 	}
 </style>
