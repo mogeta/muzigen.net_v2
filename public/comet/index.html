@@ -2,29 +2,32 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Scaled Ebiten Game Host</title>
     <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+        html, body {
             margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
             background-color: #f0f0f0;
         }
         .iframe-container {
+            position: fixed;
+            inset: 0;
             width: 100vw;
+            width: 100dvw;
             height: 100vh;
+            height: 100dvh;
             overflow: hidden;
-            position: relative;
         }
         iframe {
             border: none;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             width: 512px;  /* Canvas 2x (256x512 -> 512x1024) */
             height: 1024px;
-            transform-origin: 0 0;
+            transform-origin: 50% 50%;
             position: absolute;
             left: 50%;
             top: 50%;
@@ -41,11 +44,38 @@
         const baseWidth = 512;
         const baseHeight = 1024;
         const frame = document.getElementById("gameFrame");
+
+        function viewportSize() {
+            if (window.visualViewport) {
+                return {
+                    width: window.visualViewport.width,
+                    height: window.visualViewport.height,
+                    offsetLeft: window.visualViewport.offsetLeft,
+                    offsetTop: window.visualViewport.offsetTop,
+                };
+            }
+            return {
+                width: window.innerWidth,
+                height: window.innerHeight,
+                offsetLeft: 0,
+                offsetTop: 0,
+            };
+        }
+
         function resize() {
-            const scale = Math.min(window.innerWidth / baseWidth, window.innerHeight / baseHeight);
+            const vp = viewportSize();
+            const scale = Math.min(vp.width / baseWidth, vp.height / baseHeight);
+            frame.style.left = `${vp.offsetLeft + vp.width / 2}px`;
+            frame.style.top = `${vp.offsetTop + vp.height / 2}px`;
             frame.style.transform = `translate(-50%, -50%) scale(${scale})`;
         }
+
         window.addEventListener("resize", resize);
+        window.addEventListener("orientationchange", resize);
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener("resize", resize);
+            window.visualViewport.addEventListener("scroll", resize);
+        }
         resize();
     })();
 </script>
