@@ -770,7 +770,7 @@ const showAds = isProd && !!adClient;
 	.blog-ads-slot {
 		width: 100%;
 		max-width: 100%;
-		overflow-x: clip;
+		overflow: hidden;
 	}
 
 	.blog-ads-slot .adsbygoogle {
@@ -778,9 +778,15 @@ const showAds = isProd && !!adClient;
 		width: 100% !important;
 		max-width: 100% !important;
 		min-width: 0 !important;
+		margin-left: 0 !important;
+		margin-right: 0 !important;
 	}
 
-	.blog-ads-slot .adsbygoogle iframe {
+	.blog-ads-slot .adsbygoogle iframe,
+	.blog-ads-slot .adsbygoogle > div {
 		max-width: 100% !important;
+		width: 100% !important;
+		margin-left: 0 !important;
+		margin-right: 0 !important;
 	}
 </style>
