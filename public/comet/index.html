@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Scaled Ebiten Game Host</title>
+    <title>Comet</title>
     <style>
         html, body {
             margin: 0;
@@ -11,7 +11,7 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: #f0f0f0;
+            background-color: #0f0f19;
         }
         .iframe-container {
             position: fixed;
@@ -24,9 +24,6 @@
         }
         iframe {
             border: none;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            width: 512px;  /* Canvas 2x (256x512 -> 512x1024) */
-            height: 1024px;
             transform-origin: 50% 50%;
             position: absolute;
             left: 50%;
@@ -37,13 +34,28 @@
 </head>
 <body>
 <div class="iframe-container">
-    <iframe id="gameFrame" src="main.html" width="512" height="1024" allow="autoplay"></iframe>
+    <iframe id="gameFrame" allow="autoplay"></iframe>
 </div>
 <script>
     (function () {
-        const baseWidth = 512;
-        const baseHeight = 1024;
-        const frame = document.getElementById("gameFrame");
+        var frame = document.getElementById("gameFrame");
+
+        // Detect mode based on viewport width
+        var isMobile = window.innerWidth < 768;
+        var mode = isMobile ? "mobile" : "desktop";
+
+        // Base dimensions (2x game resolution)
+        // Mobile:  256x512 * 2 = 512x1024
+        // Desktop: 768x512 * 2 = 1536x1024
+        var baseWidth  = isMobile ? 512 : 1536;
+        var baseHeight = 1024;
+
+        // Set iframe dimensions and load with mode
+        frame.width = baseWidth;
+        frame.height = baseHeight;
+        frame.style.width = baseWidth + "px";
+        frame.style.height = baseHeight + "px";
+        frame.src = "main.html?mode=" + mode;
 
         function viewportSize() {
             if (window.visualViewport) {
@@ -63,11 +75,11 @@
         }
 
         function resize() {
-            const vp = viewportSize();
-            const scale = Math.min(vp.width / baseWidth, vp.height / baseHeight);
-            frame.style.left = `${vp.offsetLeft + vp.width / 2}px`;
-            frame.style.top = `${vp.offsetTop + vp.height / 2}px`;
-            frame.style.transform = `translate(-50%, -50%) scale(${scale})`;
+            var vp = viewportSize();
+            var scale = Math.min(vp.width / baseWidth, vp.height / baseHeight);
+            frame.style.left = (vp.offsetLeft + vp.width / 2) + "px";
+            frame.style.top = (vp.offsetTop + vp.height / 2) + "px";
+            frame.style.transform = "translate(-50%, -50%) scale(" + scale + ")";
         }
 
         window.addEventListener("resize", resize);
