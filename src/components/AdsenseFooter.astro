@@ -19,7 +19,7 @@ const isEnabled = isProd && adClient && adSlot;
 )}
 
 {isEnabled && (
-	<script define:vars={{ adClient }}>
+	<script is:inline define:vars={{ adClient }}>
 		const scriptSrc = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adClient}`;
 
 		// Load the AdSense script immediately
