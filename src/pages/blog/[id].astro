@@ -789,4 +789,28 @@ const showAds = isProd && !!adClient;
 		margin-left: 0 !important;
 		margin-right: 0 !important;
 	}
+
+	/* Prevent ad iframes from expanding viewport width on mobile */
+	html,
+	body {
+		max-width: 100%;
+		overflow-x: hidden;
+	}
+
+	#main-content,
+	.markdown-content,
+	.blog-ads-slot {
+		min-width: 0;
+		max-width: 100%;
+	}
+
+	.blog-ads-slot iframe,
+	.blog-ads-slot [id^="aswift_"],
+	.blog-ads-slot iframe[src*="googleads.g.doubleclick.net"] {
+		max-width: 100% !important;
+		width: 100% !important;
+		min-width: 0 !important;
+		left: 0 !important;
+		right: auto !important;
+	}
 </style>
