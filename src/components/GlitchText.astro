@@ -1,11 +1,11 @@
 ---
-interface Props {
+export interface Props {
     text: string;
     as?: "h1" | "h2" | "h3" | "span" | "p";
     class?: string;
 }
 
-const { text, as: Tag = "span", class: className = "" } = Astro.props;
+const { text, as: Tag = "span", class: className = "" } = Astro.props as Props;
 ---
 
 <Tag

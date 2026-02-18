@@ -1,6 +1,5 @@
-import React from "react";
 import { WagmiProvider } from "wagmi";
-import { http, createConfig } from "wagmi";
+import { http } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import {
     RainbowKitProvider,

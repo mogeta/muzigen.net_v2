@@ -1,7 +1,7 @@
 // NFTコントラクトの設定
 // チェーンIDごとに監視するNFTコントラクトアドレスを定義
 
-export const NFT_CONTRACTS = {
+export const NFT_CONTRACTS: Record<number, string[]> = {
     // Oasys Mainnet (Chain ID: 248)
     248: [
         // Oasys上のNFTコントラクトアドレスをここに追加

@@ -3,7 +3,6 @@ import Layout from "../../layouts/Layout.astro";
 import type { BlogArticle } from "../../types/blog";
 import { getFirestore } from "firebase-admin/firestore";
 import { app } from "../../firebase/server";
-import { sanitizeHtml } from "../../utils/markdown";
 import { createMarkdownProcessor } from "@astrojs/markdown-remark";
 import rehypeMermaid from "rehype-mermaid";
 import { remarkAutoEmbed } from "../../utils/remark-auto-embed";
