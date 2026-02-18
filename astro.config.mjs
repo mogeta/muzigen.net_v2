@@ -17,7 +17,7 @@ export default defineConfig({
     markdown: {
         syntaxHighlight: {
             type: 'shiki',
-            excludeLangs: ['mermaid'],
+            excludeLangs: ['mermaid', 'embedded-gist'],
         },
     },
     vite: {
@@ -34,9 +34,11 @@ export default defineConfig({
         },
 
     }),sentry({
-        project: "muzigen-net",
-        org: "muzigen",
-        authToken: process.env.SENTRY_AUTH_TOKEN,
+        sourceMapsUploadOptions: {
+            project: "muzigen-net",
+            org: "muzigen",
+            authToken: process.env.SENTRY_AUTH_TOKEN,
+        },
     }),
         sitemap(), react()]
 });
