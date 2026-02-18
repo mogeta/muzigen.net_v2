@@ -134,7 +134,7 @@ const showAds = isProd && !!adClient;
 			<!-- OGP画像（ある場合は最初に表示） -->
 			{
 				article.ogp_image && (
-					<div class="h-[200px] overflow-hidden bg-gray-100">
+					<div class="overflow-hidden bg-gray-100">
 						<img
 							src={article.ogp_image}
 							alt={article.title}
@@ -142,7 +142,7 @@ const showAds = isProd && !!adClient;
 							height="630"
 							loading="eager"
 							decoding="async"
-							class="w-full h-full object-contain"
+							class="block w-full h-auto"
 						/>
 					</div>
 				)
