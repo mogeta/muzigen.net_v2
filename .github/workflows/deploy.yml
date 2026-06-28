@@ -6,6 +6,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: firebase-hosting-main
+  cancel-in-progress: false
+
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
@@ -45,10 +49,10 @@ jobs:
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MUZIGEN_NET }}'
           channelId: live # 'live'は本番環境
           projectId: muzigen-net # ここにFirebaseプロジェクトIDを記載
+          firebaseToolsVersion: '14.19.0'
         env:
           # Astro (Webフレームワーク) のサポートを有効化
           FIREBASE_CLI_EXPERIMENTS: webframeworks
