@@ -6,7 +6,7 @@ import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import rehypeStringify from 'rehype-stringify';
 import rehypeShiki from '@shikijs/rehype';
 import { rehypeTailwind } from './rehype-tailwind';
-import rehypeMermaid from "rehype-mermaid";
+import { rehypeMermaidPre } from './rehype-mermaid-pre';
 
 /**
  * Renders markdown content to HTML with Tailwind CSS styling and Shiki syntax highlighting
@@ -39,14 +39,8 @@ export async function renderMarkdown(content: string): Promise<string> {
     const result = await unified()
       .use(remarkParse) // Parse markdown to AST
       .use(remarkGfm) // Support GitHub Flavored Markdown
-		.use(rehypeMermaid, {
-			// The default strategy is 'inline-svg'
-			// strategy: 'img-png'
-			// strategy: 'img-svg'
-			// strategy: 'inline-svg'
-			strategy: 'pre-mermaid'
-		})
       .use(remarkRehype) // Convert markdown AST to HTML AST
+      .use(rehypeMermaidPre) // Render Mermaid diagrams in the browser, not during build
       .use(rehypeShiki, {
 		  theme: "one-dark-pro",
 		  keepBackground: true,

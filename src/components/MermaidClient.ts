@@ -1,19 +1,35 @@
-type MermaidApi = {
-	initialize: (config: { startOnLoad: boolean; theme: string }) => void;
-	init: (config?: unknown, nodes?: string) => void;
-};
+import mermaid from "mermaid";
 
-type WindowWithMermaid = Window & { mermaid?: MermaidApi };
-const mermaid = (window as WindowWithMermaid).mermaid;
+let initialized = false;
 
-if (mermaid) {
-	mermaid.initialize({
-		startOnLoad: true,
-		theme: "dark",
-	});
+async function renderMermaid() {
+	const nodes = document.querySelectorAll<HTMLElement>(".mermaid");
+	if (!nodes.length) {
+		return;
+	}
 
-	// Astroがhydrateした後に描画
-	window.addEventListener("astro:after-swap", () => {
-		mermaid.init(undefined, ".mermaid");
+	if (!initialized) {
+		initialized = true;
+		mermaid.initialize({
+			startOnLoad: false,
+			theme: "dark",
+		});
+	}
+
+	await mermaid.run({
+		nodes,
+		suppressErrors: true,
 	});
 }
+
+if (document.readyState === "loading") {
+	document.addEventListener("DOMContentLoaded", () => {
+		void renderMermaid();
+	});
+} else {
+	void renderMermaid();
+}
+
+document.addEventListener("astro:after-swap", () => {
+	void renderMermaid();
+});

@@ -4,7 +4,7 @@ import type { BlogArticle } from "../../types/blog";
 import { getFirestore } from "firebase-admin/firestore";
 import { app } from "../../firebase/server";
 import { createMarkdownProcessor } from "@astrojs/markdown-remark";
-import rehypeMermaid from "rehype-mermaid";
+import { rehypeMermaidPre } from "../../utils/rehype-mermaid-pre";
 import { remarkAutoEmbed } from "../../utils/remark-auto-embed";
 import BlogPostingSchema from "../../components/BlogPostingSchema.astro";
 import BreadcrumbSchema from "../../components/BreadcrumbSchema.astro";
@@ -20,7 +20,7 @@ export async function getStaticPaths() {
 			excludeLangs: ["mermaid", "embedded-gist"],
 		},
 		remarkPlugins: [remarkAutoEmbed],
-		rehypePlugins: [rehypeMermaid],
+		rehypePlugins: [rehypeMermaidPre],
 	});
 	try {
 		const snapshot = await db
@@ -454,6 +454,10 @@ const showAds = isProd && !!adClient;
 			</a>
 		</div>
 	</main>
+
+	<script>
+		import "../../components/MermaidClient.ts";
+	</script>
 </Layout>
 
 <style is:global>
@@ -639,6 +643,18 @@ const showAds = isProd && !!adClient;
 		padding: 0;
 		color: inherit;
 		font-weight: normal;
+	}
+
+	.markdown-content pre.mermaid {
+		text-align: center;
+		white-space: pre-wrap;
+	}
+
+	.markdown-content .mermaid svg {
+		display: block;
+		max-width: 100%;
+		height: auto;
+		margin: 0 auto;
 	}
 
 	/* Tables */
