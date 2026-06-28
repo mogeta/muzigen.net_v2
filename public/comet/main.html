@@ -47,9 +47,46 @@
         font-family: monospace;
         font-size: 12px;
         letter-spacing: 1px;
+        text-align: center;
+        line-height: 1.8;
+    }
+    .loading-pct {
+        margin-top: 10px;
+        color: rgba(255,255,255,0.7);
+        font-family: monospace;
+        font-size: 13px;
+        letter-spacing: 1px;
+        min-height: 1.2em;
+        text-align: center;
+    }
+    .progress-bar-wrap {
+        margin-top: 8px;
+        width: 200px;
+        height: 3px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 2px;
+        overflow: hidden;
+    }
+    .progress-bar-fill {
+        height: 100%;
+        background: #8888cc;
+        width: 0%;
+        transition: width 0.15s ease;
+    }
+    .progress-bar-fill.indeterminate {
+        width: 35%;
+        animation: indeterminate-slide 1.1s ease-in-out infinite;
     }
     @keyframes spin {
         to { transform: rotate(360deg); }
+    }
+    @keyframes indeterminate-slide {
+        0% {
+            transform: translateX(-120%);
+        }
+        100% {
+            transform: translateX(320%);
+        }
     }
 </style>
 <script>
@@ -77,11 +114,17 @@
 <body>
 <div id="loading">
     <div class="spinner"></div>
-    <div class="loading-text">Loading...</div>
+    <div class="loading-text">
+        <div>データロード中、しばらくお待ちください</div>
+        <div>Loading, please wait...</div>
+    </div>
+    <div class="loading-pct" id="loadingStatus">Initializing...</div>
+    <div class="loading-pct" id="loadingPct"></div>
+    <div class="progress-bar-wrap" id="progressWrap">
+        <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
 </div>
 
-<script src="wasm_exec.js"></script>
-<script src="wt_bridge.js"></script>
 <script>
     if (!WebAssembly.instantiateStreaming) {
         WebAssembly.instantiateStreaming = async (resp, importObject) => {
@@ -90,15 +133,158 @@
         };
     }
 
-    const go = new Go();
-    WebAssembly.instantiateStreaming(fetch("game.wasm"), go.importObject).then(result => {
-        // Hide loading overlay once WASM starts
+    function notifyParent(type) {
+        if (window.parent && window.parent !== window) {
+            window.parent.postMessage({ type: type }, "*");
+        }
+    }
+
+    function hideLoading() {
         var el = document.getElementById("loading");
         if (el) {
             el.classList.add("hide");
             setTimeout(function() { el.remove(); }, 400);
         }
+        notifyParent("comet-ready");
+    }
+
+    function setStatus(text) {
+        var statusEl = document.getElementById("loadingStatus");
+        if (statusEl) statusEl.textContent = text;
+    }
+
+    function setProgressVisible(visible) {
+        var pctEl = document.getElementById("loadingPct");
+        var wrapEl = document.getElementById("progressWrap");
+        if (pctEl) {
+            pctEl.style.display = visible ? "block" : "none";
+            if (!visible) pctEl.textContent = "";
+        }
+        if (wrapEl) wrapEl.style.display = visible ? "block" : "block";
+    }
+
+    function setIndeterminate(active) {
+        var fillEl = document.getElementById("progressFill");
+        if (!fillEl) return;
+        if (active) {
+            fillEl.classList.add("indeterminate");
+            fillEl.style.transition = "none";
+        } else {
+            fillEl.classList.remove("indeterminate");
+            fillEl.style.width = "0%";
+            fillEl.style.transform = "translateX(0)";
+            fillEl.style.transition = "width 0.15s ease";
+        }
+    }
+
+    function setProgress(pct) {
+        var pctEl = document.getElementById("loadingPct");
+        var wrapEl = document.getElementById("progressWrap");
+        var fillEl = document.getElementById("progressFill");
+        if (pctEl) pctEl.textContent = pct + "%";
+        setIndeterminate(false);
+        if (wrapEl) wrapEl.style.display = "block";
+        if (fillEl) fillEl.style.width = pct + "%";
+    }
+
+    function showError(err) {
+        setIndeterminate(false);
+        setStatus("Failed to load game");
+        var pctEl = document.getElementById("loadingPct");
+        if (pctEl) pctEl.textContent = String(err);
+        notifyParent("comet-loading-visible");
+        console.error(err);
+    }
+
+    async function waitForCanvasReady() {
+        for (let i = 0; i < 180; i++) {
+            const canvas = document.querySelector("canvas");
+            if (canvas && canvas.width > 0 && canvas.height > 0) {
+                await new Promise(requestAnimationFrame);
+                await new Promise(requestAnimationFrame);
+                return;
+            }
+            await new Promise(resolve => setTimeout(resolve, 16));
+        }
+    }
+
+    function loadScript(src) {
+        return new Promise(function(resolve, reject) {
+            var s = document.createElement('script');
+            s.src = src;
+            s.onload = resolve;
+            s.onerror = reject;
+            document.head.appendChild(s);
+        });
+    }
+
+    async function loadWasm() {
+        setStatus("Loading runtime...");
+        setProgressVisible(false);
+        setIndeterminate(true);
+
+        // Load runtime scripts dynamically so they don't block the initial paint.
+        await loadScript('wasm_exec.js');
+        await loadScript('wt_bridge.js');
+
+        const go = new Go();
+
+        // Fetch game.wasm with progress tracking when Content-Length is available.
+        setStatus("Downloading game.wasm...");
+        const response = await fetch("game.wasm");
+        if (!response.ok) {
+            throw new Error("HTTP " + response.status + " while fetching game.wasm");
+        }
+        const contentLength = response.headers.get("Content-Length");
+        const total = contentLength ? parseInt(contentLength, 10) : 0;
+
+        let buffer;
+        if (total > 0 && response.body) {
+            setProgressVisible(true);
+            // Stream with percentage updates
+            const reader = response.body.getReader();
+            const chunks = [];
+            let received = 0;
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                chunks.push(value);
+                received += value.length;
+                setProgress(Math.min(99, Math.round(received / total * 100)));
+                setStatus("Downloading game.wasm...");
+            }
+
+            const data = new Uint8Array(received);
+            let offset = 0;
+            for (const chunk of chunks) {
+                data.set(chunk, offset);
+                offset += chunk.length;
+            }
+            buffer = data.buffer;
+        } else {
+            // No Content-Length: keep an indeterminate progress bar visible.
+            setStatus("Downloading game.wasm...");
+            setProgressVisible(false);
+            buffer = await response.arrayBuffer();
+        }
+
+        setStatus("Starting game...");
+        setProgressVisible(false);
+        setIndeterminate(true);
+        const result = await WebAssembly.instantiate(buffer, go.importObject);
         go.run(result.instance);
+        await waitForCanvasReady();
+        hideLoading();
+    }
+
+    // Double-RAF: wait for the browser to paint the loading overlay before
+    // starting any heavy network/JS work.
+    requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+            notifyParent("comet-loading-visible");
+            loadWasm().catch(showError);
+        });
     });
 </script>
 </body>

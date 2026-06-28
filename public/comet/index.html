@@ -30,15 +30,69 @@
             top: 50%;
             transform: translate(-50%, -50%);
         }
+        #pageLoading {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #0f0f19;
+            color: rgba(255, 255, 255, 0.85);
+            font-family: monospace;
+            z-index: 10000;
+            transition: opacity 0.35s ease;
+        }
+        #pageLoading.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .page-loading-spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(255,255,255,0.14);
+            border-top-color: #8888cc;
+            border-radius: 50%;
+            animation: pageSpin 0.8s linear infinite;
+        }
+        .page-loading-text {
+            margin-top: 14px;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-align: center;
+            line-height: 1.8;
+        }
+        @keyframes pageSpin {
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
+<div id="pageLoading">
+    <div class="page-loading-spinner"></div>
+    <div class="page-loading-text">
+        <div>データロード中、しばらくお待ちください</div>
+        <div>Loading, please wait...</div>
+    </div>
+</div>
 <div class="iframe-container">
     <iframe id="gameFrame" allow="autoplay"></iframe>
 </div>
 <script>
     (function () {
         var frame = document.getElementById("gameFrame");
+        var loading = document.getElementById("pageLoading");
+        var loadingHidden = false;
+        var hideLoading = function () {
+            if (!loading || loadingHidden) return;
+            loadingHidden = true;
+            loading.classList.add("hide");
+            setTimeout(function() {
+                if (loading && loading.parentNode) {
+                    loading.parentNode.removeChild(loading);
+                }
+            }, 400);
+        };
 
         // Detect mode based on viewport width
         var isMobile = window.innerWidth < 768;
@@ -56,6 +110,29 @@
         frame.style.width = baseWidth + "px";
         frame.style.height = baseHeight + "px";
         frame.src = "main.html?mode=" + mode;
+        frame.addEventListener("load", function () {
+            // Keep the parent overlay visible until the child page reports that
+            // the initial loading UI is on screen or the game is actually ready.
+            setTimeout(function () {
+                if (!loadingHidden) {
+                    loading.querySelector(".page-loading-text").children[0].textContent = "ゲームデータを読み込んでいます";
+                    loading.querySelector(".page-loading-text").children[1].textContent = "Preparing game data...";
+                }
+            }, 150);
+        }, { once: true });
+
+        window.addEventListener("message", function (event) {
+            if (event.source !== frame.contentWindow || !event.data || typeof event.data.type !== "string") {
+                return;
+            }
+            if (event.data.type === "comet-loading-visible") {
+                hideLoading();
+                return;
+            }
+            if (event.data.type === "comet-ready") {
+                hideLoading();
+            }
+        });
 
         function viewportSize() {
             if (window.visualViewport) {

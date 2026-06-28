@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import BlogPostingSchema from "../../components/BlogPostingSchema.astro";
 import BreadcrumbSchema from "../../components/BreadcrumbSchema.astro";
@@ -7,13 +7,13 @@ import BreadcrumbSchema from "../../components/BreadcrumbSchema.astro";
 export async function getStaticPaths() {
   const posts = await getCollection("posts");
   return posts.map((post) => ({
-    params: { slug: post.slug },
+    params: { slug: post.id },
     props: post,
   }));
 }
 
 const post = Astro.props;
-const { Content } = await post.render();
+const { Content } = await render(post);
 ---
 
 <Layout
@@ -35,7 +35,7 @@ const { Content } = await post.render();
     items={[
       { name: "ホーム", url: "/" },
       { name: "Posts", url: "/posts" },
-      { name: post.data.title, url: `/posts/${post.slug}/` },
+      { name: post.data.title, url: `/posts/${post.id}/` },
     ]}
   />
 

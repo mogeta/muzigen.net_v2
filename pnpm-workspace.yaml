@@ -1,6 +1,16 @@
 packages:
   - .
 
+allowBuilds:
+  '@firebase/util': true
+  '@sentry/cli': true
+  bufferutil: true
+  esbuild: true
+  keccak: true
+  protobufjs: true
+  sharp: true
+  utf-8-validate: true
+
 minimumReleaseAge: 2880
 
 overrides:
