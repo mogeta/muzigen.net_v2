@@ -30,5 +30,7 @@ pnpm-debug.log*
 .claude/cache/
 .claude/logs/
 
+.agents
+
 # スキルは含める
 !.claude/skills/

@@ -1,35 +1,43 @@
 name: Deploy to Firebase Hosting
 
-# mainブランチにプッシュされたら実行
 on:
   push:
     branches:
       - main
+  pull_request:
+
+permissions:
+  checks: write
+  contents: read
+  pull-requests: write
 
 concurrency:
-  group: firebase-hosting-main
-  cancel-in-progress: false
+  group: firebase-hosting-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build_and_deploy:
+    if: ${{ github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository }}
     runs-on: ubuntu-latest
     steps:
-      # 1. リポジトリのコードをチェックアウト
       - uses: actions/checkout@v4
 
-      # 2. Astroプロジェクトのビルド (環境に合わせて変更)
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24' # Astroが要求するNode.jsバージョン
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10
-      - name: Install Dependencies
-        run: pnpm install
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
       - name: Build
-        run: pnpm run build
+        run: pnpm build
         env:
           FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
           FIREBASE_PRIVATE_KEY_ID: ${{ secrets.FIREBASE_PRIVATE_KEY_ID }}
@@ -45,14 +53,25 @@ jobs:
           PUBLIC_ADSENSE_CLIENT: ${{ secrets.PUBLIC_ADSENSE_CLIENT }}
           PUBLIC_ADSENSE_SLOT: ${{ secrets.PUBLIC_ADSENSE_SLOT }}
 
-      # 3. Firebaseへのデプロイ
-      - name: Deploy to Firebase Hosting
+      - name: Deploy preview to Firebase Hosting
+        if: ${{ github.event_name == 'pull_request' }}
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MUZIGEN_NET }}'
-          channelId: live # 'live'は本番環境
-          projectId: muzigen-net # ここにFirebaseプロジェクトIDを記載
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MUZIGEN_NET }}
+          projectId: muzigen-net
           firebaseToolsVersion: '14.19.0'
         env:
-          # Astro (Webフレームワーク) のサポートを有効化
+          FIREBASE_CLI_EXPERIMENTS: webframeworks
+
+      - name: Deploy live to Firebase Hosting
+        if: ${{ github.event_name == 'push' }}
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MUZIGEN_NET }}
+          channelId: live
+          projectId: muzigen-net
+          firebaseToolsVersion: '14.19.0'
+        env:
           FIREBASE_CLI_EXPERIMENTS: webframeworks
