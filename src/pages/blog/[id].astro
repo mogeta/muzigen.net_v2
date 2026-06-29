@@ -789,6 +789,21 @@ const showAds = isProd && !!adClient;
 		overflow: hidden;
 	}
 
+	.blog-ads-slot:empty,
+	.blog-ads-slot:has(> .adsbygoogle:empty),
+	.blog-ads-slot:has(> .adsbygoogle[data-ad-status="unfilled"]) {
+		padding-top: 0 !important;
+		padding-bottom: 0 !important;
+		min-height: 0;
+	}
+
+	.blog-ads-slot:has(> .adsbygoogle:empty) > .adsbygoogle,
+	.blog-ads-slot:has(> .adsbygoogle[data-ad-status="unfilled"]) > .adsbygoogle {
+		height: 0 !important;
+		min-height: 0 !important;
+		overflow: hidden;
+	}
+
 	.blog-ads-slot .adsbygoogle {
 		display: block;
 		width: 100% !important;
