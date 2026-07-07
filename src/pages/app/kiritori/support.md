@@ -1,7 +1,7 @@
 ---
 layout: ../../../layouts/KiritoriDocumentLayout.astro
 title: サポート
-description: Kiritoriに関するお問い合わせ、不具合報告、各種ポリシーへのリンクをまとめたサポートページです。
+description: Fuchiに関するお問い合わせ、不具合報告、各種ポリシーへのリンクをまとめたサポートページです。
 updatedAt: 2026年6月30日
 ---
 
