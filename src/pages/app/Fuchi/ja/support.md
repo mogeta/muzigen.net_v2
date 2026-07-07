@@ -1,15 +1,19 @@
 ---
-layout: ../../../layouts/KiritoriDocumentLayout.astro
+layout: ../../../../layouts/AppDocumentLayout.astro
+appName: Fuchi
+appBasePath: /app/Fuchi
+lang: ja
+documentKey: support
 title: サポート
 description: Fuchiに関するお問い合わせ、不具合報告、各種ポリシーへのリンクをまとめたサポートページです。
-updatedAt: 2026年6月30日
+updatedAt: 2026年7月7日
 ---
 
 ## お問い合わせ先
 
-Kiritoriに関するお問い合わせは、以下のメールアドレスまでご連絡ください。
+Fuchiに関するお問い合わせは、以下のメールアドレスまでご連絡ください。
 
-[muzigen@gmail.com](mailto:muzigen@gmail.com?subject=Kiritori%20support)
+[muzigen@gmail.com](mailto:muzigen@gmail.com?subject=Fuchi%20support)
 
 ## お問い合わせ時に記載してほしい情報
 
@@ -17,7 +21,7 @@ Kiritoriに関するお問い合わせは、以下のメールアドレスまで
 
 - 利用している端末名
 - OSの種類とバージョン
-- Kiritoriのアプリバージョン
+- Fuchiのアプリバージョン
 - 発生した日時
 - 問題が発生するまでの操作手順
 - 表示されたエラーメッセージやスクリーンショット
@@ -43,6 +47,6 @@ Kiritoriに関するお問い合わせは、以下のメールアドレスまで
 
 ## 関連ページ
 
-- [利用規約](/app/kiritori/term)
-- [プライバシーポリシー](/app/kiritori/privacy)
-- [特定商取引法に基づく表記](/app/kiritori/tokushoho)
+- [利用規約](/app/Fuchi/ja/terms)
+- [プライバシーポリシー](/app/Fuchi/ja/privacy)
+- [特定商取引法に基づく表記](/app/Fuchi/ja/commercial-transactions)
