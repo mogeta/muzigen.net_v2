@@ -1,0 +1,21 @@
+---
+const target = "/app/Fuchi/ja/terms";
+const canonicalURL = `${Astro.site?.origin ?? Astro.url.origin}${target}`;
+---
+
+<!doctype html>
+<html lang="ja">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta http-equiv="refresh" content={`0;url=${target}`} />
+		<link rel="canonical" href={canonicalURL} />
+		<title>利用規約へ移動します</title>
+	</head>
+	<body>
+		<p><a href={target}>利用規約へ移動します。</a></p>
+		<script is:inline>
+			location.replace("/app/Fuchi/ja/terms");
+		</script>
+	</body>
+</html>
