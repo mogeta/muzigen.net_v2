@@ -1,4 +1,6 @@
 ---
+import { rehypeGallery } from "../../lib/gallery/gallery.mjs";
+import "../../lib/gallery/gallery.css";
 import Layout from "../../layouts/Layout.astro";
 import type { BlogArticle } from "../../types/blog";
 import { getFirestore } from "firebase-admin/firestore";
@@ -17,10 +19,10 @@ export async function getStaticPaths() {
 	const processor = await createMarkdownProcessor({
 		syntaxHighlight: {
 			type: "shiki",
-			excludeLangs: ["mermaid", "embedded-gist"],
+			excludeLangs: ["mermaid", "embedded-gist", "gallery"],
 		},
 		remarkPlugins: [remarkAutoEmbed],
-		rehypePlugins: [rehypeMermaidPre],
+		rehypePlugins: [rehypeMermaidPre, rehypeGallery],
 	});
 	try {
 		const snapshot = await db
@@ -845,3 +847,8 @@ const showAds = isProd && !!adClient;
 		right: auto !important;
 	}
 </style>
+
+<script>
+  import { mountGalleries } from "../../lib/gallery/gallery.mjs";
+  mountGalleries(document.body);
+</script>
