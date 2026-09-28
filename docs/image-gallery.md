@@ -1,5 +1,7 @@
 # Blog image galleries
 
+New gallery uploads are stored in Cloudflare R2 and served through a custom domain with Cloudflare CDN. [Admin setup and required secrets](https://github.com/mogeta/admin.muzigen.net_v2/blob/feat/blog-image-gallery/docs/R2_SETUP.md) are configured on the admin server; the public blog requires no additional secrets. Existing HTTPS image URLs remain supported.
+
 Articles may contain a fenced `gallery` block anywhere in Markdown. The admin editor generates and edits these blocks; existing articles and ordinary images are unchanged.
 
 ````markdown
